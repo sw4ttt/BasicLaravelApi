@@ -19,6 +19,7 @@ class CreateNoticiasTable extends Migration
             $table->integer('idUser');
             $table->string('title');
             $table->string('content');
+            $table->string('image');
             $table->timestamps();
         });
     }

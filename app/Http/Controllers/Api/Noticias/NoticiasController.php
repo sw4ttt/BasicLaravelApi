@@ -40,9 +40,10 @@ class NoticiasController extends Controller
 
     public function add(Request $request)
     {
-        $input = $request->only('idUser','title','content');
+        $input = $request->only('idUser','image','title','content');
         $validator = Validator::make($input, [
             'idUser' => 'required|numeric|exists:users,id',
+            'image' => 'required|image',
             'title' => 'required|string',
             'content' => 'required|string'
         ]);
@@ -51,6 +52,12 @@ class NoticiasController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
+
+        if (!$request->file('image')->isValid()) {
+            return response()->json(["error"=>"error with image file."],400);
+        }
+        $path = $request->image->store('public/images');
+        $input['image'] = $path;
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
         Noticia::create($input);
@@ -68,6 +75,11 @@ class NoticiasController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
+        $noticia = Noticia::find($id);
+        $noticia->image = str_replace('public','storage',$noticia->image,$i);
+        $path = realpath('./../public/').'/'.$noticia->image;
+        $path = str_replace('\\', '/', $path);
+        unlink($path);
         Noticia::destroy($id);
         return response()->json(['success'=>true]);
     }
