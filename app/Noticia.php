@@ -11,4 +11,9 @@ class Noticia extends Model
     protected $fillable = [
         'idUser', 'title', 'content'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo('App\User','id');
+    }
 }

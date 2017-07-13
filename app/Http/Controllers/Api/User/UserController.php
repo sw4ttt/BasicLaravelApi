@@ -14,4 +14,23 @@ use App\User;
 class UserController extends Controller
 {
     //
+    public function all(Request $request)
+    {
+        $users = User::all();
+        return $users;
+    }
+    public function find(Request $request, $id)
+    {
+        $request['id'] = $id;
+        $input = $request->only('id');
+        $validator = Validator::make($input, [
+            'id' => 'required|numeric|exists:users,id'
+        ]);
+        if($validator->fails()) {
+            //throw new ValidationHttpException($validator->errors()->all());
+            return response()->json($validator->errors(),400);
+        }
+        $user = User::find($id);
+        return $user;
+    }
 }
