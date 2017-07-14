@@ -45,4 +45,8 @@ Route::group(['middleware' => ['api','cors']], function ()
         Route::get('noticias/{id}', 'Api\Noticias\NoticiasController@find');
         Route::delete('noticias/{id}', 'Api\Noticias\NoticiasController@delete');
     });
+
+    Route::group(['middleware' => 'jwt-refresh'], function () {
+        Route::get('noticias-test', 'Api\Noticias\NoticiasController@all');
+    });
 });
