@@ -57,6 +57,8 @@ class NoticiasController extends Controller
             return response()->json(["error"=>"error with image file."],400);
         }
         $path = $request->image->store('public/images');
+
+        $path = str_replace('public','storage',$path,$i);
         $input['image'] = $path;
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
