@@ -14,8 +14,3 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
-
-//https://moviecrew.herokuapp.com/api/login?email=&password=boner123
-
-

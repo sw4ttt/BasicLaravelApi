@@ -16,7 +16,6 @@ class NoticiasController extends Controller
 {
     public function all(Request $request)
     {
-
         $noticias = Noticia::all();
         return $noticias;
     }

@@ -40,13 +40,20 @@ Route::group(['middleware' => ['api','cors']], function ()
 
         Route::get('user/{id}', 'Api\User\UserController@find');
 
-    	Route::get('noticias', 'Api\Noticias\NoticiasController@all');
-        Route::post('noticias/add', 'Api\Noticias\NoticiasController@add');
-        Route::get('noticias/{id}', 'Api\Noticias\NoticiasController@find');
-        Route::delete('noticias/{id}', 'Api\Noticias\NoticiasController@delete');
+        Route::group(['prefix' => 'noticias'], function () {
+            Route::get('/', 'Api\Noticias\NoticiasController@all');
+            Route::post('add', 'Api\Noticias\NoticiasController@add');
+            Route::get('{id}', 'Api\Noticias\NoticiasController@find');
+            Route::delete('{id}', 'Api\Noticias\NoticiasController@delete');
+        });
     });
 
     Route::group(['middleware' => 'jwt-refresh'], function () {
         Route::get('noticias-test', 'Api\Noticias\NoticiasController@all');
     });
+
+    //TESTING.
+    Route::get('testing', 'Api\Calificaciones\CalificacionesController@all');
+    Route::post('testing/add', 'Api\Calificaciones\CalificacionesController@add');
+
 });
