@@ -23,10 +23,10 @@ class CalificacionesController extends Controller
     }
     public function add(Request $request)
     {
-        $input = $request->only('idProfesor','idAlumno','periodo','data');
+        $input = $request->only('idProfesor','idEstudiante','periodo','data');
         $validator = Validator::make($input, [
             'idProfesor' => 'required|numeric|exists:users,id',
-            'idAlumno' => 'required|numeric|exists:users,id',
+            'idEstudiante' => 'required|numeric|exists:users,id',
             'periodo' => 'required|string',
             'data' => 'required|array'
         ]);

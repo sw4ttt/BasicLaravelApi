@@ -13,7 +13,7 @@ class UsersTableSeeder extends Seeder
     {
         //'idDocument','name', 'email', 'password','type'
         DB::table('users')->insert([
-            'idDocument'=> 1111,
+            'idPersonal'=> 1111,
             'name' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('123456'),
@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
         DB::table('users')->insert([
-            'idDocument'=> 1112,
+            'idPersonal'=> 1112,
             'name' => 'Profesor1',
             'email' => 'profesor1@gmail.com',
             'password' => bcrypt('123456'),
@@ -31,11 +31,11 @@ class UsersTableSeeder extends Seeder
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
         DB::table('users')->insert([
-            'idDocument'=> 1113,
-            'name' => 'Alumno1',
+            'idPersonal'=> 1113,
+            'name' => 'Representante1',
             'email' => 'alumno1@gmail.com',
             'password' => bcrypt('123456'),
-            'type' => 'ALUMNO',
+            'type' => 'REPRESENTANTE',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);

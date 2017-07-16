@@ -11,9 +11,13 @@ use JWTAuth;
 use Validator;
 use Carbon\Carbon;
 use App\User;
+
+$UserTypes = array("ADMIN","PROFESOR","REPRESENTANTE");
+
 class UserController extends Controller
 {
     //
+
     public function all(Request $request)
     {
         $users = User::all();
