@@ -17,6 +17,7 @@ class CreateCalificacionesTable extends Migration
             $table->increments('id');
             $table->integer('idProfesor');//idUser tipo PROFESOR.
             $table->integer('idEstudiante');//idUser tipo ALUMNO.
+            $table->integer('idMateria');//idUser tipo PROFESOR.
             $table->string('periodo'); //2017-2018.
             $table->text('evaluaciones');//Arreglo de Objetos con Nombre(evaluacion) y Nota(puntaje).
             $table->timestamps();

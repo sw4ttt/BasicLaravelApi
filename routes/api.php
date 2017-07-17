@@ -56,9 +56,26 @@ Route::group(['middleware' => ['api','cors']], function ()
     Route::get('testing', 'Api\Calificaciones\CalificacionesController@all');
     Route::post('testing/add', 'Api\Calificaciones\CalificacionesController@add');
 
-    Route::group(['prefix' => 'estudiante'], function () {
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/', 'Api\User\UserController@all');
+        Route::get('{id}/estudiantes', 'Api\User\UserController@estudiantes');
+        Route::post('{id}/estudiantes', 'Api\User\UserController@addEstudiantes');
+    });
+    Route::group(['prefix' => 'estudiantes'], function () {
         Route::get('/', 'Api\Estudiante\EstudianteController@all');
         Route::post('add', 'Api\Estudiante\EstudianteController@add');
+    });
+    Route::group(['prefix' => 'materias'], function () {
+        Route::get('/', 'Api\Materia\MateriaController@all');
+        Route::post('add', 'Api\Materia\MateriaController@add');
+    });
+    Route::group(['prefix' => 'calificaciones'], function () {
+        Route::get('/', 'Api\Calificaciones\CalificacionesController@all');
+        Route::post('add', 'Api\Calificaciones\CalificacionesController@add');
+        Route::put('edit', 'Api\Calificaciones\CalificacionesController@edit');
+        Route::get('/estudiante/{id}', 'Api\Calificaciones\CalificacionesController@byEstudiante');
+        Route::get('/estudiante/{idEstudiante}/materia/{idMateria}', 'Api\Calificaciones\CalificacionesController@byEstudianteByMateria');
+        Route::get('/profesor/{idProfesor}/materia/{idMateria}', 'Api\Calificaciones\CalificacionesController@byProfesorByMateria');
     });
 
 });
