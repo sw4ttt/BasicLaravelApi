@@ -18,7 +18,7 @@ class AuthController extends Controller
     {
         $UserTypes = array("ADMIN","PROFESOR","REPRESENTANTE");
 
-    	$input = $request->only('idDocument','name','email', 'password','type');
+    	$input = $request->only('idPersonal','nombre','email', 'password','type');
         $validator = Validator::make($input, [
             'idPersonal' => 'required|numeric|unique:users,idPersonal',
             'nombre' => 'required|string',
