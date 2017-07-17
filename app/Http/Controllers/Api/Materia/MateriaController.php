@@ -1,34 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Api\Estudiante;
+namespace App\Http\Controllers\Api\Materia;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Hash;
-use JWTAuth;
-use Validator;
-use Carbon\Carbon;
-use App\User;
-use App\Noticia;
-use App\Calificacion;
-use App\Estudiante;
-
-class EstudianteController extends Controller
+use App\Materia;
+class MateriaController extends Controller
 {
     public function all(Request $request)
     {
-        $Estudiantes = Estudiante::all();
-        return $Estudiantes;
+        $Materias = Materia::all();
+        return $Materias;
     }
     public function add(Request $request)
     {
-        $input = $request->only('idUser','idPersonal','nombre');
+        $input = $request->only('nombre','grado');
+        $input['nombre'] = strtoupper($input['nombre']);
         $validator = Validator::make($input, [
-            'idUser' => 'required|numeric|exists:users,id',
-            'idPersonal' => 'required|numeric|unique:estudiantes,idPersonal',
-            'nombre' => 'required|string'
+            'grado' => 'required|numeric',
+            'nombre' => 'required|string|unique:materias,nombre',
         ]);
 
         if($validator->fails()) {
@@ -39,7 +31,7 @@ class EstudianteController extends Controller
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
-        Estudiante::create($input);
+        Materia::create($input);
         return response()->json(['success'=>true]);
     }
 }

@@ -16,8 +16,6 @@ $UserTypes = array("ADMIN","PROFESOR","REPRESENTANTE");
 
 class UserController extends Controller
 {
-    //
-
     public function all(Request $request)
     {
         $users = User::all();

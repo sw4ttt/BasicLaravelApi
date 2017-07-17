@@ -23,22 +23,19 @@ class CalificacionesController extends Controller
     }
     public function add(Request $request)
     {
-        $input = $request->only('idProfesor','idEstudiante','periodo','data');
+        $input = $request->only('idProfesor','idEstudiante','periodo','evaluaciones');
         $validator = Validator::make($input, [
             'idProfesor' => 'required|numeric|exists:users,id',
-            'idEstudiante' => 'required|numeric|exists:users,id',
-            'periodo' => 'required|string',
-            'data' => 'required|array'
+            'idEstudiante' => 'required|numeric|exists:estudiantes,id',
+            'idMateria' => 'required|numeric|exists:materias,id',
+            'periodo' => 'required|string|regex:/^\d{4}-\d{4}$/',
+            'evaluaciones' => 'required|array'
         ]);
 
         if($validator->fails()) {
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-
-        // SEGUN es asi. no se. por lo visto no es necesario.
-//        $input['data'] = serialize($input['data']);
-//        unserialize($score->data);
 
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');

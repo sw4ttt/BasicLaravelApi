@@ -17,7 +17,7 @@ class CreateEstudiantesTable extends Migration
             $table->increments('id');
             $table->integer('idUser');
             $table->bigInteger('idPersonal')->unique();
-            $table->string('name');
+            $table->string('nombre');
             $table->timestamps();
         });
     }

@@ -56,4 +56,9 @@ Route::group(['middleware' => ['api','cors']], function ()
     Route::get('testing', 'Api\Calificaciones\CalificacionesController@all');
     Route::post('testing/add', 'Api\Calificaciones\CalificacionesController@add');
 
+    Route::group(['prefix' => 'estudiante'], function () {
+        Route::get('/', 'Api\Estudiante\EstudianteController@all');
+        Route::post('add', 'Api\Estudiante\EstudianteController@add');
+    });
+
 });

@@ -8,7 +8,11 @@ class Calificacion extends Model
 {
     protected $table = 'calificaciones';
     protected $fillable = [
-        'idProfesor', 'idEstudiante','periodo','evaluaciones'
+        'idProfesor',
+        'idEstudiante',
+        'idMateria',
+        'periodo',
+        'evaluaciones'
     ];
     protected $casts = [
         'evaluaciones' => 'array'

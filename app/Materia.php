@@ -9,6 +9,7 @@ class Materia extends Model
     //
     protected $table = 'materias';
     protected $fillable = [
-        'idProfesor', 'idAlumno','periodo','data'
+        "nombre",
+        'grado'
     ];
 }

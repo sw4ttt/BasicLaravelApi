@@ -14,7 +14,7 @@ class UsersTableSeeder extends Seeder
         //'idDocument','name', 'email', 'password','type'
         DB::table('users')->insert([
             'idPersonal'=> 1111,
-            'name' => 'admin',
+            'nombre' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('123456'),
             'type' => 'ADMIN',
@@ -23,7 +23,7 @@ class UsersTableSeeder extends Seeder
         ]);
         DB::table('users')->insert([
             'idPersonal'=> 1112,
-            'name' => 'Profesor1',
+            'nombre' => 'Profesor1',
             'email' => 'profesor1@gmail.com',
             'password' => bcrypt('123456'),
             'type' => 'PROFESOR',
@@ -32,7 +32,7 @@ class UsersTableSeeder extends Seeder
         ]);
         DB::table('users')->insert([
             'idPersonal'=> 1113,
-            'name' => 'Representante1',
+            'nombre' => 'Representante1',
             'email' => 'alumno1@gmail.com',
             'password' => bcrypt('123456'),
             'type' => 'REPRESENTANTE',

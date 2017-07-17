@@ -20,8 +20,6 @@ class NoticiasController extends Controller
         return $noticias;
     }
 
-    //$flight = App\Flight::find(1);
-
     public function find(Request $request, $id)
     {
         $request['id'] = $id;
@@ -39,12 +37,12 @@ class NoticiasController extends Controller
 
     public function add(Request $request)
     {
-        $input = $request->only('idUser','image','title','content');
+        $input = $request->only('idUser','imagen','titulo','contenido');
         $validator = Validator::make($input, [
             'idUser' => 'required|numeric|exists:users,id',
-            'image' => 'required|image',
-            'title' => 'required|string',
-            'content' => 'required|string'
+            'imagen' => 'required|image',
+            'titulo' => 'required|string',
+            'contenido' => 'required|string'
         ]);
 
         if($validator->fails()) {
@@ -55,10 +53,9 @@ class NoticiasController extends Controller
         if (!$request->file('image')->isValid()) {
             return response()->json(["error"=>"error with image file."],400);
         }
-        $path = $request->image->store('public/images');
-
+        $path = $request->imagen->store('public/images');
         $path = str_replace('public','storage',$path,$i);
-        $input['image'] = $path;
+        $input['imagen'] = $path;
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
         Noticia::create($input);
@@ -77,7 +74,7 @@ class NoticiasController extends Controller
             return response()->json($validator->errors(),400);
         }
         $noticia = Noticia::find($id);
-        $noticia->image = str_replace('public','storage',$noticia->image,$i);
+        $noticia->imagen = str_replace('public','storage',$noticia->image,$i);
         $path = realpath('./../public/').'/'.$noticia->image;
         $path = str_replace('\\', '/', $path);
         unlink($path);

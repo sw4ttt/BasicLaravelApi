@@ -8,10 +8,20 @@ class Estudiante extends Model
 {
     protected $table = 'estudiantes';
     protected $fillable = [
-        'idUser', 'nombre','idPersonal'
+        'idUser',
+        'idPersonal',
+        'nombre'
     ];
     public function user()
     {
         return $this->belongsTo('App\User','id');
+    }
+    public function calificaciones()
+    {
+        return $this->hasMany('App\Calificacion','idEstudiante');
+    }
+    public function materias()
+    {
+        return $this->hasMany('App\Materia','id');
     }
 }
