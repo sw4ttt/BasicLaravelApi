@@ -22,6 +22,20 @@ class MateriaController extends Controller
         $Materias = Materia::all();
         return $Materias;
     }
+    public function find(Request $request, $id)
+    {
+        $request['id'] = $id;
+        $input = $request->only('id');
+        $validator = Validator::make($input, [
+            'id' => 'required|numeric|exists:materias,id'
+        ]);
+        if($validator->fails()) {
+            //throw new ValidationHttpException($validator->errors()->all());
+            return response()->json($validator->errors(),400);
+        }
+        $materia = Materia::find($id);
+        return $materia;
+    }
     public function add(Request $request)
     {
         $input = $request->only('nombre','grado');

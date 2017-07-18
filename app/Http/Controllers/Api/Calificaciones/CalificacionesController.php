@@ -58,14 +58,11 @@ class CalificacionesController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-
-//        $calificacion = Calificacion::where('idProfesor', 1);
-
         return response()->json(['success'=>true]);
     }
-    public function byEstudiante(Request $request,$id)
+    public function byEstudiante(Request $request,$idEstudiante)
     {
-        $request['id'] = $id;
+        $request['id'] = $idEstudiante;
         $input = $request->only('id');
         $validator = Validator::make($input, [
             'id' => 'required|numeric|exists:estudiantes,id'
@@ -76,8 +73,9 @@ class CalificacionesController extends Controller
             return response()->json($validator->errors(),400);
         }
 
-        $Calificaciones = Calificacion::where('idEstudiante',$id)->get();
-        return $Calificaciones;
+        return Calificacion::where('idEstudiante',$idEstudiante)
+            ->get()
+            ->groupBy('idMateria');
     }
     public function byEstudianteByMateria(Request $request,$idEstudiante,$idMateria)
     {
@@ -93,13 +91,12 @@ class CalificacionesController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-
-        $Calificaciones = Calificacion::where('idEstudiante',$idEstudiante)->where('idMateria',$idMateria)->get();
-        return $Calificaciones;
+        return Calificacion::where('idEstudiante',$idEstudiante)->where('idMateria',$idMateria)->get()
+            ->groupBy('idMateria');
     }
-    public function byProfesor(Request $request,$id)
+    public function byProfesor(Request $request,$idProfesor)
     {
-        $request['id'] = $id;
+        $request['id'] = $idProfesor;
         $input = $request->only('id');
         $validator = Validator::make($input, [
             'id' => 'required|numeric|exists:users,id'
@@ -109,9 +106,8 @@ class CalificacionesController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-
-        $Calificaciones = Calificacion::where('idProfesor',$id)->get();
-        return $Calificaciones;
+        return Calificacion::where('idProfesor',$idProfesor)->get()
+            ->groupBy('idEstudiante');
     }
     public function byProfesorByMateria(Request $request,$idProfesor,$idMateria)
     {
@@ -127,8 +123,7 @@ class CalificacionesController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-
-        $Calificaciones = Calificacion::where('idProfesor',$idProfesor)->where('idMateria',$idMateria)->get();
-        return $Calificaciones;
+        return Calificacion::where('idProfesor',$idProfesor)->where('idMateria',$idMateria)->get()
+            ->groupBy('idEstudiante');
     }
 }

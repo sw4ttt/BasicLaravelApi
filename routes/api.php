@@ -27,13 +27,11 @@ Route::group(['middleware' => ['api','cors'],'prefix' => 'api'], function () {
 });
 */
 
-//https://moviecrew.herokuapp.com/api/login?email=&password=boner123
-
-Route::group(['middleware' => ['api','cors']], function () 
+Route::group(['middleware' => ['api','cors']], function ()
 {
-    // Grupo Normal
     Route::post('register', 'Api\AuthController@register');
     Route::post('login', 'Api\AuthController@login');
+    Route::post('refreshToken', 'Api\AuthController@refreshToken');
 
     //Este Grupo Necesita Token (usa el middleware jwt-auth)
     Route::group(['middleware' => 'jwt-auth'], function () {
@@ -68,13 +66,15 @@ Route::group(['middleware' => ['api','cors']], function ()
     Route::group(['prefix' => 'materias'], function () {
         Route::get('/', 'Api\Materia\MateriaController@all');
         Route::post('add', 'Api\Materia\MateriaController@add');
+        Route::get('{id}', 'Api\Materia\MateriaController@find');
     });
     Route::group(['prefix' => 'calificaciones'], function () {
         Route::get('/', 'Api\Calificaciones\CalificacionesController@all');
         Route::post('add', 'Api\Calificaciones\CalificacionesController@add');
         Route::put('edit', 'Api\Calificaciones\CalificacionesController@edit');
-        Route::get('/estudiante/{id}', 'Api\Calificaciones\CalificacionesController@byEstudiante');
+        Route::get('/estudiante/{idEstudiante}', 'Api\Calificaciones\CalificacionesController@byEstudiante');
         Route::get('/estudiante/{idEstudiante}/materia/{idMateria}', 'Api\Calificaciones\CalificacionesController@byEstudianteByMateria');
+        Route::get('/profesor/{idProfesor}', 'Api\Calificaciones\CalificacionesController@byProfesor');
         Route::get('/profesor/{idProfesor}/materia/{idMateria}', 'Api\Calificaciones\CalificacionesController@byProfesorByMateria');
     });
 
