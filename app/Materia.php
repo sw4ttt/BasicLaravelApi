@@ -12,4 +12,9 @@ class Materia extends Model
         "nombre",
         'grado'
     ];
+
+    public function estudiantes()
+    {
+        return $this->belongsToMany('App\Estudiante','estudiantes_materias','idMateria','idEstudiante');
+    }
 }

@@ -48,8 +48,7 @@ class UserController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-        $estudiantes = User::find($id)->estudiantes;
-        return $estudiantes;
+        return User::find($id)->estudiantes;
     }
     public function addEstudiantes(Request $request, $id)
     {
@@ -66,6 +65,8 @@ class UserController extends Controller
         }
         $user = User::find($id);
 
+        if($user->type != 'REPRESENTANTE')
+            return response()->json(['error'=>'Usuario no es tipo REPRESENTANTE'],400);
         $estudiante = new Estudiante([
             'idPersonal' => $input['idPersonal'],
             'nombre' => $input['nombre'],

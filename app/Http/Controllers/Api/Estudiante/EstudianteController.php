@@ -42,4 +42,42 @@ class EstudianteController extends Controller
         Estudiante::create($input);
         return response()->json(['success'=>true]);
     }
+    public function materias(Request $request, $idEstudiante)
+    {
+        $request['idEstudiante'] = $idEstudiante;
+        $input = $request->only('idEstudiante');
+        $validator = Validator::make($input, [
+            'idEstudiante' => 'required|numeric|exists:estudiantes,id'
+        ]);
+        if($validator->fails()) {
+            //throw new ValidationHttpException($validator->errors()->all());
+            return response()->json($validator->errors(),400);
+        }
+        $estudiante = Estudiante::find($idEstudiante);
+        return $estudiante->materias()->get();
+    }
+    public function addMateria(Request $request, $idEstudiante,$idMateria)
+    {
+        $request['idEstudiante'] = $idEstudiante;
+        $request['idMateria'] = $idMateria;
+        $input = $request->only('idEstudiante','idMateria');
+        $validator = Validator::make($input, [
+            'idEstudiante' => 'required|numeric|exists:estudiantes,id',
+            'idMateria' => 'required|numeric|exists:materias,id'
+        ]);
+        if($validator->fails()) {
+            //throw new ValidationHttpException($validator->errors()->all());
+            return response()->json($validator->errors(),400);
+        }
+        $estudiante = Estudiante::find($idEstudiante);
+        $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $estudiante->materias()
+            ->attach($input['idMateria'],
+                [
+                    'created_at'=>Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                ]);
+        return response()->json(['success'=>true]);
+    }
 }
