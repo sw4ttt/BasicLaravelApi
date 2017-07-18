@@ -37,6 +37,7 @@ Route::group(['middleware' => ['api','cors']], function ()
     Route::group(['middleware' => 'jwt-auth'], function () {
 
         Route::get('user/{id}', 'Api\User\UserController@find');
+        Route::get('me', 'Api\AuthController@me');
 
         Route::group(['prefix' => 'noticias'], function () {
             Route::get('/', 'Api\Noticias\NoticiasController@all');

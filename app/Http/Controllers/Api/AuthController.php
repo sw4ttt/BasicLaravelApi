@@ -9,7 +9,7 @@ use Hash;
 use JWTAuth;
 use Validator;
 use Carbon\Carbon;
-
+use Exception;
 
 
 class AuthController extends Controller
@@ -58,8 +58,28 @@ class AuthController extends Controller
     	if (!$token = JWTAuth::attempt($input)) {
             return response()->json(['result' => 'wrong email or password.']);
         }
-        	return response()->json(['token' => $token]);
+        $user = JWTAuth::toUser($token);
+
+        return response()->json(['user'=>$user,'token' => $token]);
     }
+
+    public function me(Request $request)
+    {
+        $input = $request->only('token');
+        try {
+            $user = JWTAuth::toUser($input['token']);
+        } catch (Exception $e) {
+            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
+                return response()->json(['error'=>'Token is Invalid']);
+            }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
+                return response()->json(['error'=>'Token is Expired']);
+            }else{
+                return response()->json(['error'=>'Token Missing']);
+            }
+        }
+        return $user;
+    }
+
     
     public function refreshToken(Request $request)
     {
