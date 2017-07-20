@@ -65,9 +65,10 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        $input = $request->only('token');
+//        $input = $request->only('token');
         try {
-            $user = JWTAuth::toUser($input['token']);
+//            $user = JWTAuth::toUser($input['token']);
+            $user = JWTAuth::parseToken()->authenticate();
         } catch (Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
                 return response()->json(['error'=>'Token is Invalid']);
@@ -83,8 +84,15 @@ class AuthController extends Controller
     
     public function refreshToken(Request $request)
     {
-    	$input = $request->only('token');
-        $newToken = JWTAuth::refresh($input['token']);
+        try {
+            $newToken = JWTAuth::refresh($request->bearerToken());
+        } catch (Exception $e) {
+            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
+                return response()->json(['error'=>'Token is Invalid']);
+            }else{
+                return response()->json(['error'=>'Token Missing']);
+            }
+        }
         return response()->json(['token' => $newToken]);
     }   
 }

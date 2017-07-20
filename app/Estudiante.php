@@ -20,8 +20,4 @@ class Estudiante extends Model
     {
         return $this->hasMany('App\Calificacion','idEstudiante');
     }
-    public function materias()
-    {
-        return $this->belongsToMany('App\Materia','estudiantes_materias','idEstudiante','idMateria');
-    }
 }
