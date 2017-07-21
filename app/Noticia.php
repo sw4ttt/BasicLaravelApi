@@ -10,9 +10,9 @@ class Noticia extends Model
     protected $table = 'noticias';
     protected $fillable = [
         'idUser',
-        'titulo',
-        'contenido',
-        'imagen'
+        'title',
+        'content',
+        'image'
     ];
 
     public function user()

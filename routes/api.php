@@ -57,7 +57,7 @@ Route::group(['middleware' => ['api','cors']], function ()
         Route::group(['prefix' => 'estudiantes'], function () {
             Route::get('/', 'Api\Estudiante\EstudianteController@all');
             Route::post('add', 'Api\Estudiante\EstudianteController@add');
-            Route::get('{idEstudiante}/materias', 'Api\Estudiante\EstudianteController@materias');
+            Route::get('{id}/materias', 'Api\Estudiante\EstudianteController@materias');
         });
         Route::group(['prefix' => 'materias'], function () {
             Route::get('/', 'Api\Materia\MateriaController@all');

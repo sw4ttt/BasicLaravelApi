@@ -66,7 +66,7 @@ class UserController extends Controller
         $user = User::find($id);
 
         if($user->type != 'REPRESENTANTE')
-            return response()->json(['error'=>'Usuario no es tipo REPRESENTANTE'],400);
+            return response()->json(['KEY'=>'WRONG_USERTYPE','MESSAGE'=>'Usuario no es tipo REPRESENTANTE'],400);
         $estudiante = new Estudiante([
             'idPersonal' => $input['idPersonal'],
             'nombre' => $input['nombre'],
@@ -92,10 +92,12 @@ class UserController extends Controller
         $profesor = User::find($idProfesor);
 
         if($profesor->type != 'PROFESOR')
-            return response()->json(['error'=>'Usuario no es tipo PROFESOR'],400);
+            return response()->json(['KEY'=>'WRONG_USERTYPE','MESSAGE'=>'Usuario no es tipo PROFESOR'],400);
 
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
+
+
         $profesor->materias()
             ->attach($input['idMateria'],
                 [
@@ -117,8 +119,6 @@ class UserController extends Controller
             return response()->json($validator->errors(),400);
         }
         $profesor = User::find($id);
-        if($profesor->type != 'PROFESOR')
-            return response()->json(['error'=>'Usuario no es tipo PROFESOR'],400);
         return $profesor->materias()->get();
     }
 }

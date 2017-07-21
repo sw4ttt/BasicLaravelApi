@@ -56,7 +56,7 @@ class AuthController extends Controller
         }
 
     	if (!$token = JWTAuth::attempt($input)) {
-            return response()->json(['result' => 'wrong email or password.']);
+            return response()->json(['result' => 'wrong email or password.'],400);
         }
         $user = JWTAuth::toUser($token);
 
@@ -71,11 +71,11 @@ class AuthController extends Controller
             $user = JWTAuth::parseToken()->authenticate();
         } catch (Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
-                return response()->json(['error'=>'Token is Invalid']);
+                return response()->json(['error'=>'Token is Invalid'],401);
             }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
-                return response()->json(['error'=>'Token is Expired']);
+                return response()->json(['error'=>'Token is Expired'],401);
             }else{
-                return response()->json(['error'=>'Token Missing']);
+                return response()->json(['error'=>'Token Missing'],400);
             }
         }
         return $user;
@@ -88,9 +88,11 @@ class AuthController extends Controller
             $newToken = JWTAuth::refresh($request->bearerToken());
         } catch (Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
-                return response()->json(['error'=>'Token is Invalid']);
+                return response()->json(['error'=>'Token is Invalid'],401);
+            }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
+                return response()->json(['error'=>'Token is Expired'],401);
             }else{
-                return response()->json(['error'=>'Token Missing']);
+                return response()->json(['error'=>'Token Missing2'],400);
             }
         }
         return response()->json(['token' => $newToken]);

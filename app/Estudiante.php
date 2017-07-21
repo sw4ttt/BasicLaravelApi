@@ -10,7 +10,8 @@ class Estudiante extends Model
     protected $fillable = [
         'idUser',
         'idPersonal',
-        'nombre'
+        'nombre',
+        'grado'
     ];
     public function user()
     {

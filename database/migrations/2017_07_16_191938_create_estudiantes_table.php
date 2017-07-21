@@ -18,6 +18,7 @@ class CreateEstudiantesTable extends Migration
             $table->integer('idUser');
             $table->bigInteger('idPersonal')->unique();
             $table->string('nombre');
+            $table->integer('grado');
             $table->timestamps();
         });
     }

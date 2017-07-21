@@ -14,7 +14,7 @@ class CreateProfesoresMateriasTable extends Migration
     public function up()
     {
         Schema::create('profesores_materias', function (Blueprint $table) {
-            $table->increments('id');
+            $table->primary(['idProfesor', 'idMateria']);
             $table->integer('idProfesor');
             $table->integer('idMateria');
             $table->timestamps();

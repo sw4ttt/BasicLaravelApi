@@ -37,6 +37,11 @@ class CalificacionesController extends Controller
             return response()->json($validator->errors(),400);
         }
 
+        $calificacion = Calificacion::where('idProfesor',$input['idProfesor'])->where('idMateria',$input['idMateria'])->first();
+
+        if($calificacion)
+            return response()->json(['KEY'=>'ALREADY_EXIST','MESSAGE'=>'Ya existe un objeto Calificacion para esa Materia,Profesor y Periodo.'],400);
+
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
@@ -58,6 +63,14 @@ class CalificacionesController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
+
+        $calificacion = Calificacion::where('idProfesor',$input['idProfesor'])->where('idMateria',$input['idMateria'])->first();
+        if(!$calificacion)
+            return response()->json(['KEY'=>'NOTFOUND','MESSAGE'=>'No existe un objeto Calificacion para esa Materia,Profesor y Periodo.'],400);
+
+        $calificacion->evaluaciones = $input['evaluaciones'];
+        $calificacion->updated_at = Carbon::now()->format('Y-m-d H:i:s');
+        $calificacion->save();
         return response()->json(['success'=>true]);
     }
     public function byEstudiante(Request $request,$idEstudiante)
@@ -91,8 +104,7 @@ class CalificacionesController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-        return Calificacion::where('idEstudiante',$idEstudiante)->where('idMateria',$idMateria)->get()
-            ->groupBy('idMateria');
+        return Calificacion::where('idEstudiante',$idEstudiante)->where('idMateria',$idMateria)->first();
     }
     public function byProfesor(Request $request,$idProfesor)
     {
@@ -123,7 +135,6 @@ class CalificacionesController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-        return Calificacion::where('idProfesor',$idProfesor)->where('idMateria',$idMateria)->get()
-            ->groupBy('idEstudiante');
+        return Calificacion::where('idProfesor',$idProfesor)->where('idMateria',$idMateria)->first();
     }
 }
