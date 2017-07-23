@@ -37,7 +37,10 @@ class CalificacionesController extends Controller
             return response()->json($validator->errors(),400);
         }
 
-        $calificacion = Calificacion::where('idProfesor',$input['idProfesor'])->where('idMateria',$input['idMateria'])->first();
+        $calificacion = Calificacion::where('idProfesor',$input['idProfesor'])
+            ->where('idMateria',$input['idMateria'])
+            ->where('idEstudiante',$input['idEstudiante'])
+            ->first();
 
         if($calificacion)
             return response()->json(['KEY'=>'ALREADY_EXIST','MESSAGE'=>'Ya existe un objeto Calificacion para esa Materia,Profesor y Periodo.'],400);
@@ -87,8 +90,10 @@ class CalificacionesController extends Controller
         }
 
         return Calificacion::where('idEstudiante',$idEstudiante)
-            ->get()
-            ->groupBy('idMateria');
+            ->join('estudiantes', 'calificaciones.idEstudiante','=', 'estudiantes.id')
+            ->join('materias', 'calificaciones.idMateria','=', 'materias.id')
+            ->select('calificaciones.*', 'estudiantes.nombre as nombreEstudiante','materias.nombre as nombreMateria')
+            ->get();
     }
     public function byEstudianteByMateria(Request $request,$idEstudiante,$idMateria)
     {
@@ -104,7 +109,11 @@ class CalificacionesController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-        return Calificacion::where('idEstudiante',$idEstudiante)->where('idMateria',$idMateria)->first();
+        return Calificacion::where('idEstudiante',$idEstudiante)->where('idMateria',$idMateria)
+            ->join('estudiantes', 'calificaciones.idEstudiante','=', 'estudiantes.id')
+            ->join('materias', 'calificaciones.idMateria','=', 'materias.id')
+            ->select('calificaciones.*', 'estudiantes.nombre as nombreEstudiante','materias.nombre as nombreMateria')
+            ->get();
     }
     public function byProfesor(Request $request,$idProfesor)
     {
@@ -113,13 +122,36 @@ class CalificacionesController extends Controller
         $validator = Validator::make($input, [
             'id' => 'required|numeric|exists:users,id'
         ]);
-
         if($validator->fails()) {
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-        return Calificacion::where('idProfesor',$idProfesor)->get()
-            ->groupBy('idEstudiante');
+
+        $calificaciones =
+            Calificacion::where('idProfesor',$idProfesor)
+                ->join('estudiantes', 'calificaciones.idEstudiante','=', 'estudiantes.id')
+                ->join('materias', 'calificaciones.idMateria','=', 'materias.id')
+                ->select('calificaciones.*', 'estudiantes.nombre as nombreEstudiante','materias.nombre as nombreMateria')
+                ->get();
+
+        return $calificaciones;
+    }
+    public function editByProfesor(Request $request,$idProfesor)
+    {
+        $list = json_decode($request->getContent());
+        if(is_null($list) || count($list)==0)
+            return response()->json(["error"=>"Request Body invalid or empty."],400);
+        foreach ($list as $calificacion) {
+            Calificacion::find($calificacion->id)
+                ->update([
+                    'idProfesor' => $calificacion->idProfesor,
+                    'idEstudiante' => $calificacion->idEstudiante,
+                    'idMateria' => $calificacion->idMateria,
+                    'periodo' => $calificacion->periodo,
+                    'evaluaciones' => $calificacion->evaluaciones
+                ]);
+        }
+        return response()->json(['success'=>true],201);
     }
     public function byProfesorByMateria(Request $request,$idProfesor,$idMateria)
     {
@@ -135,6 +167,10 @@ class CalificacionesController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-        return Calificacion::where('idProfesor',$idProfesor)->where('idMateria',$idMateria)->first();
+        return Calificacion::where('idProfesor',$idProfesor)->where('idMateria',$idMateria)
+            ->join('estudiantes', 'calificaciones.idEstudiante','=', 'estudiantes.id')
+            ->join('materias', 'calificaciones.idMateria','=', 'materias.id')
+            ->select('calificaciones.*', 'estudiantes.nombre as nombreEstudiante','materias.nombre as nombreMateria')
+            ->get();
     }
 }

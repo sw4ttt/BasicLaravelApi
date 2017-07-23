@@ -64,7 +64,7 @@ class NoticiasController extends Controller
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
         Noticia::create($input);
-        return response()->json(['success'=>true,'pathtest'=>$input['image']]);
+        return response()->json(['success'=>true,'image'=>$input['image']]);
     }
 
     public function delete(Request $request, $id)

@@ -15,6 +15,7 @@ use App\User;
 use App\Noticia;
 use App\Calificacion;
 use App\Estudiante;
+use App\Material;
 class MateriaController extends Controller
 {
     public function all(Request $request)
@@ -36,6 +37,20 @@ class MateriaController extends Controller
         $materia = Materia::find($id);
         return $materia;
     }
+
+    public function byGrado(Request $request, $grado)
+    {
+        $request['grado'] = $grado;
+        $input = $request->only('grado');
+        $validator = Validator::make($input, [
+            'grado' => 'required|numeric'
+        ]);
+        if($validator->fails()) {
+            //throw new ValidationHttpException($validator->errors()->all());
+            return response()->json($validator->errors(),400);
+        }
+        return Materia::where('grado',$grado)->get();
+    }
     public function add(Request $request)
     {
         $input = $request->only('nombre','grado');
@@ -55,5 +70,21 @@ class MateriaController extends Controller
 
         Materia::create($input);
         return response()->json(['success'=>true]);
+    }
+    public function materiales(Request $request, $id)
+    {
+        $request['id'] = $id;
+        $input = $request->only('id');
+        $validator = Validator::make($input, [
+            'id' => 'required|numeric|exists:materias,id'
+        ]);
+
+        if($validator->fails()) {
+            //throw new ValidationHttpException($validator->errors()->all());
+            return response()->json($validator->errors(),400);
+        }
+
+        $materia = Materia::find($id);
+        return $materia->materiales()->get();
     }
 }

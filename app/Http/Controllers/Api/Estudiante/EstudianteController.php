@@ -40,7 +40,17 @@ class EstudianteController extends Controller
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
-        Estudiante::create($input);
+        $estudiante = Estudiante::create($input);
+
+//        'idProfesor',
+//        'idEstudiante',
+//        'idMateria',
+//        'periodo',
+//        'evaluaciones'
+        $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
+
+        Calificacion::create($input);
         return response()->json(['success'=>true]);
     }
     public function materias(Request $request, $id)

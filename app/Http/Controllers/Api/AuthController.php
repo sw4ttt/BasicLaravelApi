@@ -92,7 +92,7 @@ class AuthController extends Controller
             }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
                 return response()->json(['error'=>'Token is Expired'],401);
             }else{
-                return response()->json(['error'=>'Token Missing2'],400);
+                return response()->json(['error'=>'Token Missing'],400);
             }
         }
         return response()->json(['token' => $newToken]);

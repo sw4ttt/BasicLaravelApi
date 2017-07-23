@@ -63,6 +63,8 @@ Route::group(['middleware' => ['api','cors']], function ()
             Route::get('/', 'Api\Materia\MateriaController@all');
             Route::post('add', 'Api\Materia\MateriaController@add');
             Route::get('{id}', 'Api\Materia\MateriaController@find');
+            Route::get('grado/{grado}', 'Api\Materia\MateriaController@byGrado');
+            Route::get('{id}/material', 'Api\Materia\MateriaController@materiales');
         });
         Route::group(['prefix' => 'calificaciones'], function () {
             Route::get('/', 'Api\Calificaciones\CalificacionesController@all');
@@ -71,7 +73,18 @@ Route::group(['middleware' => ['api','cors']], function ()
             Route::get('/estudiante/{idEstudiante}', 'Api\Calificaciones\CalificacionesController@byEstudiante');
             Route::get('/estudiante/{idEstudiante}/materia/{idMateria}', 'Api\Calificaciones\CalificacionesController@byEstudianteByMateria');
             Route::get('/profesor/{idProfesor}', 'Api\Calificaciones\CalificacionesController@byProfesor');
+            Route::put('/profesor/{idProfesor}', 'Api\Calificaciones\CalificacionesController@editByProfesor');
             Route::get('/profesor/{idProfesor}/materia/{idMateria}', 'Api\Calificaciones\CalificacionesController@byProfesorByMateria');
+        });
+
+        Route::group(['prefix' => 'horarios'], function () {
+            Route::get('/', 'Api\Horario\HorariosController@all');
+            Route::post('add', 'Api\Horario\HorariosController@add');
+        });
+
+        Route::group(['prefix' => 'materiales'], function () {
+            Route::get('/', 'Api\Material\MaterialController@all');
+            Route::post('add', 'Api\Material\MaterialController@add');
         });
     });
 
