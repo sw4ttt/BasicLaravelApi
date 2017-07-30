@@ -53,11 +53,12 @@ class MateriaController extends Controller
     }
     public function add(Request $request)
     {
-        $input = $request->only('nombre','grado');
+        $input = $request->only('nombre','grado','idProfesor');
         $input['nombre'] = strtoupper($input['nombre']);
         $validator = Validator::make($input, [
             'grado' => 'required|numeric',
             'nombre' => 'required|string|unique:materias,nombre',
+            'idProfesor' => 'required|numeric|exists:users,id'
         ]);
 
         if($validator->fails()) {
@@ -68,7 +69,8 @@ class MateriaController extends Controller
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
-        Materia::create($input);
+        $materia = Materia::create($input);
+        $materia->profesores()->attach($input['idProfesor']);
         return response()->json(['success'=>true]);
     }
     public function materiales(Request $request, $id)

@@ -85,6 +85,9 @@ Route::group(['middleware' => ['api','cors']], function ()
         Route::group(['prefix' => 'materiales'], function () {
             Route::get('/', 'Api\Material\MaterialController@all');
             Route::post('add', 'Api\Material\MaterialController@add');
+            Route::get('{id}', 'Api\Material\MaterialController@find');
+            Route::put('{id}', 'Api\Material\MaterialController@edit');
+            Route::delete('{id}', 'Api\Material\MaterialController@delete');
         });
     });
 

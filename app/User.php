@@ -14,9 +14,22 @@ class User extends Authenticatable
      *
      * @var array
      */
+    //$table->string('tipoIdPersonal');
+    //$table->bigInteger('idPersonal')->unique();
+    //$table->string('nombre');
+    //$table->string('tlfDomicilio');
+    //$table->string('tlfCelular');
+    //$table->string('direccion');
+    //$table->string('email');
+    //$table->string('password');
+    //$table->string('type');
     protected $fillable = [
+        'tipoIdPersonal',
         'idPersonal',
         'nombre',
+        'tlfDomicilio',
+        'tlfCelular',
+        'direccion',
         'email',
         'password',
         'type'

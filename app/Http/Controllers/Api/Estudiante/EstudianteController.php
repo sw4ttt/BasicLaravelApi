@@ -25,11 +25,12 @@ class EstudianteController extends Controller
     }
     public function add(Request $request)
     {
-        $input = $request->only('idUser','idPersonal','nombre');
+        $input = $request->only('idUser','idPersonal','nombre','grado');
         $validator = Validator::make($input, [
             'idUser' => 'required|numeric|exists:users,id',
             'idPersonal' => 'required|numeric|unique:estudiantes,idPersonal',
-            'nombre' => 'required|string'
+            'nombre' => 'required|string',
+            'grado' => 'required|numeric',
         ]);
 
         if($validator->fails()) {
@@ -47,10 +48,24 @@ class EstudianteController extends Controller
 //        'idMateria',
 //        'periodo',
 //        'evaluaciones'
+
+        $materias = Materia::where('grado',$input['grado'])->get();
+        foreach ($materias as $materia) {
+            $profesor = $materia->profesores()->get()->first();
+            if(!is_null($profesor))
+            {
+                Calificacion::create([
+                    'idProfesor'=>$profesor->id,
+                    'idEstudiante'=>$estudiante->id,
+                    'idMateria'=>$materia->id,
+                    'periodo'=>'2017-2018',
+                    'evaluaciones'=>[]
+                ]);
+            }
+        }
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
-        Calificacion::create($input);
         return response()->json(['success'=>true]);
     }
     public function materias(Request $request, $id)
