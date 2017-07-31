@@ -2,6 +2,10 @@
 
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
 class UsersTableSeeder extends Seeder
 {
     /**
@@ -20,11 +24,26 @@ class UsersTableSeeder extends Seeder
     //$table->string('type');
     public function run()
     {
-        //'idDocument','name', 'email', 'password','type'
+//        Schema::create('users', function (Blueprint $table) {
+//            $table->increments('id');
+//            $table->string('tipoIdPersonal');
+//            $table->bigInteger('idPersonal')->unique();
+//            $table->string('nombre');
+//            $table->string('image');
+//            $table->string('tlfDomicilio');
+//            $table->string('tlfCelular');
+//            $table->string('direccion');
+//            $table->string('email');
+//            $table->string('password');
+//            $table->string('type');
+//            $table->rememberToken();
+//            $table->timestamps();
+//        });
         DB::table('users')->insert([
             'tipoIdPersonal' => 'cedula',
             'idPersonal'=> 1111,
             'nombre' => 'admin',
+            'image' => 'https://lacasacreativaapp.com/images/default-profile.jpg',
             'tlfDomicilio' => '+58123456',
             'tlfCelular' => '+58123456',
             'direccion' => 'direccion ADMIN',
@@ -38,6 +57,7 @@ class UsersTableSeeder extends Seeder
             'tipoIdPersonal' => 'cedula',
             'idPersonal'=> 1112,
             'nombre' => 'Profesor1',
+            'image' => 'https://lacasacreativaapp.com/images/default-profile.jpg',
             'tlfDomicilio' => '+58123456',
             'tlfCelular' => '+58123456',
             'direccion' => 'direccion PROFESOR',
@@ -51,6 +71,7 @@ class UsersTableSeeder extends Seeder
             'tipoIdPersonal' => 'cedula',
             'idPersonal'=> 1113,
             'nombre' => 'Representante1',
+            'image' => 'https://lacasacreativaapp.com/images/default-profile.jpg',
             'tlfDomicilio' => '+58123456',
             'tlfCelular' => '+58123456',
             'direccion' => 'direccion REPRESENTANTE',

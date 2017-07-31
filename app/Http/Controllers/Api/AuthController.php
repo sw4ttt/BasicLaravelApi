@@ -11,17 +11,38 @@ use Validator;
 use Carbon\Carbon;
 use Exception;
 
-
+//$table->string('tipoIdPersonal');
+//$table->bigInteger('idPersonal')->unique();
+//$table->string('nombre');
+//$table->string('tlfDomicilio');
+//$table->string('tlfCelular');
+//$table->string('direccion');
+//$table->string('email');
+//$table->string('password');
+//$table->string('type');
 class AuthController extends Controller
 {
     public function register(Request $request)
     {
         $UserTypes = array("ADMIN","PROFESOR","REPRESENTANTE");
 
-    	$input = $request->only('idPersonal','nombre','email', 'password','type');
+    	$input = $request->only(
+            'tipoIdPersonal',
+    	    'idPersonal',
+            'tlfDomicilio',
+            'tlfCelular',
+            'direccion',
+            'nombre',
+            'email',
+            'password',
+            'type');
         $validator = Validator::make($input, [
+            'tipoIdPersonal' => 'required|string',
             'idPersonal' => 'required|numeric|unique:users,idPersonal',
             'nombre' => 'required|string',
+            'tlfDomicilio' => 'required|string',
+            'tlfCelular' => 'required|string',
+            'direccion' => 'required|string',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:4',
             'type' => 'required|string'

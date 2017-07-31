@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('tipoIdPersonal');
             $table->bigInteger('idPersonal')->unique();
             $table->string('nombre');
+            $table->string('image');
             $table->string('tlfDomicilio');
             $table->string('tlfCelular');
             $table->string('direccion');
