@@ -34,6 +34,7 @@ class AuthController extends Controller
             'direccion',
             'nombre',
             'email',
+            'image',
             'password',
             'type');
         $validator = Validator::make($input, [
@@ -44,6 +45,7 @@ class AuthController extends Controller
             'tlfCelular' => 'required|string',
             'direccion' => 'required|string',
             'email' => 'required|email|unique:users,email',
+            'image' => 'required|image',
             'password' => 'required|min:4',
             'type' => 'required|string'
         ]);
