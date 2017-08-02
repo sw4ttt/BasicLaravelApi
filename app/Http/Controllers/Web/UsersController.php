@@ -15,12 +15,18 @@ use App\Noticia;
 use App\Calificacion;
 use App\Estudiante;
 use Illuminate\Support\Facades\Storage;
-
+use App\Notifications\NotificacionGeneral;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
+use OneSignal;
 class UsersController extends Controller
 {
     public function all(Request $request)
     {
         $users = User::all();
+
+        OneSignal::sendNotificationToAll("Some Message", $url = null, $data = null, $buttons = null, $schedule = null);
+
         return view('users/users', ['users' => $users]);
     }
 
@@ -59,6 +65,8 @@ class UsersController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return back()->withErrors($validator)->withInput();
         }
+
+        $input['email'] = strtolower($input['email']);
         $input['image'] = Storage::put('images', $request->image);
         $input['image'] = str_replace('public','storage',$input['image'],$i);
         $input['image'] = url('/')."/".$input['image'];

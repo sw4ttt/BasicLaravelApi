@@ -182,7 +182,8 @@ return [
 
 
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
-        
+
+        Berkayk\OneSignal\OneSignalServiceProvider::class
     ],
 
     /*
@@ -233,6 +234,7 @@ return [
 
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class
 
     ],
 

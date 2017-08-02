@@ -10,8 +10,14 @@
 | to using a Closure or controller method. Build something great!
 |
 */
+use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {   return view('/auth/login');});
+Route::get('/', function () {
+    if (Auth::check())
+        return view('/home');
+    else
+        return view('/auth/login');
+});
 Route::get('/login', function () {  return view('/auth/login');});
 Route::post('/login', 'Web\Auth\AuthController@authenticate');
 Route::get('/register', function () {   return view('/auth/register');});

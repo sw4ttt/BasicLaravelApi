@@ -81,19 +81,22 @@ class CalificacionesController extends Controller
         $request['id'] = $idEstudiante;
         $input = $request->only('id');
         $validator = Validator::make($input, [
-            'id' => 'required|numeric|exists:estudiantes,id'
+            'id' => 'required|numeric|exists:users,id'
         ]);
 
         if($validator->fails()) {
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
+        
+        $estudiante = User::find($input['id'])->estudiantes->first();
 
-        return Calificacion::where('idEstudiante',$idEstudiante)
+        return Calificacion::where('idEstudiante',$estudiante->id)
             ->join('estudiantes', 'calificaciones.idEstudiante','=', 'estudiantes.id')
             ->join('materias', 'calificaciones.idMateria','=', 'materias.id')
             ->select('calificaciones.*', 'estudiantes.nombre as nombreEstudiante','materias.nombre as nombreMateria')
             ->get();
+            
     }
     public function byEstudianteByMateria(Request $request,$idEstudiante,$idMateria)
     {

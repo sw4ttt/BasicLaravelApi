@@ -31,7 +31,7 @@ class AuthController extends Controller
             return back()->withErrors($validator)->withInput();
 //            return response()->json($validator->errors(),400);
         }
-        if (Auth::attempt(['email' => $input['email'], 'password' => $input['password']])) {
+        if (Auth::attempt(['email' => strtolower($input['email']), 'password' => $input['password']])) {
             // Authentication passed...
             return redirect('home');
         }

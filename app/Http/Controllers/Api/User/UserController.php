@@ -14,6 +14,7 @@ use App\User;
 use App\Noticia;
 use App\Calificacion;
 use App\Estudiante;
+use App\Materia;
 $UserTypes = array("ADMIN","PROFESOR","REPRESENTANTE");
 
 class UserController extends Controller
@@ -53,11 +54,12 @@ class UserController extends Controller
     public function addEstudiantes(Request $request, $id)
     {
         $request['id'] = $id;
-        $input = $request->only('id','idPersonal','nombre');
+        $input = $request->only('id','idPersonal','nombre','grado');
         $validator = Validator::make($input, [
             'id' => 'required|numeric|exists:users,id',
             'idPersonal' => 'required|numeric|unique:estudiantes,idPersonal',
-            'nombre' => 'required|string'
+            'nombre' => 'required|string',
+            'grado' => 'required|numeric'
         ]);
         if($validator->fails()) {
             //throw new ValidationHttpException($validator->errors()->all());
@@ -70,6 +72,7 @@ class UserController extends Controller
         $estudiante = new Estudiante([
             'idPersonal' => $input['idPersonal'],
             'nombre' => $input['nombre'],
+            'grado' => $input['grado'],
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
@@ -118,7 +121,16 @@ class UserController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-        $profesor = User::find($id);
-        return $profesor->materias()->get();
+        $user = User::find($id);
+
+        if ($user->type === 'PROFESOR')
+            return $user->materias()->get();
+        else
+        {
+            $estudiante = User::find($id)->estudiantes->first();
+            if (is_null($estudiante))
+                return [];
+            return Materia::where('grado', $estudiante->grado)->get();
+        }
     }
 }

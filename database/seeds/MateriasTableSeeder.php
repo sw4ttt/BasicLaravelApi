@@ -35,7 +35,7 @@ class MateriasTableSeeder extends Seeder
 
         $input = [
             'grado'=>1,
-            'nombre'=>'Materia1'
+            'nombre'=>'Matematica 1'
         ];
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
@@ -46,16 +46,70 @@ class MateriasTableSeeder extends Seeder
             ]
         );
 
-        $input2 = [
+        $input = [
             'grado'=>1,
-            'nombre'=>'Materia2'
+            'nombre'=>'Lenguaje 1'
         ];
-        $input2['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
-        $input2['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
-        $materia2 = Materia::create($input2);
-        $materia2->profesores()->attach(2,[
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $materia = Materia::create($input);
+        $materia->profesores()->attach(2,[
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]
+        );
+
+
+        $input = [
+            'grado'=>1,
+            'nombre'=>'Historia 1'
+        ];
+        $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $materia = Materia::create($input);
+        $materia->profesores()->attach(2,[
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]
+        );
+
+        $input = [
+            'grado'=>2,
+            'nombre'=>'Matematica 2'
+        ];
+        $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $materia = Materia::create($input);
+        $materia->profesores()->attach(2,[
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]
+        );
+
+        $input = [
+            'grado'=>2,
+            'nombre'=>'Lenguaje 2'
+        ];
+        $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $materia = Materia::create($input);
+        $materia->profesores()->attach(2,[
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]
+        );
+
+
+        $input = [
+            'grado'=>2,
+            'nombre'=>'Historia 2'
+        ];
+        $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $materia = Materia::create($input);
+        $materia->profesores()->attach(2,[
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ]
         );
     }

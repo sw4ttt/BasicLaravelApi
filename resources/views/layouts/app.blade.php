@@ -10,6 +10,25 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <link rel="manifest" href="/manifest.json">
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
+    <script>
+      var OneSignal = window.OneSignal || [];
+      OneSignal.push(["init", {
+        appId: "9c9c55f8-cd80-461f-94b5-557e9204c8f2",
+        autoRegister: false,
+        notifyButton: {
+          enable: true /* Set to false to hide */
+        }
+      }]);
+
+      OneSignal.push(function() {
+        OneSignal.getUserId().then(function(userId) {
+          console.log("OneSignal User ID:", userId);
+          // (Output) OneSignal User ID: 270a35cd-4dda-4b3f-b04e-41d7463a2316
+        });
+      });
+    </script>
     <!-- Styles -->
     <link href="{{ url('/') }}/css/app.css" rel="stylesheet">
     <link href="{{ url('/') }}/css/sidebar.css" rel="stylesheet">

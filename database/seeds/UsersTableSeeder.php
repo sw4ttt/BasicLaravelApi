@@ -24,21 +24,21 @@ class UsersTableSeeder extends Seeder
     //$table->string('type');
     public function run()
     {
-//        Schema::create('users', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string('tipoIdPersonal');
-//            $table->bigInteger('idPersonal')->unique();
-//            $table->string('nombre');
-//            $table->string('image');
-//            $table->string('tlfDomicilio');
-//            $table->string('tlfCelular');
-//            $table->string('direccion');
-//            $table->string('email');
-//            $table->string('password');
-//            $table->string('type');
-//            $table->rememberToken();
-//            $table->timestamps();
-//        });
+        Schema::create('users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('tipoIdPersonal');
+            $table->bigInteger('idPersonal')->unique();
+            $table->string('nombre');
+            $table->string('image');
+            $table->string('tlfDomicilio');
+            $table->string('tlfCelular');
+            $table->string('direccion');
+            $table->string('email');
+            $table->string('password');
+            $table->string('type');
+            $table->rememberToken();
+            $table->timestamps();
+        });
         DB::table('users')->insert([
             'tipoIdPersonal' => 'cedula',
             'idPersonal'=> 1111,
