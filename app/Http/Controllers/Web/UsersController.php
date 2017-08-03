@@ -25,7 +25,7 @@ class UsersController extends Controller
     {
         $users = User::all();
 
-        OneSignal::sendNotificationToAll("Some Message", $url = null, $data = null, $buttons = null, $schedule = null);
+        OneSignal::sendNotificationToAll("Some Message", $url = 'do_not_open', $data = ["dataTest"=>'test value'], $buttons = null, $schedule = null);
 
         return view('users/users', ['users' => $users]);
     }
