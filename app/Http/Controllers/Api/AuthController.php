@@ -24,8 +24,6 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $UserTypes = array("ADMIN","PROFESOR","REPRESENTANTE");
-
     	$input = $request->only(
             'tipoIdPersonal',
     	    'idPersonal',
@@ -47,10 +45,8 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users,email',
             'image' => 'required|image',
             'password' => 'required|min:4',
-            'type' => 'required|string'
+            'type' => 'required|string|in:ADMIN,PROFESOR,REPRESENTANTE'
         ]);
-        if(array_search(strtoupper($input['type']),$UserTypes) == false)
-            return response()->json(["type"=>"Wrong User Type.","valid types"=>$UserTypes],400);
         if($validator->fails()) {
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);

@@ -13,14 +13,18 @@
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    if (Auth::check())
-        return view('/home');
-    else
-        return view('/auth/login');
+    if (Auth::check())return view('/home');
+    else return view('/auth/login');
 });
-Route::get('/login', function () {  return view('/auth/login');});
+Route::get('/login', function () {
+    if (Auth::check())return view('/home');
+    else return view('/auth/login');
+});
 Route::post('/login', 'Web\Auth\AuthController@authenticate');
-Route::get('/register', function () {   return view('/auth/register');});
+Route::get('/register', function () {
+    if (Auth::check())return view('/home');
+    else return view('/auth/register');
+});
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', function () {   return view('/home');});

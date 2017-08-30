@@ -23,6 +23,7 @@
       }]);
 
       OneSignal.push(function() {
+        OneSignal.sendTag("userType", "web");
         OneSignal.getUserId().then(function(userId) {
           console.log("OneSignal User ID:", userId);
           // (Output) OneSignal User ID: 270a35cd-4dda-4b3f-b04e-41d7463a2316
