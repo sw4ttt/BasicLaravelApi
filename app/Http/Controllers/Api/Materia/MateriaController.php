@@ -71,6 +71,21 @@ class MateriaController extends Controller
 
         $materia = Materia::create($input);
         $materia->profesores()->attach($input['idProfesor']);
+
+        $estudiantes = Estudiante::where('grado',$input['grado'])->get();
+
+        foreach ($estudiantes as $estudiante) {
+            Calificacion::create([
+                'idProfesor'=>$input['idProfesor'],
+                'idEstudiante'=>$estudiante->id,
+                'idMateria'=>$materia->id,
+                'periodo'=>'2017-2018',
+                'evaluaciones'=>[],
+                'created_at'=>$input['created_at'],
+                'updated_at'=>$input['updated_at'],
+            ]);
+        }
+
         return response()->json(['success'=>true]);
     }
     public function materiales(Request $request, $id)

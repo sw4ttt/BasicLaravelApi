@@ -8,8 +8,12 @@ use App\User;
 use Hash;
 use JWTAuth;
 use Validator;
+use App\Calificacion;
+use App\Estudiante;
+use App\Materia;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\Storage;
 
 //$table->string('tipoIdPersonal');
 //$table->bigInteger('idPersonal')->unique();
@@ -34,7 +38,10 @@ class AuthController extends Controller
             'email',
             'image',
             'password',
-            'type');
+            'type',
+            'nombreEstudiante',
+            'idPersonalEstudiante',
+            'grado');
         $validator = Validator::make($input, [
             'tipoIdPersonal' => 'required|string',
             'idPersonal' => 'required|numeric|unique:users,idPersonal',
@@ -45,7 +52,10 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users,email',
             'image' => 'required|image',
             'password' => 'required|min:4',
-            'type' => 'required|string|in:ADMIN,PROFESOR,REPRESENTANTE'
+            'type' => 'required|string|in:ADMIN,PROFESOR,REPRESENTANTE',
+            'nombreEstudiante' => 'required|string',
+            'idPersonalEstudiante' => 'required|string',
+            'grado' => 'required|integer'
         ]);
         if($validator->fails()) {
             //throw new ValidationHttpException($validator->errors()->all());
@@ -55,7 +65,35 @@ class AuthController extends Controller
     	$input['password'] = Hash::make($input['password']);
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
-    	User::create($input);
+
+        $input['image'] = Storage::put('images', $request->image);
+        $input['image'] = str_replace('public','storage',$input['image'],$i);
+        $input['image'] = url('/')."/".$input['image'];
+
+    	$user = User::create($input);
+
+    	$input['idUser'] = $user->id;
+        $input['idPersonal'] = $input['idPersonalEstudiante'];
+        $input['nombre'] = $input['nombreEstudiante'];
+
+        $estudiante = Estudiante::create($input);
+
+        $materias = Materia::where('grado',$input['grado'])->get();
+        foreach ($materias as $materia) {
+            $profesor = $materia->profesores()->get()->first();
+            if(!is_null($profesor))
+            {
+                Calificacion::create([
+                    'idProfesor'=>$profesor->id,
+                    'idEstudiante'=>$estudiante->id,
+                    'idMateria'=>$materia->id,
+                    'periodo'=>'2017-2018',
+                    'evaluaciones'=>[],
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ]);
+            }
+        }
         return response()->json(['success'=>true]);
     }
     
