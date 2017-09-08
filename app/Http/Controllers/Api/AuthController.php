@@ -28,9 +28,9 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-    	$input = $request->only(
+        $input = $request->only(
             'tipoIdPersonal',
-    	    'idPersonal',
+            'idPersonal',
             'tlfDomicilio',
             'tlfCelular',
             'direccion',
@@ -38,10 +38,7 @@ class AuthController extends Controller
             'email',
             'image',
             'password',
-            'type',
-            'nombreEstudiante',
-            'idPersonalEstudiante',
-            'grado');
+            'type');
         $validator = Validator::make($input, [
             'tipoIdPersonal' => 'required|string',
             'idPersonal' => 'required|numeric|unique:users,idPersonal',
@@ -52,16 +49,30 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users,email',
             'image' => 'required|image',
             'password' => 'required|min:4',
-            'type' => 'required|string|in:ADMIN,PROFESOR,REPRESENTANTE',
-            'nombreEstudiante' => 'required|string',
-            'idPersonalEstudiante' => 'required|string',
-            'grado' => 'required|integer'
+            'type' => 'required|string|in:ADMIN,PROFESOR,REPRESENTANTE'
         ]);
         if($validator->fails()) {
-            //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-        $input['type'] = strtoupper($input['type']);
+
+        $userType = $input['type'];
+
+        if($userType === 'REPRESENTANTE')
+        {
+            $input = $request->only(
+                'nombreEstudiante',
+                'idPersonalEstudiante',
+                'grado');
+            $validator = Validator::make($input, [
+                'nombreEstudiante' => 'required|string',
+                'idPersonalEstudiante' => 'required|string',
+                'grado' => 'required|integer'
+            ]);
+            if($validator->fails()) {
+                return response()->json($validator->errors(),400);
+            }
+        }
+
     	$input['password'] = Hash::make($input['password']);
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
@@ -72,26 +83,29 @@ class AuthController extends Controller
 
     	$user = User::create($input);
 
-    	$input['idUser'] = $user->id;
-        $input['idPersonal'] = $input['idPersonalEstudiante'];
-        $input['nombre'] = $input['nombreEstudiante'];
+        if($userType === 'REPRESENTANTE')
+        {
+            $input['idUser'] = $user->id;
+            $input['idPersonal'] = $input['idPersonalEstudiante'];
+            $input['nombre'] = $input['nombreEstudiante'];
 
-        $estudiante = Estudiante::create($input);
+            $estudiante = Estudiante::create($input);
 
-        $materias = Materia::where('grado',$input['grado'])->get();
-        foreach ($materias as $materia) {
-            $profesor = $materia->profesores()->get()->first();
-            if(!is_null($profesor))
-            {
-                Calificacion::create([
-                    'idProfesor'=>$profesor->id,
-                    'idEstudiante'=>$estudiante->id,
-                    'idMateria'=>$materia->id,
-                    'periodo'=>'2017-2018',
-                    'evaluaciones'=>[],
-                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-                ]);
+            $materias = Materia::where('grado',$input['grado'])->get();
+            foreach ($materias as $materia) {
+                $profesor = $materia->profesores()->get()->first();
+                if(!is_null($profesor))
+                {
+                    Calificacion::create([
+                        'idProfesor'=>$profesor->id,
+                        'idEstudiante'=>$estudiante->id,
+                        'idMateria'=>$materia->id,
+                        'periodo'=>'2017-2018',
+                        'evaluaciones'=>[],
+                        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                        'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                    ]);
+                }
             }
         }
         return response()->json(['success'=>true]);

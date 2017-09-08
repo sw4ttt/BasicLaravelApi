@@ -79,6 +79,7 @@ Route::group(['middleware' => ['api','cors']], function ()
 
         Route::group(['prefix' => 'horarios'], function () {
             Route::get('/', 'Api\Horario\HorariosController@all');
+            Route::get('horario', 'Api\Horario\HorariosController@horario');
             Route::post('add', 'Api\Horario\HorariosController@add');
         });
 
