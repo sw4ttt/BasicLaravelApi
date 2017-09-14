@@ -15,6 +15,7 @@ class Articulo extends Model
         'nombre',
         'cantidad',
         'estado',
-        'precio'
+        'precio',
+        'image'
     ];
 }

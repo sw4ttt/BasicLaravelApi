@@ -19,6 +19,7 @@ class CreateArticulosTable extends Migration
             $table->string('cantidad');
             $table->string('estado');
             $table->float('precio', 8, 2);
+            $table->string('image');
             $table->timestamps();
         });
     }
