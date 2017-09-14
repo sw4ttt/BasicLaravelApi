@@ -9,7 +9,8 @@
         "laravel/framework": "5.3.*",
         "tymon/jwt-auth": "0.5.*",
         "laravel-notification-channels/onesignal": "^1.0",
-        "berkayk/onesignal-laravel": "^0.9.7"
+        "berkayk/onesignal-laravel": "^0.9.7",
+        "guzzlehttp/guzzle": "~6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

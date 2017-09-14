@@ -17,6 +17,7 @@ class CreateHorariosTable extends Migration
             $table->increments('id');
             $table->string('entidad');
             $table->string('idEntidad')->nullable();
+            $table->string('nombreEntidad')->nullable();
             $table->string('descripcion');
             $table->string('dia');
             $table->string('inicio');

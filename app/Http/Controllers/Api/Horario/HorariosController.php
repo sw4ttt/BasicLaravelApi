@@ -38,8 +38,6 @@ class HorariosController extends Controller
                 return response()->json(['error'=>'Token Missing'],400);
             }
         }
-//        ADMIN,PROFESOR,REPRESENTANTE
-        $horario = [];
         switch ($user->type) {
             case 'PROFESOR':
             {
@@ -56,7 +54,10 @@ class HorariosController extends Controller
                 break;
             case 'REPRESENTANTE':
             {
-                return $horario;
+                $estudiante = $user->estudiantes()->first();
+                if (is_null($estudiante))
+                    return [];
+                return Horario::where('grado',$estudiante->grado)->get();
             }
                 break;
             case 'ADMIN':
@@ -64,6 +65,9 @@ class HorariosController extends Controller
                 return response()->json(['error'=>'user is ADMIN, no maneja horario'],400);
             }
                 break;
+            default:{
+                return response()->json(['error'=>'user is not valid.'],400);
+            }
         }
     }
 
@@ -83,7 +87,7 @@ class HorariosController extends Controller
         $validator = Validator::make($input, [
             'entidad' => 'required|string|in:MATERIA,PROFESOR,GENERAL',
             'idEntidad' => 'required_if:entidad,MATERIA,PROFESOR',
-            'descripcion' => 'required|string',
+            'descripcion' => 'required_if:entidad,GENERAL',
             'dia' => 'required|string',
             'inicio' => 'required|string',
             'fin' => 'required|string',
@@ -113,6 +117,11 @@ class HorariosController extends Controller
                 //throw new ValidationHttpException($validator->errors()->all());
                 return response()->json($validator->errors(),400);
             }
+
+            if($input['entidad']=== 'MATERIA')
+                $input['nombreEntidad']=Materia::find($input['idEntidad'])->nombre;
+            elseif($input['entidad']=== 'PROFESOR')
+                $input['nombreEntidad']=User::find($input['idEntidad'])->nombre;
         }
 
         if($input['entidad'] === 'GENERAL')

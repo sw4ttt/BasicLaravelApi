@@ -29,6 +29,8 @@ Route::group(['middleware' => ['api','cors'],'prefix' => 'api'], function () {
 
 Route::group(['middleware' => ['api','cors']], function ()
 {
+    Route::post('/testpayu1', 'Api\User\UserController@testConsultaPayu');
+
     Route::post('register', 'Api\AuthController@register');
     Route::post('login', 'Api\AuthController@login');
     Route::post('refreshToken', 'Api\AuthController@refreshToken');
@@ -89,6 +91,18 @@ Route::group(['middleware' => ['api','cors']], function ()
             Route::get('{id}', 'Api\Material\MaterialController@find');
             Route::put('{id}', 'Api\Material\MaterialController@edit');
             Route::delete('{id}', 'Api\Material\MaterialController@delete');
+        });
+
+        Route::group(['prefix' => 'carrito'], function () {
+            Route::post('add', 'Api\Carrito\CarritoController@add');
+            Route::get('actual', 'Api\Carrito\CarritoController@carrito');
+            Route::put('edit', 'Api\Carrito\CarritoController@edit');
+            Route::put('vaciar', 'Api\Carrito\CarritoController@vaciar');
+        });
+
+        Route::group(['prefix' => 'articulo'], function () {
+            Route::post('add', 'Api\Articulo\ArticuloController@add');
+            Route::get('{id}', 'Api\Articulo\ArticuloController@find');
         });
     });
 

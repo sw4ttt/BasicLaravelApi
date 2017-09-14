@@ -58,4 +58,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Materia','profesores_materias','idProfesor','idMateria');
     }
+    public function carrito()
+    {
+        return $this->belongsToMany('App\Articulo','usuarios_articulos','idUsuario','idArticulo');
+    }
 }

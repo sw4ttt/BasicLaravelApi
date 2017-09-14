@@ -10,6 +10,7 @@ class Horario extends Model
     protected $fillable = [
         'entidad',
         'idEntidad',
+        'nombreEntidad',
         'descripcion',
         'dia',
         'inicio',
