@@ -25,6 +25,11 @@ class ArticuloController extends Controller
 //$table->string('cantidad');
 //$table->string('estado');
 //$table->float('precio', 8, 2);
+
+    public function all(Request $request)
+    {
+        return Articulo::all();
+    }
     public function add(Request $request)
     {
         $input = $request->only('nombre','cantidad','estado','precio','image');

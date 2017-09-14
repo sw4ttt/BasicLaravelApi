@@ -51,7 +51,7 @@ class CarritoController extends Controller
         if($encontrados !== count($input['articulosIds']))
             return response()->json(['error'=>'articulosIds con ids invalidos. Ids Enviados: '.count($input['articulosIds']).", Ids Encotrandos en BD: ".$encontrados],400);
 
-        $user->carrito()->attach($input['articulosIds']);
+        $user->carrito()->syncWithoutDetaching($input['articulosIds']);
 
         return response()->json(['success'=>'true','carrito'=>$user->carrito()->get()],201);
     }

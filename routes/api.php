@@ -100,7 +100,8 @@ Route::group(['middleware' => ['api','cors']], function ()
             Route::put('vaciar', 'Api\Carrito\CarritoController@vaciar');
         });
 
-        Route::group(['prefix' => 'articulo'], function () {
+        Route::group(['prefix' => 'articulos'], function () {
+            Route::get('/', 'Api\Articulo\ArticuloController@all');
             Route::post('add', 'Api\Articulo\ArticuloController@add');
             Route::get('{id}', 'Api\Articulo\ArticuloController@find');
         });
