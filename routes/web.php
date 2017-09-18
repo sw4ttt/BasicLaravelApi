@@ -33,4 +33,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/users', 'Web\UsersController@all');
     Route::get('/users/add', function () {  return view('/users/add');});
     Route::post('/users/add', 'Web\UsersController@add');
+
+    Route::get('/orders', 'Web\OrdersController@all');
+    Route::get('/materias', 'Web\MateriasController@all');
 });

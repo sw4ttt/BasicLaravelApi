@@ -22,7 +22,8 @@ class Order extends Model
         'transaction_id',
         'state',
         'value',
-        'user_id'
+        'user_id',
+        'user_name'
     ];
 
     protected $casts = [

@@ -41,7 +41,7 @@ class PagosController extends Controller
             }
         }
 
-        return Order::where('user_id', $user->id)->get();
+        return Order::where('user_id', $user->id)->where('state', 'APPROVED')->get();
 
     }
     public function add(Request $request)
@@ -77,7 +77,7 @@ class PagosController extends Controller
         $articulos = $user->carrito()->withPivot('cantidad')->get();
 
         if(count($articulos)===0)
-            return response()->json(['error'=>'El carrito de compras esta vacio.'],400);
+            return response()->json(['key'=>'ERROR','message'=>'El carrito de compras esta vacio.'],400);
 
 //        return $articulos;
 
@@ -106,6 +106,7 @@ class PagosController extends Controller
 
         $order = Order::create([
             'user_id'=>$user->id,
+            'user_name'=>$user->nombre,
             'reference'=>Carbon::now()->format('Y-m-d_H-i-s').str_random(10),
             'payu_order_id'=>'',
             'transaction_id'=>'',
@@ -143,21 +144,21 @@ class PagosController extends Controller
 
             // -- Comprador
             //Ingrese aquí el nombre del comprador.
-            \PayUParameters::BUYER_NAME => "First name and second buyer name",
+            \PayUParameters::BUYER_NAME => $user->nombre,
             //Ingrese aquí el email del comprador.
-            \PayUParameters::BUYER_EMAIL => "buyer_test@test.com",
+            \PayUParameters::BUYER_EMAIL => $user->email,
             //Ingrese aquí el teléfono de contacto del comprador.
-            \PayUParameters::BUYER_CONTACT_PHONE => "7563126",
+            \PayUParameters::BUYER_CONTACT_PHONE => $user->tlfCelular,
             //Ingrese aquí el documento de contacto del comprador.
-            \PayUParameters::BUYER_DNI => "5415668464654",
+            \PayUParameters::BUYER_DNI => $user->idPersonal,
             //Ingrese aquí la dirección del comprador.
-            \PayUParameters::BUYER_STREET => "calle 100",
-            \PayUParameters::BUYER_STREET_2 => "5555487",
-            \PayUParameters::BUYER_CITY => "Medellin",
-            \PayUParameters::BUYER_STATE => "Antioquia",
+            \PayUParameters::BUYER_STREET => $user->direccion,
+            \PayUParameters::BUYER_STREET_2 => "DEFAULT",
+            \PayUParameters::BUYER_CITY => "DEFAULT",
+            \PayUParameters::BUYER_STATE => "DEFAULT",
             \PayUParameters::BUYER_COUNTRY => "CO",
-            \PayUParameters::BUYER_POSTAL_CODE => "000000",
-            \PayUParameters::BUYER_PHONE => "7563126",
+            \PayUParameters::BUYER_POSTAL_CODE => "DEFAULT",
+            \PayUParameters::BUYER_PHONE => $user->tlfCelular,
 
             // -- pagador --
             //Ingrese aquí el nombre del pagador.
@@ -203,9 +204,9 @@ class PagosController extends Controller
             \PayUParameters::USER_AGENT=>"Mozilla/5.0 (Windows NT 5.1; rv:18.0) Gecko/20100101 Firefox/18.0"
         ];
 
-        $promise = new Promise(function () use (&$promise,&$order,&$data,&$articulos) {
+        $promise = new Promise(function () use (&$promise,&$order,&$data,&$articulos,&$user) {
 
-            $order->payWith($data, function($response, $order) use(&$promise,&$articulos){
+            $order->payWith($data, function($response, $order) use(&$promise,&$articulos,&$user){
                 if ($response->code == 'SUCCESS') {
 
                     switch($response->transactionResponse->state)
@@ -217,6 +218,7 @@ class PagosController extends Controller
                                 'payu_order_id' => $response->transactionResponse->orderId,
                                 'transaction_id' => $response->transactionResponse->transactionId
                             ]);
+                            $user->carrito()->detach();
                             foreach ($articulos as $articulo){
                                 $articulo->decrement('cantidad',$articulo->pivot->cantidad);
                             }
@@ -230,7 +232,8 @@ class PagosController extends Controller
                                 'code'=>isset(
                                     $response->transactionResponse->responseCode)?
                                     $response->transactionResponse->responseCode:
-                                    'APPROVED'
+                                    'APPROVED',
+                                'order'=>$order
                             ]);
                             break;
                         case 'DECLINED';
@@ -244,7 +247,8 @@ class PagosController extends Controller
                             $promise->resolve([
                                 'key'=>'ERROR',
                                 'message'=>$response->transactionResponse->responseMessage,
-                                'code'=>$response->transactionResponse->responseCode
+                                'code'=>$response->transactionResponse->responseCode,
+                                'order'=>$order
                             ]);
                             break;
                         case 'PENDING';
@@ -257,7 +261,8 @@ class PagosController extends Controller
                             $promise->resolve([
                                 'key'=>'ERROR',
                                 'message'=>$response->transactionResponse->responseMessage,
-                                'code'=>$response->transactionResponse->responseCode
+                                'code'=>$response->transactionResponse->responseCode,
+                                'order'=>$order
                             ]);
                             break;
                         case 'PENDING_TRANSACTION_CONFIRMATION';

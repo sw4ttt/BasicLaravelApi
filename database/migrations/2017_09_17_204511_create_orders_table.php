@@ -29,6 +29,7 @@ class CreateOrdersTable extends Migration
             $table->string('state');
             $table->string('value');
             $table->string('user_id');
+            $table->string('user_name');
             $table->text('articulos');
 
             $table->timestamps();

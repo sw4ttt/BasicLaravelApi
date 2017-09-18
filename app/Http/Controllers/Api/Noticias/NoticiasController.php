@@ -100,7 +100,9 @@ class NoticiasController extends Controller
         $noticia->image = str_replace('public','storage',$noticia->image,$i);
         $path = realpath('./../public/').'/'.$noticia->image;
         $path = str_replace('\\', '/', $path);
-        unlink($path);
+
+        if( file_exists($path) )
+            unlink($path);
         Noticia::destroy($id);
         return response()->json(['success'=>true]);
     }

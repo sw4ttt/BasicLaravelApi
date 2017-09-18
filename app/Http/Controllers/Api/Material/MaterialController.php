@@ -76,6 +76,7 @@ class MaterialController extends Controller
     }
     public function edit(Request $request, $id)
     {
+        $request['id'] = $id;
         $input = $request->only('id','titulo','descripcion');
         $validator = Validator::make($input, [
             'id' => 'required|numeric|exists:materials,id',
@@ -112,7 +113,11 @@ class MaterialController extends Controller
         $material->file = str_replace(url('/'),'',$material->file,$i);
         $path = realpath('./../public/').$material->file;
         $path = str_replace('\\', '/', $path);
-        unlink($path);
+
+
+        if( file_exists($path) )
+            unlink($path);
+
         Material::destroy($id);
         return response()->json(['success'=>true]);
     }

@@ -70,11 +70,11 @@ class TarjetasController extends Controller
         $input['tipo'] = strtoupper($input['tipo']);
 
         $validator = Validator::make($input, [
+            'vencimiento' => 'required|string|regex:(^([0-9]{4}\/[0-9]{2})$)',
             'tipo' => 'required|string|in:VISA,MASTERCARD',
             'numero' => 'required|digits:16',
             'nombre' => 'required|string',
             'cod' => 'required|string',
-            'vencimiento' => 'required|string',
             'street1' => 'required|string',
             'street2' => 'required|string',
             'city' => 'required|string',

@@ -31,9 +31,17 @@ class AuthController extends Controller
             return back()->withErrors($validator)->withInput();
 //            return response()->json($validator->errors(),400);
         }
+
+
         if (Auth::attempt(['email' => strtolower($input['email']), 'password' => $input['password']])) {
             // Authentication passed...
-            return redirect('home');
+            if(Auth::user()->type === 'ADMIN')
+                return redirect('home');
+            else
+            {
+                Auth::logout();
+                return back()->withErrors(['userType'=>['Debes ser ADMIN para ingresar a la parte web.']])->withInput();
+            }
         }
         return back()->withErrors(['password'=>['Email o Password Invalido.']])->withInput();
     }

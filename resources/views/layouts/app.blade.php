@@ -114,7 +114,9 @@
                             </div>
                             <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
                                 <ul class="nav navbar-nav">
-                                    <li class="active"><a href="{{URL::to('home')}}">Home<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
+                                    <li class=""><a href="{{URL::to('home')}}">Home<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
+                                    <li class=""><a href="{{URL::to('orders')}}">Ordenes de Pago<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-shopping-cart"></span></a></li>
+                                    <li class=""><a href="{{URL::to('materias')}}">Materias<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-book"></span></a></li>
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuarios <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">

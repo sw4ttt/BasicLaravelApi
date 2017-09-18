@@ -35,6 +35,11 @@
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                                 @endif
+                                @if ($errors->has('userType'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('userType') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
 
