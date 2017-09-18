@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="panel panel-default ">
-        <div class="panel-heading"><h2>Materias</h2></div>
+        <div class="panel-heading"><h2>Materias <span class="badge"> {{count($materias)}}</span></h2></div>
         <div class="panel-body">
             <table class="table table-striped">
                 <thead>
@@ -22,8 +22,6 @@
                         @endforeach
                     @else
                         <tr>
-                            <td>..</td>
-                            <td>..</td>
                             <td>..</td>
                             <td>..</td>
                         </tr>

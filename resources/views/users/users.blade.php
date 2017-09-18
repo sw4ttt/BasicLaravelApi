@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="panel panel-default ">
-        <div class="panel-heading"><h2>Usuarios</h2></div>
+        <div class="panel-heading"><h2>Usuarios <span class="badge"> {{count($users)}}</span></h2></div>
         <div class="panel-body">
             <table class="table table-striped">
                 <thead>

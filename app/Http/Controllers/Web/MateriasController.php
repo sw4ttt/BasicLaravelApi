@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Materia;
 use Hash;
 use JWTAuth;
 use Validator;
@@ -14,28 +15,81 @@ use App\User;
 use App\Noticia;
 use App\Calificacion;
 use App\Estudiante;
-use Illuminate\Support\Facades\Storage;
-use App\Notifications\NotificacionGeneral;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Auth;
-use OneSignal;
-use App\Materia;
+use App\Material;
 
 class MateriasController extends Controller
 {
     public function all(Request $request)
     {
-        $user = Auth::user();
-
-        if($user->type === 'ADMIN')
-        {
-            $materias = Materia::all();
-            return view('materias/materias', ['materias' => $materias]);
-        }
-        else
-            return redirect('home');
-
-
+        $materias = Materia::all();
+        return view('materias/materias', ['materias' => $materias]);
     }
 
+    public function addGet(Request $request)
+    {
+        $materias = Materia::all();
+        return view('materias/add', ['materias' => $materias]);
+    }
+
+    public function add(Request $request)
+    {
+        $input = $request->only('nombre','grado','idProfesor');
+        $input['nombre'] = strtoupper($input['nombre']);
+        $validator = Validator::make($input, [
+            'grado' => 'required|numeric|between:1,15',
+            'nombre' => 'required|string|unique:materias,nombre',
+            'idProfesor' => 'required|string|exists:users,nombre'
+        ]);
+
+        if($validator->fails()) {
+            //throw new ValidationHttpException($validator->errors()->all());
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
+
+        $materia = Materia::create($input);
+//        $materia->profesores()->attach($input['idProfesor']);
+//
+//        $estudiantes = Estudiante::where('grado',$input['grado'])->get();
+//
+//        foreach ($estudiantes as $estudiante) {
+//            Calificacion::create([
+//                'idProfesor'=>$input['idProfesor'],
+//                'idEstudiante'=>$estudiante->id,
+//                'idMateria'=>$materia->id,
+//                'periodo'=>'2017-2018',
+//                'evaluaciones'=>[],
+//                'created_at'=>$input['created_at'],
+//                'updated_at'=>$input['updated_at'],
+//            ]);
+//        }
+//        return view('materias/add', ['message'=>'Materia Creada!']);
+
+        return back()->with('message', 'Materia Creada!');
+    }
+
+    public function delete(Request $request)
+    {
+        $input = $request->only(
+            'id'
+        );
+        $validator = Validator::make($input, [
+            'id' => 'required|numeric|exists:materias,id'
+        ]);
+
+        if($validator->fails()) {
+            //throw new ValidationHttpException($validator->errors()->all());
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $materia = Materia::find($input['id']);
+
+        $materia->profesores()->detach();
+
+        $materia->delete();
+
+        return back();
+    }
 }

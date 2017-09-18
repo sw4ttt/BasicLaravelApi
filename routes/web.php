@@ -11,6 +11,7 @@
 |
 */
 use Illuminate\Support\Facades\Auth;
+use App\User;
 
 Route::get('/', function () {
     if (Auth::check())return view('/home');
@@ -35,5 +36,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/users/add', 'Web\UsersController@add');
 
     Route::get('/orders', 'Web\OrdersController@all');
+
     Route::get('/materias', 'Web\MateriasController@all');
+    Route::get('/materias/add', function () {  return view('/materias/add',['profesores'=>User::where('type','PROFESOR')->get()]);});
+    Route::post('/materias/add', 'Web\MateriasController@add');
 });
