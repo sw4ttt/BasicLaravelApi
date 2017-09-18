@@ -13,6 +13,8 @@ use Validator;
 use Carbon\Carbon;
 use App\User;
 use App\Noticia;
+use OneSignal;
+
 class NoticiasController extends Controller
 {
     public function all(Request $request)
@@ -63,7 +65,23 @@ class NoticiasController extends Controller
         $input['image'] = url('/')."/".$input['image'];
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
-        Noticia::create($input);
+        $noticia = Noticia::create($input);
+
+        OneSignal::sendNotificationToAll(
+            "Nueva Noticia: ".$noticia->title,
+            $url = null,
+            [
+                "key"=>"NOTICIA",
+                "id"=>$noticia->id,
+                "title"=>$noticia->title,
+                "content"=>$noticia->content,
+                "image"=>$noticia->image,
+                "fecha"=>$noticia->created_at
+            ],
+            $buttons = null,
+            $schedule = null
+        );
+
         return response()->json(['success'=>true,'image'=>$input['image']]);
     }
 

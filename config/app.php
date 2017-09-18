@@ -183,7 +183,9 @@ return [
 
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
 
-        Berkayk\OneSignal\OneSignalServiceProvider::class
+        Berkayk\OneSignal\OneSignalServiceProvider::class,
+
+        Alexo\LaravelPayU\LaravelPayUServiceProvider::class,
     ],
 
     /*

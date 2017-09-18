@@ -76,7 +76,6 @@ class MaterialController extends Controller
     }
     public function edit(Request $request, $id)
     {
-        $request['id'] = $id;
         $input = $request->only('id','titulo','descripcion');
         $validator = Validator::make($input, [
             'id' => 'required|numeric|exists:materials,id',
@@ -87,7 +86,7 @@ class MaterialController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-        $material = Material::find($id);
+        $material = Material::find($input['id']);
 
         $material->titulo = $input['titulo'];
         $material->descripcion = $input['descripcion'];

@@ -32,13 +32,15 @@ class ArticuloController extends Controller
     }
     public function add(Request $request)
     {
-        $input = $request->only('nombre','cantidad','estado','precio','image');
+        $input = $request->only('nombre','cantidad','estado','precio','image','categoria','descripcion');
         $validator = Validator::make($input, [
             'nombre' => 'required|string|unique:articulos,nombre',
             'cantidad' => 'required|numeric|between:1,9999',
             'estado' => 'required|string|in:HABILITADO,DESHABILITADO',
             'precio' => 'required|numeric|between:1,100000.00',
             'image' => 'required|image',
+            'categoria' => 'required|string',
+            'descripcion' => 'required|string'
         ]);
 
         if($validator->fails()) {

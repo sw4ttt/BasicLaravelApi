@@ -131,6 +131,12 @@ class AuthController extends Controller
         }
         $user = JWTAuth::toUser($token);
 
+        if($user->type === 'REPRESENTANTE')
+        {
+            $estudiante = $user->estudiantes()->first();
+            $user->grado = $estudiante->grado;
+        }
+
         return response()->json(['user'=>$user,'token' => $token]);
     }
 
@@ -149,6 +155,13 @@ class AuthController extends Controller
                 return response()->json(['error'=>'Token Missing'],400);
             }
         }
+
+        if($user->type === 'REPRESENTANTE')
+        {
+            $estudiante = $user->estudiantes()->first();
+            $user->grado = $estudiante->grado;
+        }
+
         return $user;
     }
 

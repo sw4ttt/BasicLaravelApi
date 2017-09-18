@@ -141,6 +141,17 @@ class UserController extends Controller
     public function testConsultaPayu(Request $request)
     {
         $client = new Client(['timeout'  => 10.0]);
+
+        $body = [
+                "test"=> false,
+   "language"=> "en",
+   "command"=> "PING",
+   "merchant"=> [
+       "apiLogin"=> "pRRXKOl8ikMmt9u",
+      "apiKey"=> "4Vj8eK4rloUd272L48hsrarnUA"
+   ]
+
+        ];
         $response = $client->post('https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi',[
             'headers'=>[
                 'Content-Type'=>['application/json','charset=utf-8'],

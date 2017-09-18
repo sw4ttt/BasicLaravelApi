@@ -97,6 +97,7 @@ Route::group(['middleware' => ['api','cors']], function ()
             Route::post('add', 'Api\Carrito\CarritoController@add');
             Route::get('actual', 'Api\Carrito\CarritoController@carrito');
             Route::put('edit', 'Api\Carrito\CarritoController@edit');
+            Route::put('quitar', 'Api\Carrito\CarritoController@quitar');
             Route::put('vaciar', 'Api\Carrito\CarritoController@vaciar');
         });
 
@@ -104,6 +105,23 @@ Route::group(['middleware' => ['api','cors']], function ()
             Route::get('/', 'Api\Articulo\ArticuloController@all');
             Route::post('add', 'Api\Articulo\ArticuloController@add');
             Route::get('{id}', 'Api\Articulo\ArticuloController@find');
+        });
+
+        Route::group(['prefix' => 'pagos'], function () {
+            Route::get('/', 'Api\Pagos\PagosController@all');
+//            Route::get('/ping', 'Api\Pagos\PagosController@testPayuApi');
+            Route::post('/add', 'Api\Pagos\PagosController@add');
+        });
+
+        Route::group(['prefix' => 'tarjetas'], function () {
+            Route::get('/', 'Api\Tarjetas\TarjetasController@all');
+            Route::post('/add', 'Api\Tarjetas\TarjetasController@add');
+            Route::put('/eliminar', 'Api\Tarjetas\TarjetasController@eliminar');
+        });
+
+        Route::group(['prefix' => 'mensajes'], function () {
+            Route::get('/', 'Api\Mensajes\MensajesController@all');
+            Route::post('/add', 'Api\Mensajes\MensajesController@enviar');
         });
     });
 
