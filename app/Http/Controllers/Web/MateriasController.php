@@ -67,6 +67,7 @@ class MateriasController extends Controller
     public function editGet(Request $request,$id)
     {
         $materia = Materia::where('nombre',$id)->first();
+
         if(is_null($materia))
             return back()->with('message', 'Materia No Existe!');
 
@@ -95,11 +96,11 @@ class MateriasController extends Controller
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
-        $order->update([
-            'state' => "APPROVED",
-            'payu_order_id' => $response->transactionResponse->orderId,
-            'transaction_id' => $response->transactionResponse->transactionId
-        ]);
+//        $order->update([
+//            'state' => "APPROVED",
+//            'payu_order_id' => $response->transactionResponse->orderId,
+//            'transaction_id' => $response->transactionResponse->transactionId
+//        ]);
 
 
 
