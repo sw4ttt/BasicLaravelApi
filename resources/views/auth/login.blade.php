@@ -29,12 +29,15 @@
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control" name="password" required>
-
                                 @if ($errors->has('password'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                                 @endif
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('userType') ? ' has-error' : '' }}">
+                            <div class="col-md-offset-4 col-md-8">
                                 @if ($errors->has('userType'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('userType') }}</strong>

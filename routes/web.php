@@ -39,8 +39,18 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/orders', 'Web\OrdersController@all');
 
     Route::get('/materias', 'Web\MateriasController@all');
-    Route::get('/materias/add', function () {  return view('/materias/add',['profesores'=>User::where('type','PROFESOR')->get()]);});
+    Route::get('/materias/add', function () {
+        return view('/materias/add',['profesores'=>User::where('type','PROFESOR')->get()]);
+    });
     Route::post('/materias/add', 'Web\MateriasController@add');
-    Route::get('/materias/edit/{id}', function () {  return view('/materias/edit',['materia'=>User::where('type','PROFESOR')->get()]);});
-    Route::post('/materias/edit', 'Web\MateriasController@edit');
+    Route::get('/materias/edit/{id}', function ($id) {
+        $materia = Materia::find($id);
+        if(!is_null($materia))
+            return view('/materias/edit',[
+                'materia'=>Materia::find($id),
+                'profesores'=>User::where('type','PROFESOR')->get()
+            ]);
+        return back()->withErrors(['invalid'=>['El id de materia seleccionado no es valido.']]);
+    });
+    Route::post('/materias/edit/{id}', 'Web\MateriasController@edit');
 });

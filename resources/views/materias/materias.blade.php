@@ -10,6 +10,7 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Grado</th>
+                        <th>Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -18,6 +19,9 @@
                             <tr>
                                 <td>{{ $materia->nombre }}</td>
                                 <td>{{ $materia->grado }}</td>
+                                <td>
+                                    <a class="btn btn-primary" href="{{ url('/materias/edit/'.$materia->id) }}" role="button">Editar</a>
+                                </td>
                             </tr>
                         @endforeach
                     @else

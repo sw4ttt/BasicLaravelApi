@@ -16,18 +16,32 @@ use App\Noticia;
 use App\Calificacion;
 use App\Estudiante;
 use App\Material;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class MateriasController extends Controller
 {
     public function all(Request $request)
     {
         $materias = Materia::all();
+
+//
+//
+//        $encryptedValue = encrypt("4097440000000004");
+//        try {
+//            $decrypted = decrypt($encryptedValue);
+//        } catch (DecryptException $e) {
+//            //
+//            $decrypted = 'ERROR-decripted';
+//        }
+//
+//        return "4097440000000004\n".$encryptedValue."\n".$decrypted;
+
         return view('materias/materias', ['materias' => $materias]);
     }
 
     public function add(Request $request)
     {
-        $input = $request->only('nombre','grado','idProfesor');
+        $input = $request->only('nombre', 'grado', 'idProfesor');
         $input['nombre'] = strtoupper($input['nombre']);
         $validator = Validator::make($input, [
             'grado' => 'required|numeric|between:1,15',
@@ -35,7 +49,7 @@ class MateriasController extends Controller
             'idProfesor' => 'required|string|exists:users,nombre'
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             //throw new ValidationHttpException($validator->errors()->all());
             return back()->withErrors($validator)->withInput();
         }
@@ -64,31 +78,19 @@ class MateriasController extends Controller
         return back()->with('message', 'Materia Creada!');
     }
 
-    public function editGet(Request $request,$id)
+    public function edit(Request $request,$id)
     {
-        $materia = Materia::where('nombre',$id)->first();
-
-        if(is_null($materia))
-            return back()->with('message', 'Materia No Existe!');
-
-        $profesor = User::find($materia->idProfesor);
-
-        $materia->profesor = $profesor->nombre;
-
-        return view('materias/edit', ['materia' => $materia]);
-    }
-
-    public function edit(Request $request)
-    {
-        $input = $request->only('nombre','grado','idProfesor');
+        $input = $request->only('nombre', 'grado', 'idProfesor');
+        $input['id'] = $id;
         $input['nombre'] = strtoupper($input['nombre']);
         $validator = Validator::make($input, [
             'grado' => 'required|numeric|between:1,15',
             'nombre' => 'required|string|unique:materias,nombre',
-            'idProfesor' => 'required|string|exists:users,nombre'
+            'idProfesor' => 'required|string|not_in:VACIO|exists:users,nombre',
+            'id' => 'required|numeric|exists:materias,id'
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             //throw new ValidationHttpException($validator->errors()->all());
             return back()->withErrors($validator)->withInput();
         }
@@ -96,13 +98,23 @@ class MateriasController extends Controller
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
-//        $order->update([
-//            'state' => "APPROVED",
-//            'payu_order_id' => $response->transactionResponse->orderId,
-//            'transaction_id' => $response->transactionResponse->transactionId
-//        ]);
+        $materia = Materia::find($id);
+        $profesor = User::where('nombre',$input['idProfesor'])->first();
 
+        $materia->profesores()->sync([$profesor->id=>['updated_at' => $input['updated_at']]]);
 
+        Calificacion::where('idMateria', $id)
+            ->update([
+                    'idProfesor' => $profesor->id,
+                    'updated_at' => $input['updated_at']
+                ]
+            );
+
+        $materia->nombre = $input['nombre'];
+        $materia->grado = $input['grado'];
+        $materia->updated_at = $input['updated_at'];
+
+        $materia->save();
 
         return back()->with('message', 'Materia Editada!');
     }
@@ -116,7 +128,7 @@ class MateriasController extends Controller
             'id' => 'required|numeric|exists:materias,id'
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             //throw new ValidationHttpException($validator->errors()->all());
             return back()->withErrors($validator)->withInput();
         }
@@ -125,7 +137,7 @@ class MateriasController extends Controller
 
         $materia->profesores()->detach();
 
-        Calificacion::where('idMateria',$materia->id)->delete();
+        Calificacion::where('idMateria', $materia->id)->delete();
 
         $materia->delete();
 

@@ -19,8 +19,17 @@ use App\Notifications\NotificacionGeneral;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use OneSignal;
+
+/**
+ * Class UsersController
+ * @package App\Http\Controllers\Web
+ */
 class UsersController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function all(Request $request)
     {
         $users = User::all();
@@ -30,6 +39,10 @@ class UsersController extends Controller
         return view('users/users', ['users' => $users]);
     }
 
+    /**
+     * @param Request $request
+     * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function add(Request $request)
     {
         $UserTypes = array("ADMIN","PROFESOR","REPRESENTANTE");

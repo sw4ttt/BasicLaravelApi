@@ -70,7 +70,14 @@ class MateriaController extends Controller
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
         $materia = Materia::create($input);
-        $materia->profesores()->attach($input['idProfesor']);
+        $materia->profesores()->attach(
+            [
+                $input['idProfesor']=>[
+                    'created_at' => $input['created_at'],
+                    'updated_at' => $input['updated_at']
+                ]
+            ]
+        );
 
         $estudiantes = Estudiante::where('grado',$input['grado'])->get();
 

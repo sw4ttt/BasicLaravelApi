@@ -11,7 +11,15 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <link rel="manifest" href="/manifest.json">
+    {{--<script src="{{ url('/') }}/js/jquery-3.2.1.js"></script>--}}
+    {{--<script src="js/jquery-1.9.1.min.js" type="text/javascript"></script>--}}
+
+
+    {{--<script src="{{ url('/') }}/js/jquery-3.2.1.js"></script>--}}
+    {{--<script src="{{ url('/') }}/js/loadingoverlay.min.js"></script>--}}
+
     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
+    {{--<script src="{{ url('/') }}/js/loadingoverlay.min.js"></script>--}}
     <script>
       var OneSignal = window.OneSignal || [];
       OneSignal.push(["init", {
@@ -153,5 +161,17 @@
 
     <!-- Scripts -->
     <script src="{{ url('/') }}/js/app.js"></script>
+
+    {{--<script>--}}
+      {{--$( document ).ready(function() {--}}
+        {{--$.LoadingOverlay("show");--}}
+
+        {{--// Hide it after 3 seconds--}}
+{{--//        setTimeout(function () {--}}
+{{--//          $.LoadingOverlay("hide");--}}
+{{--//        }, 3000);--}}
+      {{--});--}}
+    {{--</script>--}}
+
 </body>
 </html>
