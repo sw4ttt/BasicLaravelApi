@@ -129,7 +129,7 @@
                                         <ul class="dropdown-menu forAnimate" role="menu">
                                             <li><a href="{{URL::to('materias')}}">Listado</a></li>
                                             <li><a href="{{URL::to('materias/add')}}">Crear</a></li>
-                                            <li><a href="#">Modificar</a></li>
+                                            {{--<li><a href="#">Modificar</a></li>--}}
                                         </ul>
                                     </li>
                                     <li class="dropdown">
@@ -137,7 +137,7 @@
                                         <ul class="dropdown-menu forAnimate" role="menu">
                                             <li><a href="{{URL::to('users')}}">Listado</a></li>
                                             <li><a href="{{URL::to('users/add')}}">Crear</a></li>
-                                            <li><a href="#">Modificar</a></li>
+                                            {{--<li><a href="#">Modificar</a></li>--}}
                                             {{--<li><a href="#">Reportar</a></li>--}}
                                             {{--<li class="divider"></li>--}}
                                             {{--<li><a href="#">Separated link</a></li>--}}

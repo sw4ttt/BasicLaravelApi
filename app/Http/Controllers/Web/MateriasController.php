@@ -58,22 +58,30 @@ class MateriasController extends Controller
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
         $materia = Materia::create($input);
-//        $materia->profesores()->attach($input['idProfesor']);
-//
-//        $estudiantes = Estudiante::where('grado',$input['grado'])->get();
-//
-//        foreach ($estudiantes as $estudiante) {
-//            Calificacion::create([
-//                'idProfesor'=>$input['idProfesor'],
-//                'idEstudiante'=>$estudiante->id,
-//                'idMateria'=>$materia->id,
-//                'periodo'=>'2017-2018',
-//                'evaluaciones'=>[],
-//                'created_at'=>$input['created_at'],
-//                'updated_at'=>$input['updated_at'],
-//            ]);
-//        }
-//        return view('materias/add', ['message'=>'Materia Creada!']);
+        $profesor = User::where('nombre',$input['idProfesor'])->first();
+
+        $materia->profesores()->attach(
+            [
+                $profesor->id=>[
+                    'created_at' => $input['created_at'],
+                    'updated_at' => $input['updated_at']
+                ]
+            ]
+        );
+
+        $estudiantes = Estudiante::where('grado',$input['grado'])->get();
+
+        foreach ($estudiantes as $estudiante) {
+            Calificacion::create([
+                'idProfesor'=>$profesor->id,
+                'idEstudiante'=>$estudiante->id,
+                'idMateria'=>$materia->id,
+                'periodo'=>'2017-2018',
+                'evaluaciones'=>[],
+                'created_at'=>$input['created_at'],
+                'updated_at'=>$input['updated_at'],
+            ]);
+        }
 
         return back()->with('message', 'Materia Creada!');
     }
