@@ -21,6 +21,11 @@
                                 <td>{{ $materia->grado }}</td>
                                 <td>
                                     <a class="btn btn-primary" href="{{ url('/materias/edit/'.$materia->id) }}" role="button">Editar</a>
+                                    <a class="btn btn-danger" href="{{ url('/materias/delete/'.$materia->id) }}"
+                                       role="button"
+                                       onclick="return confirm('Esta seguro? Se eliminara toda la informacion relacionada a la materia. ')">
+                                        Eliminar
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
@@ -28,10 +33,17 @@
                         <tr>
                             <td>..</td>
                             <td>..</td>
+                            <td>..</td>
                         </tr>
                     @endif
                 </tbody>
             </table>
+            @if (Session::has('message'))
+                <div class="alert alert-success alert-dismissable fade in" style="margin-top: 10px">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>{{ Session::get('message') }}</strong>
+                </div>
+            @endif
         </div>
     </div>
 @endsection

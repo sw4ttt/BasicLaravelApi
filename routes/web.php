@@ -53,4 +53,7 @@ Route::group(['middleware' => ['auth']], function () {
         return back()->withErrors(['invalid'=>['El id de materia seleccionado no es valido.']]);
     });
     Route::post('/materias/edit/{id}', 'Web\MateriasController@edit');
+    Route::get('/materias/delete/{id}', 'Web\MateriasController@delete');
+
+    Route::get('/articulos', 'Web\ArticulosController@all');
 });

@@ -59,13 +59,13 @@ class AuthController extends Controller
 
         if($userType === 'REPRESENTANTE')
         {
-            $input = $request->only(
-                'nombreEstudiante',
-                'idPersonalEstudiante',
-                'grado');
+            $input['nombreEstudiante'] = $request['nombreEstudiante'];
+            $input['idPersonalEstudiante'] = $request['idPersonalEstudiante'];
+            $input['grado'] = $request['grado'];
+
             $validator = Validator::make($input, [
                 'nombreEstudiante' => 'required|string',
-                'idPersonalEstudiante' => 'required|string',
+                'idPersonalEstudiante' => 'required|numeric',
                 'grado' => 'required|integer'
             ]);
             if($validator->fails()) {

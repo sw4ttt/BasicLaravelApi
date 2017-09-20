@@ -14,8 +14,13 @@
                 {{--'tlfCelular' => 'required|string',--}}
                 {{--'direccion' => 'required|string',--}}
                 {{--'email' => 'required|email|unique:users,email',--}}
+                {{--'image' => 'required|image',--}}
                 {{--'password' => 'required|min:4',--}}
-                {{--'type' => 'required|string'--}}
+                {{--'type' => 'required|string|in:ADMIN,PROFESOR,REPRESENTANTE'--}}
+
+                {{--'nombreEstudiante' => 'required|string',--}}
+                {{--'idPersonalEstudiante' => 'required|string',--}}
+                {{--'grado' => 'required|integer'--}}
 
                 <div class="form-group{{ $errors->has('tipoIdPersonal') ? ' has-error' : '' }}">
                     <label for="tipoIdPersonal" class="col-md-4 control-label">Tipo Id Personal</label>
@@ -119,6 +124,45 @@
                         @endif
                     </div>
                 </div>
+
+//**********************************************************************************************************************
+                {{--'nombreEstudiante' => 'required|string',--}}
+                {{--'idPersonalEstudiante' => 'required|string',--}}
+                {{--'grado' => 'required|integer'--}}
+                <div class="form-group{{ $errors->has('nombreEstudiante') ? ' has-error' : '' }}">
+                    <label for="nombreEstudiante" class="col-md-4 control-label">Nombre Estudiante</label>
+                    <div class="col-md-6">
+                        <input id="nombreEstudiante" type="text" class="form-control" name="nombreEstudiante" value="{{ old('nombreEstudiante') }}">
+                        @if ($errors->has('nombreEstudiante'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('nombreEstudiante') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+                <div class="form-group{{ $errors->has('idPersonalEstudiante') ? ' has-error' : '' }}">
+                    <label for="idPersonalEstudiante" class="col-md-4 control-label">Id Personal Estudiante</label>
+                    <div class="col-md-6">
+                        <input id="idPersonalEstudiante" type="text" class="form-control" name="idPersonalEstudiante" value="{{ old('idPersonalEstudiante') }}">
+                        @if ($errors->has('idPersonalEstudiante'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('idPersonalEstudiante') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+                <div class="form-group{{ $errors->has('grado') ? ' has-error' : '' }}">
+                    <label for="grado" class="col-md-4 control-label">Grado</label>
+                    <div class="col-md-6">
+                        <input id="grado" type="text" class="form-control" name="grado" value="{{ old('grado') }}">
+                        @if ($errors->has('grado'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('grado') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+//**********************************************************************************************************************
 
                 <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                     <label for="image" class="col-md-4 control-label">Imagen de Perfil</label>

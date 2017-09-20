@@ -17,12 +17,13 @@ use App\Calificacion;
 use App\Estudiante;
 use App\Material;
 use Illuminate\Contracts\Encryption\DecryptException;
+use App\Articulo;
 
-class MateriasController extends Controller
+class ArticulosController extends Controller
 {
     public function all(Request $request)
     {
-        $materias = Materia::all();
+        $articulos = Articulo::all();
 
 //
 //
@@ -36,7 +37,7 @@ class MateriasController extends Controller
 //
 //        return "4097440000000004\n".$encryptedValue."\n".$decrypted;
 
-        return view('materias/materias', ['materias' => $materias]);
+        return view('articulos/articulos', ['articulos' => $articulos]);
     }
 
     public function add(Request $request)

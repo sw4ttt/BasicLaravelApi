@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Notifications\NotificacionGeneral;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
+use App\Materia;
 use OneSignal;
 
 /**
@@ -78,6 +79,24 @@ class UsersController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return back()->withErrors($validator)->withInput();
         }
+        $userType = $input['type'];
+
+        if($userType === 'REPRESENTANTE')
+        {
+            $input['nombreEstudiante'] = $request['nombreEstudiante'];
+            $input['idPersonalEstudiante'] = $request['idPersonalEstudiante'];
+            $input['grado'] = $request['grado'];
+
+            $validator = Validator::make($input, [
+                'nombreEstudiante' => 'required|string',
+                'idPersonalEstudiante' => 'required|numeric',
+                'grado' => 'required|integer'
+            ]);
+            if($validator->fails()) {
+                return back()->withErrors($validator)->withInput();
+            }
+        }
+
 
         $input['email'] = strtolower($input['email']);
         $input['image'] = Storage::put('images', $request->image);
@@ -88,8 +107,37 @@ class UsersController extends Controller
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
-        User::create($input);
+        $user = User::create($input);
+
+        if($userType === 'REPRESENTANTE')
+        {
+            $input['idUser'] = $user->id;
+            $input['idPersonal'] = $input['idPersonalEstudiante'];
+            $input['nombre'] = $input['nombreEstudiante'];
+
+            $estudiante = Estudiante::create($input);
+
+            $materias = Materia::where('grado',$input['grado'])->get();
+            foreach ($materias as $materia) {
+                $profesor = $materia->profesores()->get()->first();
+                if(!is_null($profesor))
+                {
+                    Calificacion::create([
+                        'idProfesor'=>$profesor->id,
+                        'idEstudiante'=>$estudiante->id,
+                        'idMateria'=>$materia->id,
+                        'periodo'=>'2017-2018',
+                        'evaluaciones'=>[],
+                        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                        'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                    ]);
+                }
+            }
+        }
+
         $users = User::all();
+
+
         return view('users/users', ['users' => $users]);
     }
 
