@@ -137,8 +137,7 @@ class UsersController extends Controller
 
         $users = User::all();
 
-
-        return view('users/users', ['users' => $users]);
+        return back()->with('message', 'Usuario Creado!');
     }
 
 }

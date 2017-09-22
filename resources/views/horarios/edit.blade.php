@@ -3,13 +3,13 @@
 @section('content')
 
     <div class="panel panel-default ">
-        <div class="panel-heading"><h2>Crear Materia</h2></div>
+        <div class="panel-heading"><h2>Editar Materia</h2></div>
         <div class="panel-body">
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/materias/add') }}" enctype="multipart/form-data">
+            <form class="form-horizontal" role="form" method="POST" action="{{ url('/materias/edit/'.$materia->id) }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
                 <div class="form-group{{ $errors->has('nombre') ? ' has-error' : '' }}">
-                    <label for="nombre" class="col-md-4 control-label">Nombre</label>
+                    <label for="nombre" class="col-md-4 control-label">Nombre ({{$materia->nombre}})</label>
                     <div class="col-md-6">
                         <input id="nombre" type="text" class="form-control" name="nombre" value="{{ old('nombre') }}" required autofocus>
                         @if ($errors->has('nombre'))
@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="form-group{{ $errors->has('grado') ? ' has-error' : '' }}">
-                    <label for="grado" class="col-md-4 control-label">Grado</label>
+                    <label for="grado" class="col-md-4 control-label">Grado ({{$materia->grado}})</label>
                     <div class="col-md-6">
                         <input id="grado" type="text" class="form-control" name="grado" value="{{ old('grado') }}" required>
                         @if ($errors->has('grado'))
@@ -41,7 +41,7 @@
                                     <option>{{$profesor->nombre}}</option>
                                 @endforeach
                             @else
-                                <option>-</option>
+                                <option>VACIO</option>
                             @endif
                         </select>
                         @if ($errors->has('idProfesor'))
@@ -54,9 +54,8 @@
 
                 <div class="form-group">
                     <div class="col-md-8 col-md-offset-4">
-                        <button type="submit" class="btn btn-primary" style="font-size:18px;" onclick="return confirm('Estas seguro?')">
-                            <span class="glyphicon glyphicon-floppy-save"></span>
-                            Crear Materia
+                        <button type="submit" class="btn btn-primary" onclick="return confirm('Estas seguro?')">
+                            Guardar Cambios
                         </button>
                         @if (Session::has('message'))
                             <div class="alert alert-success alert-dismissable fade in" style="margin-top: 10px">

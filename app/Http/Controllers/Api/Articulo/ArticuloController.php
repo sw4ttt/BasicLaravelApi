@@ -50,9 +50,12 @@ class ArticuloController extends Controller
         if (!$request->file('image')->isValid()) {
             return response()->json(["error"=>"error with image file."],400);
         }
-        $input['image'] = Storage::put('images', $request->image);
-        $input['image'] = str_replace('public','storage',$input['image'],$i);
-        $input['image'] = url('/')."/".$input['image'];
+//        $input['image'] = Storage::put('images', $request->image);
+//        $input['image'] = str_replace('public','storage',$input['image'],$i);
+//        $input['image'] = url('/')."/".$input['image'];
+
+        $input['image'] = Storage::put('images', $input['image']);
+        $input['image'] = asset($input['image']);
 
         $nuevo = Articulo::create($input);
 

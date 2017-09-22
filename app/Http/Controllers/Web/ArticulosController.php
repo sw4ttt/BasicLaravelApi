@@ -24,19 +24,6 @@ class ArticulosController extends Controller
     public function all(Request $request)
     {
         $articulos = Articulo::all();
-
-//
-//
-//        $encryptedValue = encrypt("4097440000000004");
-//        try {
-//            $decrypted = decrypt($encryptedValue);
-//        } catch (DecryptException $e) {
-//            //
-//            $decrypted = 'ERROR-decripted';
-//        }
-//
-//        return "4097440000000004\n".$encryptedValue."\n".$decrypted;
-
         return view('articulos/articulos', ['articulos' => $articulos]);
     }
 

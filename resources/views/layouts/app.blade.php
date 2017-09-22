@@ -123,7 +123,7 @@
                             <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
                                 <ul class="nav navbar-nav">
                                     <li class=""><a href="{{URL::to('home')}}">Home<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
-                                    <li class=""><a href="{{URL::to('orders')}}">Ordenes de Pago<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-shopping-cart"></span></a></li>
+                                    <li class=""><a href="{{URL::to('orders')}}">Ordenes de Pago<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-usd"></span></a></li>
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Materias <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-book"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
@@ -133,10 +133,18 @@
                                         </ul>
                                     </li>
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Articulos<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-book"></span></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Articulos<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-shopping-cart"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
                                             <li><a href="{{URL::to('articulos')}}">Listado</a></li>
                                             {{--<li><a href="{{URL::to('articulos/add')}}">Crear</a></li>--}}
+                                            {{--<li><a href="#">Modificar</a></li>--}}
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Horarios<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-calendar"></span></a>
+                                        <ul class="dropdown-menu forAnimate" role="menu">
+                                            <li><a href="{{URL::to('horarios')}}">Listado</a></li>
+                                            <li><a href="{{URL::to('horarios/add')}}">Crear</a></li>
                                             {{--<li><a href="#">Modificar</a></li>--}}
                                         </ul>
                                     </li>
@@ -170,16 +178,16 @@
     <!-- Scripts -->
     <script src="{{ url('/') }}/js/app.js"></script>
 
-    {{--<script>--}}
-      {{--$( document ).ready(function() {--}}
-        {{--$.LoadingOverlay("show");--}}
-
-        {{--// Hide it after 3 seconds--}}
-{{--//        setTimeout(function () {--}}
-{{--//          $.LoadingOverlay("hide");--}}
-{{--//        }, 3000);--}}
-      {{--});--}}
-    {{--</script>--}}
-
+    <script>
+      jQuery(document).ready(function($) {
+        $( "#type" ).change(function() {
+          var selectedText = $("#type option:selected" ).text();
+          if(selectedText === 'REPRESENTANTE')
+            $("#opcionalEstudiante").removeClass('hidden');
+          else
+            $("#opcionalEstudiante").addClass('hidden');
+        });
+      });
+    </script>
 </body>
 </html>

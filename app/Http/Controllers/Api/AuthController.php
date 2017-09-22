@@ -77,9 +77,12 @@ class AuthController extends Controller
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
-        $input['image'] = Storage::put('images', $request->image);
-        $input['image'] = str_replace('public','storage',$input['image'],$i);
-        $input['image'] = url('/')."/".$input['image'];
+//        $input['image'] = Storage::put('images', $request->image);
+//        $input['image'] = str_replace('public','storage',$input['image'],$i);
+//        $input['image'] = url('/')."/".$input['image'];
+
+        $input['image'] = Storage::put('images', $input['image']);
+        $input['image'] = asset($input['image']);
 
     	$user = User::create($input);
 

@@ -49,16 +49,13 @@ class MaterialController extends Controller
         if (!$request->file('file')->isValid()) {
             return response()->json(["error"=>"error with file."],400);
         }
-        $input['file'] = Storage::putFileAs('files', $input['file'],
-            str_random(20).Carbon::now()->timestamp.'.'.$input['file']->getClientOriginalExtension());
+        $input['file'] = Storage::put('files', $input['file']);
         $input['size'] = Storage::size($input['file']);
         $input['size'] = $this->formatSizeUnits($input['size']);
-        $input['file'] = url('/')."/".$input['file'];
-        $input['file'] = str_replace('public','storage',$input['file'],$i);
+        $input['file'] = asset($input['file']);
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
         Material::create($input);
-
         return response()->json(['success'=>true,'file'=>$input['file']]);
     }
     public function find(Request $request, $id)

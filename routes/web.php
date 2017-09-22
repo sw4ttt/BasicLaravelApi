@@ -13,6 +13,8 @@
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Materia;
+use App\Horario;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
     if (Auth::check())return view('/home');
@@ -27,6 +29,22 @@ Route::post('/login', 'Web\Auth\AuthController@authenticate');
 //    if (Auth::check())return view('/home');
 //    else return view('/auth/register');
 //});
+
+Route::get('images/{filename}', function ($filename)
+{
+    if(!Storage::exists('images/'.$filename))  return response('Imagen no existe.',404);
+    $contents = Storage::get('images/'.$filename);
+    $response = Response::make($contents, 200);
+    return $response->header("Content-Type", Storage::mimeType('images/'.$filename));
+});
+
+Route::get('files/{filename}', function ($filename)
+{
+    if(!Storage::exists('files/'.$filename))  return response('Archivo no existe.',404);
+    $contents = Storage::get('files/'.$filename);
+    $response = Response::make($contents, 200);
+    return $response->header("Content-Type", Storage::mimeType('files/'.$filename));
+});
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', function () {   return view('/home');});
@@ -56,4 +74,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/materias/delete/{id}', 'Web\MateriasController@delete');
 
     Route::get('/articulos', 'Web\ArticulosController@all');
+
+    Route::get('/horarios', 'Web\HorariosController@all');
+    Route::get('/horarios/add', function () {
+        return view('/horarios/add',['horarios'=>Horario::all()]);
+    });
 });

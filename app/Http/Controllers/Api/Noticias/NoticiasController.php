@@ -56,13 +56,19 @@ class NoticiasController extends Controller
         if (!$request->file('image')->isValid()) {
             return response()->json(["error"=>"error with image file."],400);
         }
-        $input['image'] = Storage::put('images', $request->image);
-//        $path = $request->image->store('public/images');
-//        $path = str_replace('public','storage',$path,$i);
-//        $input['image'] = url('/')."/".$path;
-//        $input['image'] = Storage::url('BLRUBLRU.jpg');
-        $input['image'] = str_replace('public','storage',$input['image'],$i);
-        $input['image'] = url('/')."/".$input['image'];
+//        $input['image'] = Storage::put('images', $request->image);
+////        $path = $request->image->store('public/images');
+////        $path = str_replace('public','storage',$path,$i);
+////        $input['image'] = url('/')."/".$path;
+////        $input['image'] = Storage::url('BLRUBLRU.jpg');
+//        $input['image'] = str_replace('public','storage',$input['image'],$i);
+//        $input['image'] = url('/')."/".$input['image'];
+
+
+        $input['image'] = Storage::put('images', $input['image']);
+        $input['image'] = asset($input['image']);
+
+
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $noticia = Noticia::create($input);
