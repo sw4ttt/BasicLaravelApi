@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Materia;
+use Illuminate\Support\Facades\Storage;
 use Hash;
 use JWTAuth;
 use Validator;
@@ -29,49 +30,35 @@ class ArticulosController extends Controller
 
     public function add(Request $request)
     {
-        $input = $request->only('nombre', 'grado', 'idProfesor');
-        $input['nombre'] = strtoupper($input['nombre']);
+        $input = $request->only('nombre','cantidad','estado','precio','image','categoria','descripcion');
         $validator = Validator::make($input, [
-            'grado' => 'required|numeric|between:1,15',
-            'nombre' => 'required|string|unique:materias,nombre',
-            'idProfesor' => 'required|string|exists:users,nombre'
+            'nombre' => 'required|string|unique:articulos,nombre',
+            'cantidad' => 'required|numeric|between:1,9999',
+            'estado' => 'required|string|in:HABILITADO,DESHABILITADO',
+            'precio' => 'required|numeric|between:1,100000',
+            'image' => 'required|image',
+            'categoria' => 'required|string',
+            'descripcion' => 'required|string'
         ]);
 
-        if ($validator->fails()) {
+        if($validator->fails()) {
             //throw new ValidationHttpException($validator->errors()->all());
             return back()->withErrors($validator)->withInput();
         }
-
-        $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
-        $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
-
-        $materia = Materia::create($input);
-        $profesor = User::where('nombre',$input['idProfesor'])->first();
-
-        $materia->profesores()->attach(
-            [
-                $profesor->id=>[
-                    'created_at' => $input['created_at'],
-                    'updated_at' => $input['updated_at']
-                ]
-            ]
-        );
-
-        $estudiantes = Estudiante::where('grado',$input['grado'])->get();
-
-        foreach ($estudiantes as $estudiante) {
-            Calificacion::create([
-                'idProfesor'=>$profesor->id,
-                'idEstudiante'=>$estudiante->id,
-                'idMateria'=>$materia->id,
-                'periodo'=>'2017-2018',
-                'evaluaciones'=>[],
-                'created_at'=>$input['created_at'],
-                'updated_at'=>$input['updated_at'],
-            ]);
+        if (!$request->file('image')->isValid()) {
+            return back()->withErrors(["error"=>"error with image file."])->withInput();
         }
 
-        return back()->with('message', 'Materia Creada!');
+//        $input['image'] = Storage::put('images', $request->image);
+//        $input['image'] = str_replace('public','storage',$input['image'],$i);
+//        $input['image'] = url('/')."/".$input['image'];
+
+        $input['image'] = Storage::put('images', $input['image']);
+        $input['image'] = asset($input['image']);
+
+        Articulo::create($input);
+
+        return back()->with('message', 'Articulo Creado!');
     }
 
     public function edit(Request $request,$id)
@@ -119,22 +106,31 @@ class ArticulosController extends Controller
     {
         $input['id'] = $id;
         $validator = Validator::make($input, [
-            'id' => 'required|numeric|exists:materias,id'
+            'id' => 'required|numeric|exists:articulos,id'
         ]);
-
         if ($validator->fails()) {
             //throw new ValidationHttpException($validator->errors()->all());
             return back()->withErrors($validator)->withInput();
         }
 
-        $materia = Materia::find($input['id']);
+        $articulo = Articulo::find($input['id']);
 
-        $materia->profesores()->detach();
 
-        Calificacion::where('idMateria', $materia->id)->delete();
+        print_r (explode(" ",$articulo->image));
 
-        $materia->delete();
+        return 1;
 
-        return back()->with('message', 'Materia Eliminada!');
+
+
+
+//        $articulo->delete();
+
+
+//        return back()->with('message', 'Articulo Eliminada!');
+
+//        if(!Storage::exists('images/'.$filename))  return response('Imagen no existe.',404);
+//        $contents = Storage::get('images/'.$filename);
+//        $response = Response::make($contents, 200);
+//        return $response->header("Content-Type", Storage::mimeType('images/'.$filename));
     }
 }

@@ -38,7 +38,7 @@
                         <select id="idProfesor" name="idProfesor" class="form-control" required>
                             @if(isset($profesores) && count($profesores) > 0)
                                 @foreach ($profesores as $profesor)
-                                    <option>{{$profesor->nombre}}</option>
+                                    <option value="{{$profesor->id}}">{{$profesor->id}} - {{$profesor->nombre}}</option>
                                 @endforeach
                             @else
                                 <option>-</option>

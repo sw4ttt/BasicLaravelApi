@@ -19,17 +19,9 @@ use App\Estudiante;
 use App\Horario;
 use App\Articulo;
 
-class ArticuloController extends Controller
+class ResourcesController extends Controller
 {
-//$table->string('nombre');
-//$table->string('cantidad');
-//$table->string('estado');
-//$table->float('precio', 8, 2);
 
-    public function all(Request $request)
-    {
-        return Articulo::where('estado','HABILITADO')->get();
-    }
     public function add(Request $request)
     {
         $input = $request->only('nombre','cantidad','estado','precio','image','categoria','descripcion');
@@ -37,7 +29,7 @@ class ArticuloController extends Controller
             'nombre' => 'required|string|unique:articulos,nombre',
             'cantidad' => 'required|numeric|between:1,9999',
             'estado' => 'required|string|in:HABILITADO,DESHABILITADO',
-            'precio' => 'required|numeric|between:1,100000',
+            'precio' => 'required|numeric|between:1,100000.00',
             'image' => 'required|image',
             'categoria' => 'required|string',
             'descripcion' => 'required|string'

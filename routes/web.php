@@ -15,6 +15,7 @@ use App\User;
 use App\Materia;
 use App\Horario;
 use Illuminate\Support\Facades\Storage;
+use App\Material;
 
 Route::get('/', function () {
     if (Auth::check())return view('/home');
@@ -47,36 +48,80 @@ Route::get('files/{filename}', function ($filename)
 });
 
 Route::group(['middleware' => ['auth']], function () {
+
     Route::get('/home', function () {   return view('/home');});
     Route::post('/logout', 'Web\Auth\AuthController@logout');
 
-    Route::get('/users', 'Web\UsersController@all');
-    Route::get('/users/add', function () {  return view('/users/add');});
-    Route::post('/users/add', 'Web\UsersController@add');
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/', 'Web\UsersController@all');
+        Route::get('/add', function () {  return view('/users/add');});
+        Route::post('/add', 'Web\UsersController@add');
+    });
+
+    Route::group(['prefix' => 'materias'], function () {
+        Route::get('/', 'Web\MateriasController@all');
+        Route::get('/add', function () {
+            return view('/materias/add',['profesores'=>User::where('type','PROFESOR')->get()]);
+        });
+        Route::post('/add', 'Web\MateriasController@add');
+        Route::get('/edit/{id}', function ($id) {
+            $materia = Materia::find($id);
+            $profesor = $materia->profesores()->first();
+
+            $materia->profesor = $profesor->nombre;
+
+            if(!is_null($materia))
+                return view('/materias/edit',[
+                    'materia'=>Materia::find($id),
+                    'profesores'=>User::where('type','PROFESOR')->get(),
+                ]);
+            return back()->withErrors(['invalid'=>['El id de materia seleccionado no es valido.']]);
+        });
+        Route::post('/edit/{id}', 'Web\MateriasController@edit');
+        Route::post('/delete/{id}', 'Web\MateriasController@delete');
+    });
 
     Route::get('/orders', 'Web\OrdersController@all');
 
-    Route::get('/materias', 'Web\MateriasController@all');
-    Route::get('/materias/add', function () {
-        return view('/materias/add',['profesores'=>User::where('type','PROFESOR')->get()]);
+    Route::group(['prefix' => 'articulos'], function () {
+        Route::get('/', 'Web\ArticulosController@all');
+        Route::get('/add', function () {
+            return view('/articulos/add');
+        });
+        Route::post('/add', 'Web\ArticulosController@add');
     });
-    Route::post('/materias/add', 'Web\MateriasController@add');
-    Route::get('/materias/edit/{id}', function ($id) {
-        $materia = Materia::find($id);
-        if(!is_null($materia))
-            return view('/materias/edit',[
-                'materia'=>Materia::find($id),
-                'profesores'=>User::where('type','PROFESOR')->get()
+
+    Route::group(['prefix' => 'horarios'], function () {
+        Route::get('/', 'Web\HorariosController@all');
+        Route::get('/add', function () {
+            return view('/horarios/add',['horarios'=>Horario::all()]);
+        });
+    });
+
+    Route::group(['prefix' => 'materiales'], function () {
+        Route::get('/', 'Web\MaterialesController@all');
+        Route::get('/add', function () {
+            return view('/materiales/add',['materias'=>Materia::all()]);
+        });
+        Route::post('/add', 'Web\MaterialesController@add');
+        Route::get('/edit/{id}', function ($id) {
+            $material = Material::find($id);
+            return view('/materiales/edit',[
+                'material'=>$material,
+                'materias'=>Materia::all(),
             ]);
-        return back()->withErrors(['invalid'=>['El id de materia seleccionado no es valido.']]);
+        });
+        Route::post('/edit/{id}', 'Web\MaterialesController@edit');
+        Route::post('/delete/{id}', 'Web\MaterialesController@delete');
     });
-    Route::post('/materias/edit/{id}', 'Web\MateriasController@edit');
-    Route::get('/materias/delete/{id}', 'Web\MateriasController@delete');
 
-    Route::get('/articulos', 'Web\ArticulosController@all');
-
-    Route::get('/horarios', 'Web\HorariosController@all');
-    Route::get('/horarios/add', function () {
-        return view('/horarios/add',['horarios'=>Horario::all()]);
+    Route::group(['prefix' => 'notificaciones'], function () {
+//        Route::get('/', 'Web\HorariosController@all');
+        Route::get('/add', function () {
+            return view('/notificaciones/add');
+        });
+        Route::post('/add', 'Web\NotificacionesController@add');
     });
+
+
 });

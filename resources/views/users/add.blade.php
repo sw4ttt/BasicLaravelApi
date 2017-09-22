@@ -124,6 +124,7 @@
                         @endif
                     </div>
                 </div>
+
                 <div id="opcionalEstudiante" class="hidden">
                     <div class="form-group{{ $errors->has('nombreEstudiante') ? ' has-error' : '' }}">
                         <label for="nombreEstudiante" class="col-md-4 control-label">Nombre Estudiante</label>

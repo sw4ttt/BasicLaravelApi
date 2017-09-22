@@ -53,7 +53,7 @@ Route::group(['middleware' => ['api','cors']], function ()
             Route::get('/', 'Api\Noticias\NoticiasController@all');
             Route::post('add', 'Api\Noticias\NoticiasController@add');
             Route::get('{id}', 'Api\Noticias\NoticiasController@find');
-            Route::delete('{id}', 'Api\Noticias\NoticiasController@delete');
+//            Route::delete('{id}', 'Api\Noticias\NoticiasController@delete');
         });
 
         Route::group(['prefix' => 'estudiantes'], function () {
@@ -90,7 +90,7 @@ Route::group(['middleware' => ['api','cors']], function ()
             Route::post('add', 'Api\Material\MaterialController@add');
             Route::get('{id}', 'Api\Material\MaterialController@find');
             Route::put('{id}', 'Api\Material\MaterialController@edit');
-            Route::delete('{id}', 'Api\Material\MaterialController@delete');
+//            Route::delete('{id}', 'Api\Material\MaterialController@delete');
         });
 
         Route::group(['prefix' => 'carrito'], function () {

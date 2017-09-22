@@ -136,7 +136,7 @@
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Articulos<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-shopping-cart"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
                                             <li><a href="{{URL::to('articulos')}}">Listado</a></li>
-                                            {{--<li><a href="{{URL::to('articulos/add')}}">Crear</a></li>--}}
+                                            <li><a href="{{URL::to('articulos/add')}}">Crear</a></li>
                                             {{--<li><a href="#">Modificar</a></li>--}}
                                         </ul>
                                     </li>
@@ -145,6 +145,14 @@
                                         <ul class="dropdown-menu forAnimate" role="menu">
                                             <li><a href="{{URL::to('horarios')}}">Listado</a></li>
                                             <li><a href="{{URL::to('horarios/add')}}">Crear</a></li>
+                                            {{--<li><a href="#">Modificar</a></li>--}}
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Materiales<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-file"></span></a>
+                                        <ul class="dropdown-menu forAnimate" role="menu">
+                                            <li><a href="{{URL::to('materiales')}}">Listado</a></li>
+                                            <li><a href="{{URL::to('materiales/add')}}">Crear</a></li>
                                             {{--<li><a href="#">Modificar</a></li>--}}
                                         </ul>
                                     </li>
@@ -159,6 +167,14 @@
                                             {{--<li><a href="#">Separated link</a></li>--}}
                                             {{--<li class="divider"></li>--}}
                                             {{--<li><a href="#">Noticias</a></li>--}}
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Notificaciones<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-file"></span></a>
+                                        <ul class="dropdown-menu forAnimate" role="menu">
+                                            {{--<li><a href="{{URL::to('materiales')}}">Listado</a></li>--}}
+                                            <li><a href="{{URL::to('notificaciones/add')}}">Crear</a></li>
+                                            {{--<li><a href="#">Modificar</a></li>--}}
                                         </ul>
                                     </li>
                                     {{--<li ><a href="#">Noticias<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-th-list"></span></a></li>--}}
@@ -186,6 +202,16 @@
             $("#opcionalEstudiante").removeClass('hidden');
           else
             $("#opcionalEstudiante").addClass('hidden');
+        });
+
+        $( "#grupo" ).change(function() {
+          var selectedText = $("#grupo option:selected" ).text();
+
+          console.log("selectedText=",selectedText);
+          if(selectedText === 'GRADO')
+            $("#opcionalNotificaciones").removeClass('hidden');
+          else
+            $("#opcionalNotificaciones").addClass('hidden');
         });
       });
     </script>

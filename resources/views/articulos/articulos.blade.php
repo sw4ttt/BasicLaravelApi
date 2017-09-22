@@ -15,7 +15,7 @@
                         <th>Estado</th>
                         <th>Precio</th>
                         <th>Image</th>
-                        <th>Opciones</th>
+                        {{--<th>Opciones</th>--}}
                     </tr>
                 </thead>
                 <tbody>
@@ -39,14 +39,14 @@
                                     <a class="" href="{{ $articulo->image }}">Link</a>
                                     {{--{{ $articulo->image }}--}}
                                 </td>
-                                <td>
-                                    <a class="btn btn-primary" href="{{ url('/materias/edit/'.$articulo->id) }}" role="button">Editar</a>
-                                    <a class="btn btn-danger" href="{{ url('/materias/delete/'.$articulo->id) }}"
-                                       role="button"
-                                       onclick="return confirm('Esta seguro? Se eliminara toda la informacion relacionada a el articulo. ')">
-                                        Eliminar
-                                    </a>
-                                </td>
+                                {{--<td>--}}
+                                    {{--<a class="btn btn-primary" href="{{ url('/articulos/edit/'.$articulo->id) }}" role="button">Editar</a>--}}
+                                    {{--<a class="btn btn-danger" href="{{ url('/articulos/delete/'.$articulo->id) }}"--}}
+                                       {{--role="button"--}}
+                                       {{--onclick="return confirm('Esta seguro? Se eliminara toda la informacion relacionada a el articulo. ')">--}}
+                                        {{--Eliminar--}}
+                                    {{--</a>--}}
+                                {{--</td>--}}
                             </tr>
                         @endforeach
                     @else

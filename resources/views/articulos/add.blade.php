@@ -5,8 +5,16 @@
     <div class="panel panel-default ">
         <div class="panel-heading"><h2>Crear Materia</h2></div>
         <div class="panel-body">
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/materias/add') }}" enctype="multipart/form-data">
+            <form class="form-horizontal" role="form" method="POST" action="{{ url('/articulos/add') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
+
+                {{--'nombre',--}}
+                {{--'cantidad',--}}
+                {{--'estado',--}}
+                {{--'precio',--}}
+                {{--'image',--}}
+                {{--'categoria',--}}
+                {{--'descripcion'--}}
 
                 <div class="form-group{{ $errors->has('nombre') ? ' has-error' : '' }}">
                     <label for="nombre" class="col-md-4 control-label">Nombre</label>
@@ -20,33 +28,78 @@
                     </div>
                 </div>
 
-                <div class="form-group{{ $errors->has('grado') ? ' has-error' : '' }}">
-                    <label for="grado" class="col-md-4 control-label">Grado</label>
+                <div class="form-group{{ $errors->has('cantidad') ? ' has-error' : '' }}">
+                    <label for="cantidad" class="col-md-4 control-label">Cantidad</label>
                     <div class="col-md-6">
-                        <input id="grado" type="text" class="form-control" name="grado" value="{{ old('grado') }}" required>
-                        @if ($errors->has('grado'))
+                        <input id="cantidad" type="text" class="form-control" name="cantidad" value="{{ old('cantidad') }}" required autofocus>
+                        @if ($errors->has('cantidad'))
                             <span class="help-block">
-                                <strong>{{ $errors->first('grado') }}</strong>
+                                <strong>{{ $errors->first('cantidad') }}</strong>
                             </span>
                         @endif
                     </div>
                 </div>
 
-                <div class="form-group{{ $errors->has('idProfesor') ? ' has-error' : '' }}">
-                    <label for="idProfesor" class="col-md-4 control-label">Profesor</label>
+                <div class="form-group{{ $errors->has('precio') ? ' has-error' : '' }}">
+                    <label for="precio" class="col-md-4 control-label">Precio</label>
                     <div class="col-md-6">
-                        <select id="idProfesor" name="idProfesor" class="form-control" required>
-                            @if(isset($profesores) && count($profesores) > 0)
-                                @foreach ($profesores as $profesor)
-                                    <option>{{$profesor->nombre}}</option>
-                                @endforeach
-                            @else
-                                <option>-</option>
-                            @endif
-                        </select>
-                        @if ($errors->has('idProfesor'))
+                        <input id="precio" type="text" class="form-control" name="precio" value="{{ old('precio') }}" required autofocus>
+                        @if ($errors->has('precio'))
                             <span class="help-block">
-                                <strong>{{ $errors->first('idProfesor') }}</strong>
+                                <strong>{{ $errors->first('precio') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+
+                <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
+                    <label for="image" class="col-md-4 control-label">Imagen de Referencia</label>
+                    <div class="col-md-6">
+                        <input id="image" type="file" name="image" class="form-control" required>
+                        @if ($errors->has('image'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('image') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group{{ $errors->has('categoria') ? ' has-error' : '' }}">
+                    <label for="categoria" class="col-md-4 control-label">Categoria</label>
+                    <div class="col-md-6">
+                        <input id="categoria" type="text" class="form-control" name="categoria" value="{{ old('categoria') }}" required autofocus>
+                        @if ($errors->has('categoria'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('categoria') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group{{ $errors->has('descripcion') ? ' has-error' : '' }}">
+                    <label for="descripcion" class="col-md-4 control-label">Descripcion</label>
+                    <div class="col-md-6">
+                        <input id="descripcion" type="text" class="form-control" name="descripcion" value="{{ old('descripcion') }}" required autofocus>
+                        @if ($errors->has('descripcion'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('descripcion') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group{{ $errors->has('estado') ? ' has-error' : '' }}">
+                    <label for="estado" class="col-md-4 control-label">Estado</label>
+                    <div class="col-md-6">
+                        <select id="estado" name="estado" class="form-control" required>
+                            <option>HABILITADO</option>
+                            <option>DESHABILITADO</option>
+                        </select>
+
+                        @if ($errors->has('estado'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('estado') }}</strong>
                             </span>
                         @endif
                     </div>
@@ -54,8 +107,9 @@
 
                 <div class="form-group">
                     <div class="col-md-8 col-md-offset-4">
-                        <button type="submit" class="btn btn-primary" onclick="return confirm('Estas seguro?')">
-                            Crear Materia
+                        <button type="submit" class="btn btn-primary" style="font-size:18px;" onclick="return confirm('Estas seguro?')">
+                            <span class="glyphicon glyphicon-floppy-save"></span>
+                            Crear Articulo
                         </button>
                         @if (Session::has('message'))
                             <div class="alert alert-success alert-dismissable fade in" style="margin-top: 10px">

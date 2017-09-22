@@ -3,48 +3,50 @@
 @section('content')
 
     <div class="panel panel-default ">
-        <div class="panel-heading"><h2>Editar Materia</h2></div>
+        <div class="panel-heading"><h2>Editar Material</h2></div>
         <div class="panel-body">
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/materias/edit/'.$materia->id) }}" enctype="multipart/form-data">
+            <form class="form-horizontal" role="form" method="POST" action="{{ url('/materiales/edit/'.$material->id) }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
-                <div class="form-group{{ $errors->has('nombre') ? ' has-error' : '' }}">
-                    <label for="nombre" class="col-md-4 control-label">Nombre</label>
+                {{--'idMateria','titulo','descripcion','file'--}}
+
+                <div class="form-group{{ $errors->has('titulo') ? ' has-error' : '' }}">
+                    <label for="titulo" class="col-md-4 control-label">Titulo</label>
                     <div class="col-md-6">
-                        <input id="nombre" type="text" class="form-control" name="nombre" value="{{ old('nombre')?old('nombre'):$materia->nombre }}" required autofocus>
-                        @if ($errors->has('nombre'))
+                        <input id="titulo" type="text" class="form-control" name="titulo" value="{{ old('titulo')?old('titulo'):$material->titulo }}" required autofocus>
+                        @if ($errors->has('titulo'))
                             <span class="help-block">
-                                <strong>{{ $errors->first('nombre') }}</strong>
+                                <strong>{{ $errors->first('titulo') }}</strong>
                             </span>
                         @endif
                     </div>
                 </div>
 
-                <div class="form-group{{ $errors->has('grado') ? ' has-error' : '' }}">
-                    <label for="grado" class="col-md-4 control-label">Grado</label>
+                <div class="form-group{{ $errors->has('descripcion') ? ' has-error' : '' }}">
+                    <label for="descripcion" class="col-md-4 control-label">Descripcion</label>
                     <div class="col-md-6">
-                        <input id="grado" type="text" class="form-control" name="grado" value="{{ old('grado')?old('grado'):$materia->grado }}" required>
-                        @if ($errors->has('grado'))
+                        <input id="descripcion" type="text" class="form-control" name="descripcion" value="{{ old('descripcion')?old('descripcion'):$material->descripcion }}" required>
+                        @if ($errors->has('descripcion'))
                             <span class="help-block">
-                                <strong>{{ $errors->first('grado') }}</strong>
+                                <strong>{{ $errors->first('descripcion') }}</strong>
                             </span>
                         @endif
                     </div>
                 </div>
 
-                <div class="form-group{{ $errors->has('idProfesor') ? ' has-error' : '' }}">
-                    <label for="idProfesor" class="col-md-4 control-label">Profesor</label>
+                <div class="form-group{{ $errors->has('idMateria') ? ' has-error' : '' }}">
+                    <label for="idMateria" class="col-md-4 control-label">Materia</label>
                     <div class="col-md-6">
-                        <select id="idProfesor" name="idProfesor" class="form-control" required>
-                            @if(isset($profesores) && count($profesores) > 0)
-                                @foreach ($profesores as $profesor)
-                                    <option value="{{$profesor->id}}">{{$profesor->id}} - {{$profesor->nombre}}</option>
+                        <select id="idMateria" name="idMateria" class="form-control" required>
+                            @if(isset($materias) && count($materias) > 0)
+                                @foreach ($materias as $materia)
+                                    <option value="{{$materia->id}}">{{$materia->id}} - {{$materia->nombre}}</option>
                                 @endforeach
                             @endif
                         </select>
-                        @if ($errors->has('idProfesor'))
+                        @if ($errors->has('idMateria'))
                             <span class="help-block">
-                                <strong>{{ $errors->first('idProfesor') }}</strong>
+                                <strong>{{ $errors->first('idMateria') }}</strong>
                             </span>
                         @endif
                     </div>
@@ -65,7 +67,7 @@
                 </div>
             </form>
 
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/materias/delete/'.$materia->id) }}" enctype="multipart/form-data">
+            <form class="form-horizontal" role="form" method="POST" action="{{ url('/materiales/delete/'.$material->id) }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="form-group">
                     <div class="col-md-8 col-md-offset-4">

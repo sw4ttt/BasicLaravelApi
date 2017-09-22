@@ -23,19 +23,6 @@ class MateriasController extends Controller
     public function all(Request $request)
     {
         $materias = Materia::all();
-
-//
-//
-//        $encryptedValue = encrypt("4097440000000004");
-//        try {
-//            $decrypted = decrypt($encryptedValue);
-//        } catch (DecryptException $e) {
-//            //
-//            $decrypted = 'ERROR-decripted';
-//        }
-//
-//        return "4097440000000004\n".$encryptedValue."\n".$decrypted;
-
         return view('materias/materias', ['materias' => $materias]);
     }
 
@@ -46,7 +33,7 @@ class MateriasController extends Controller
         $validator = Validator::make($input, [
             'grado' => 'required|numeric|between:1,15',
             'nombre' => 'required|string|unique:materias,nombre',
-            'idProfesor' => 'required|string|exists:users,nombre'
+            'idProfesor' => 'required|numeric|exists:users,id'
         ]);
 
         if ($validator->fails()) {
@@ -58,7 +45,7 @@ class MateriasController extends Controller
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
         $materia = Materia::create($input);
-        $profesor = User::where('nombre',$input['idProfesor'])->first();
+        $profesor = User::where('id',$input['idProfesor'])->first();
 
         $materia->profesores()->attach(
             [
@@ -94,7 +81,7 @@ class MateriasController extends Controller
         $validator = Validator::make($input, [
             'grado' => 'required|numeric|between:1,15',
             'nombre' => 'required|string|unique:materias,nombre',
-            'idProfesor' => 'required|string|not_in:VACIO|exists:users,nombre',
+            'idProfesor' => 'required|numeric|exists:users,id',
             'id' => 'required|numeric|exists:materias,id'
         ]);
 
@@ -107,7 +94,7 @@ class MateriasController extends Controller
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
         $materia = Materia::find($id);
-        $profesor = User::where('nombre',$input['idProfesor'])->first();
+        $profesor = User::where('id',$input['idProfesor'])->first();
 
         $materia->profesores()->sync([$profesor->id=>['updated_at' => $input['updated_at']]]);
 
@@ -147,6 +134,21 @@ class MateriasController extends Controller
 
         $materia->delete();
 
-        return back()->with('message', 'Materia Eliminada!');
+        $materias = Materia::all();
+        return view('materias/materias', ['materias' => $materias]);
+
+//        return back()->with('message', 'Materia Eliminada!');
+
+//
+//
+//        $encryptedValue = encrypt("4097440000000004");
+//        try {
+//            $decrypted = decrypt($encryptedValue);
+//        } catch (DecryptException $e) {
+//            //
+//            $decrypted = 'ERROR-decripted';
+//        }
+//
+//        return "4097440000000004\n".$encryptedValue."\n".$decrypted;
     }
 }
