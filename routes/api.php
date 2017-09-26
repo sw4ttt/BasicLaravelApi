@@ -121,6 +121,7 @@ Route::group(['middleware' => ['api','cors']], function ()
 
         Route::group(['prefix' => 'mensajes'], function () {
             Route::get('/', 'Api\Mensajes\MensajesController@all');
+            Route::get('/destinatarios', 'Api\Mensajes\MensajesController@destinatarios');
             Route::post('/add', 'Api\Mensajes\MensajesController@enviar');
         });
     });

@@ -41,6 +41,69 @@ class UserController extends Controller
         $user = User::find($id);
         return $user;
     }
+
+    public function edit(Request $request)
+    {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+        } catch (Exception $e) {
+            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
+                return response()->json(['error'=>'Token is Invalid'],401);
+            }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
+                return response()->json(['error'=>'Token is Expired'],401);
+            }else{
+                return response()->json(['error'=>'Token Missing'],400);
+            }
+        }
+
+        $input = $request->only(
+            'tlfDomicilio',
+            'tlfCelular',
+            'email',
+            'password'
+        );
+        $validator = Validator::make($input, [
+            'tlfDomicilio' => 'string',
+            'tlfCelular' => 'string',
+            'email' => 'email|unique:users,email',
+            'password' => 'numeric|min:4'
+        ]);
+        if($validator->fails()) {
+            return response()->json($validator->errors(),400);
+        }
+
+        $editable = false;
+
+        if(strlen($input['tlfDomicilio'])>0)
+        {
+            $user->tlfDomicilio = $input['tlfDomicilio'];
+            $editable = true;
+        }
+
+        if(strlen($input['tlfCelular'])>0)
+        {
+            $user->tlfCelular = $input['tlfCelular'];
+            $editable = true;
+        }
+
+        if(strlen($input['email'])>0)
+        {
+            $user->email = $input['email'];
+            $editable = true;
+        }
+
+        if(strlen($input['password'])>0)
+        {
+            $user->password = Hash::make($input['password']);
+            $editable = true;
+        }
+
+        if($editable === true)
+            $user->save();
+
+        return response()->json(['success'=>true,'message'=>($editable===true?'editado':'nada que editar'),'user'=>$user]);
+
+    }
     public function estudiantes(Request $request, $id)
     {
         $request['id'] = $id;

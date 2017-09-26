@@ -17,6 +17,7 @@ use App\Materia;
 use App\Material;
 use OneSignal;
 use App\Mensaje;
+use Illuminate\Support\Facades\DB;
 
 class MensajesController extends Controller
 {
@@ -43,6 +44,54 @@ class MensajesController extends Controller
             $user->grado = $estudiante->grado;
             return Mensaje::where('grado', $user->grado)->get();
         }
+    }
+
+    public function destinatarios(Request $request)
+    {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+        } catch (Exception $e) {
+            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
+                return response()->json(['error'=>'Token is Invalid'],401);
+            }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
+                return response()->json(['error'=>'Token is Expired'],401);
+            }else{
+                return response()->json(['error'=>'Token Missing'],400);
+            }
+        }
+
+        if(($user->type === 'PROFESOR'))
+        {
+            $materias = $user->materias()->get();
+            if(count($materias)>0)
+            {
+                $grados = array_pluck($materias, 'grado');
+
+                $data = Estudiante::whereIn('grado', $grados)
+                    ->join('users', 'users.id','=', 'estudiantes.idUser')
+                    ->select('users.id as idUser','estudiantes.grado','estudiantes.id as idEstudiante')
+                    ->get();
+
+                return response()->json(['data'=>$data,'grados'=>$grados,'materias'=>$materias]);
+            }
+            else
+                return response()->json(['error'=>'Profesor no tiene materias asignadas'],400);
+        }
+        if(($user->type === 'REPRESENTANTE'))
+        {
+            $estudiantes = $user->estudiantes()->get();
+
+            $grados = array_pluck($estudiantes, 'grado');
+
+            $data = Materia::whereIn('grado', $grados)
+                ->join('profesores_materias', 'profesores_materias.idMateria','=', 'materias.id')
+                ->select('profesores_materias.idProfesor','profesores_materias.idMateria')
+                ->get();
+
+            return response()->json(['data'=>$data,'grados'=>$grados,'estudiantes'=>$estudiantes]);
+
+        }
+        return response()->json(['error'=>'EL usuario debe ser PROFESOR o REPRESENTANTE.'],400);
     }
 
     public function enviar(Request $request)
