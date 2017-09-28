@@ -106,6 +106,7 @@ class AuthController extends Controller
                         'idMateria'=>$materia->id,
                         'periodo'=>'2017-2018',
                         'evaluaciones'=>[],
+                        'acumulado'=>0,
                         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                         'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);

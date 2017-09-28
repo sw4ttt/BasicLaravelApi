@@ -13,12 +13,12 @@ class CreateProfesoresMateriasTable extends Migration
      */
     public function up()
     {
-//        Schema::create('profesores_materias', function (Blueprint $table) {
-//            $table->primary(['idProfesor', 'idMateria']);
-//            $table->integer('idProfesor');
-//            $table->integer('idMateria');
-//            $table->timestamps();
-//        });
+        Schema::create('profesores_materias', function (Blueprint $table) {
+            $table->primary(['idProfesor', 'idMateria']);
+            $table->integer('idProfesor');
+            $table->integer('idMateria');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -28,6 +28,6 @@ class CreateProfesoresMateriasTable extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('profesores_materias');
+        Schema::dropIfExists('profesores_materias');
     }
 }

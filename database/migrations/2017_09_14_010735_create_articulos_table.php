@@ -13,17 +13,17 @@ class CreateArticulosTable extends Migration
      */
     public function up()
     {
-//        Schema::create('articulos', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string('nombre');
-//            $table->string('cantidad');
-//            $table->string('categoria');
-//            $table->string('descripcion');
-//            $table->string('estado');
-//            $table->float('precio', 8, 2);
-//            $table->string('image');
-//            $table->timestamps();
-//        });
+        Schema::create('articulos', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nombre');
+            $table->integer('cantidad')->nullable();
+            $table->string('categoria');
+            $table->string('descripcion');
+            $table->string('estado');
+            $table->integer('precio');
+            $table->string('image')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -33,6 +33,6 @@ class CreateArticulosTable extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('articulos');
+        Schema::dropIfExists('articulos');
     }
 }

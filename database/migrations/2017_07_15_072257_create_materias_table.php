@@ -13,12 +13,12 @@ class CreateMateriasTable extends Migration
      */
     public function up()
     {
-//        Schema::create('materias', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string('nombre');
-//            $table->integer('grado');
-//            $table->timestamps();
-//        });
+        Schema::create('materias', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nombre');
+            $table->integer('grado');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -28,6 +28,6 @@ class CreateMateriasTable extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('materias');
+        Schema::dropIfExists('materias');
     }
 }

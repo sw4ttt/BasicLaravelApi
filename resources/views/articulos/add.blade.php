@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="panel panel-default ">
-        <div class="panel-heading"><h2>Crear Materia</h2></div>
+        <div class="panel-heading"><h2>Crear Articulo</h2></div>
         <div class="panel-body">
             <form class="form-horizontal" role="form" method="POST" action="{{ url('/articulos/add') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
@@ -31,7 +31,7 @@
                 <div class="form-group{{ $errors->has('cantidad') ? ' has-error' : '' }}">
                     <label for="cantidad" class="col-md-4 control-label">Cantidad</label>
                     <div class="col-md-6">
-                        <input id="cantidad" type="text" class="form-control" name="cantidad" value="{{ old('cantidad') }}" required autofocus>
+                        <input id="cantidad" type="text" class="form-control" name="cantidad" value="{{ old('cantidad') }}" autofocus>
                         @if ($errors->has('cantidad'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('cantidad') }}</strong>
@@ -56,7 +56,7 @@
                 <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                     <label for="image" class="col-md-4 control-label">Imagen de Referencia</label>
                     <div class="col-md-6">
-                        <input id="image" type="file" name="image" class="form-control" required>
+                        <input id="image" type="file" name="image" class="form-control">
                         @if ($errors->has('image'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('image') }}</strong>
@@ -68,7 +68,12 @@
                 <div class="form-group{{ $errors->has('categoria') ? ' has-error' : '' }}">
                     <label for="categoria" class="col-md-4 control-label">Categoria</label>
                     <div class="col-md-6">
-                        <input id="categoria" type="text" class="form-control" name="categoria" value="{{ old('categoria') }}" required autofocus>
+                        <select id="categoria" name="categoria" class="form-control" required>
+                            <option value="PAPELERIA">Papeleria</option>
+                            <option value="LIBRERIA">Libreria</option>
+                            <option value="MATRICULA">Matricula</option>
+                        </select>
+
                         @if ($errors->has('categoria'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('categoria') }}</strong>

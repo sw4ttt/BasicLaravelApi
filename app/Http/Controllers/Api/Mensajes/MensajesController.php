@@ -37,13 +37,23 @@ class MensajesController extends Controller
 
         if(($user->type === 'PROFESOR' || $user->type === 'ADMIN'))
         {
-            return Mensaje::where('idUsuario', $user->id)->get();
+            $enviados = Mensaje::where('idEmisor', $user->id)->get();
+            $recibidos = Mensaje::where('idReceptor', $user->id)->get();
+
+            return response()->json(['enviados'=>$enviados,'recibidos'=>$recibidos]);
         }
         else{
             $estudiante = $user->estudiantes()->first();
             $user->grado = $estudiante->grado;
-            return Mensaje::where('grado', $user->grado)->get();
+
+            $enviados = Mensaje::where('idEmisor', $user->id)->get();
+            $recibidos = Mensaje::where('idReceptor', $user->id)
+                ->orWhere('grado', $user->grado)
+                ->get();
+
+            return response()->json(['enviados'=>$enviados,'recibidos'=>$recibidos]);
         }
+
     }
 
     public function destinatarios(Request $request)
@@ -66,13 +76,17 @@ class MensajesController extends Controller
             if(count($materias)>0)
             {
                 $grados = array_pluck($materias, 'grado');
+                
+                $grados = array_unique($grados);
 
                 $data = Estudiante::whereIn('grado', $grados)
                     ->join('users', 'users.id','=', 'estudiantes.idUser')
-                    ->select('users.id as idUser','estudiantes.grado','estudiantes.id as idEstudiante')
+                    ->select('users.id as idEntidad','estudiantes.grado','users.nombre as nombre')
                     ->get();
+                
+                $data = $data->unique('idEntidad')->values();
 
-                return response()->json(['data'=>$data,'grados'=>$grados,'materias'=>$materias]);
+                return response()->json(['data'=>$data,'materias'=>$materias]);
             }
             else
                 return response()->json(['error'=>'Profesor no tiene materias asignadas'],400);
@@ -82,13 +96,18 @@ class MensajesController extends Controller
             $estudiantes = $user->estudiantes()->get();
 
             $grados = array_pluck($estudiantes, 'grado');
+            
+            $grados = array_unique($grados);
 
             $data = Materia::whereIn('grado', $grados)
                 ->join('profesores_materias', 'profesores_materias.idMateria','=', 'materias.id')
-                ->select('profesores_materias.idProfesor','profesores_materias.idMateria')
+                ->join('users', 'users.id','=', 'profesores_materias.idProfesor')
+                ->select('profesores_materias.idProfesor as idEntidad','profesores_materias.idMateria','users.nombre')
                 ->get();
+                
+            $data = $data->unique('idEntidad')->values();
 
-            return response()->json(['data'=>$data,'grados'=>$grados,'estudiantes'=>$estudiantes]);
+            return response()->json(['data'=>$data]);
 
         }
         return response()->json(['error'=>'EL usuario debe ser PROFESOR o REPRESENTANTE.'],400);
@@ -97,13 +116,15 @@ class MensajesController extends Controller
     public function enviar(Request $request)
     {
         $input = $request->only(
+            'idUsuario',
             'idMateria',
             'asunto',
             'mensaje'
         );
 
         $validator = Validator::make($input, [
-            'idMateria' => 'required|numeric|exists:materias,id',
+            'idUsuario' => 'required_without:idMateria|numeric|exists:users,id',
+            'idMateria' => 'required_without:idUsuario|numeric|exists:materias,id',
             'asunto' => 'required|string',
             'mensaje' => 'required|string'
         ]);
@@ -124,29 +145,66 @@ class MensajesController extends Controller
                 return response()->json(['error'=>'Token Missing'],400);
             }
         }
+        
+        //return response()->json(['success'=>true]);
 
-        if(($user->type === 'REPRESENTANTE'))
-            return response()->json(['error'=>'Usuario no puede mandar mensajes porque no es PROFESOR o ADMIN'],400);
+        //if(($user->type === 'REPRESENTANTE'))
+            //return response()->json(['error'=>'Usuario no puede mandar mensajes porque no es PROFESOR o ADMIN'],400);
 
-        $input['idUsuario'] = $user->id;
-        $input['nombre'] = $user->nombre;
+        //$materia = $user->materias()->where('id', $input['idMateria'])->first();
 
-        $materia = $user->materias()->where('id', $input['idMateria'])->first();
+        //if($materia === null)
+        //    return response()->json(['error'=>'El idMateria especificado no corresponde a las materias del usuario.'],400);
+        
+        $key = "";
+        $value = "";
 
-        if($materia === null)
-            return response()->json(['error'=>'El idMateria especificado no corresponde a las materias del usuario.'],400);
+//        echo "idMateria=".$input['idMateria']."\n";
+//        echo "idUsuario=".$input['idUsuario']."\n";
+        
+        if($input['idMateria'] != ""){
+            $materia = Materia::find($input['idMateria']);
+            
+            $key = "grado";
+            $value = $materia->grado;
 
-        $input['materia'] = $materia->nombre;
-        $input['grado'] = $materia->grado;
+            $input['materia'] = $materia->nombre;
+            $input['grado'] = $materia->grado;
+            
+            $input['idEmisor'] = $user->id;
+            $input['idReceptor'] = 0;
+            $input['nombre'] = $user->nombre;
 
+            unset($input['idUsuario']);
+            
+        }
+        else{
+            $input['materia'] = "";
+            $input['idMateria'] = 0;
+            $input['grado'] = 0;
+            
+            $key = "userId";
+            $value = $input['idUsuario'];
+
+            $input['idEmisor'] = $user->id;
+            $input['idReceptor'] = $input['idUsuario'];
+            $input['nombre'] = $user->nombre;
+
+            unset($input['idUsuario']);
+            
+        }
+        
+        
         $tag = new \stdClass;
-        $tag->key = "grado";
+        $tag->key = $key;
         $tag->relation = "=";
-        $tag->value = $materia->grado;
+        $tag->value = $value;
 
         $tags = array();
 
         array_push($tags,$tag);
+
+//        echo $input['idEmisor'];
 
         $mensaje = Mensaje::create($input);
 
@@ -159,11 +217,12 @@ class MensajesController extends Controller
                 "id"=>$mensaje->id,
                 "idMateria"=>$input['idMateria'],
                 "materia"=>$input['materia'],
-                "idUsuario"=>$input['idUsuario'],
+                "idEmisor"=>$input['idEmisor'],
+                "idReceptor"=>$input['idReceptor'],
                 "nombre"=>$input['nombre'],
                 "asunto"=>$input['asunto'],
                 "mensaje"=>$input['mensaje'],
-                "created_at"=>$mensaje->created_at
+                "created_at"=>$mensaje->created_at->format('Y-m-d H:i:s')
             ],
             $buttons = null,
             $schedule = null

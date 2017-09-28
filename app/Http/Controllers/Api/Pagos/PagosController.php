@@ -23,6 +23,7 @@ use Alexo\LaravelPayU\LaravelPayU;
 use PayUException;
 use App\Order;
 use App\Tarjeta;
+use App\Articulo;
 
 
 class PagosController extends Controller
@@ -40,8 +41,30 @@ class PagosController extends Controller
                 return response()->json(['error'=>'Token Missing'],400);
             }
         }
-
-        return Order::where('user_id', $user->id)->where('state', 'APPROVED')->get();
+        
+        $pagables = Articulo::where('categoria','MATRICULA')->where('estado','HABILITADO')->get();
+        
+        //string(6) "nombre"
+        //string(8) "cantidad"
+        //string(6) "estado"
+        //string(6) "precio"
+        //string(5) "image"
+        //string(9) "categoria"
+        //string(11) "descripcion"
+        
+        $pagables->transform(function ($item, $key) {
+            $itemPagable = new \stdClass;
+            $itemPagable->id = $item->id;
+            $itemPagable->nombre = $item->nombre;
+            $itemPagable->state = "PAGABLE";
+            $itemPagable->value = $item->precio;
+            $itemPagable->created_at = $item->created_at->format('Y-m-d H:i:s');
+            return $itemPagable;
+        });
+        
+        //return Order::where('user_id', $user->id)->where('state', 'APPROVED')->get();
+        $orders = Order::where('user_id', $user->id)->where('state', 'APPROVED')->get();
+        return response()->json(['orders'=>$orders,'pagables'=>$pagables]);
 
     }
     public function add(Request $request)

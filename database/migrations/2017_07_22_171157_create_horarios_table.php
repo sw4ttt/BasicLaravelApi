@@ -13,19 +13,19 @@ class CreateHorariosTable extends Migration
      */
     public function up()
     {
-//        Schema::create('horarios', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string('entidad');
-//            $table->string('idEntidad')->nullable();
-//            $table->string('nombreEntidad')->nullable();
-//            $table->string('descripcion');
-//            $table->string('dia');
-//            $table->string('inicio');
-//            $table->string('fin');
-//            $table->integer('grado');
-//            $table->string('lugar');
-//            $table->timestamps();
-//        });
+        Schema::create('horarios', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('entidad');
+            $table->string('idEntidad')->nullable();
+            $table->string('nombreEntidad')->nullable();
+            $table->string('descripcion');
+            $table->string('dia');
+            $table->string('inicio');
+            $table->string('fin');
+            $table->integer('grado');
+            $table->string('lugar');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -35,6 +35,6 @@ class CreateHorariosTable extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('horarios');
+        Schema::dropIfExists('horarios');
     }
 }

@@ -13,13 +13,13 @@ class CreateUsuariosArticulosTable extends Migration
      */
     public function up()
     {
-//        Schema::create('usuarios_articulos', function (Blueprint $table) {
-//            $table->primary(['idUsuario', 'idArticulo']);
-//            $table->integer('idUsuario');
-//            $table->integer('idArticulo');
-//            $table->integer('cantidad');
-//            $table->timestamps();
-//        });
+        Schema::create('usuarios_articulos', function (Blueprint $table) {
+            $table->primary(['idUsuario', 'idArticulo']);
+            $table->integer('idUsuario');
+            $table->integer('idArticulo');
+            $table->integer('cantidad');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -29,6 +29,6 @@ class CreateUsuariosArticulosTable extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('usuarios_articulos');
+        Schema::dropIfExists('usuarios_articulos');
     }
 }

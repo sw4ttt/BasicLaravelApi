@@ -14,14 +14,14 @@ class CreateNoticiasTable extends Migration
     public function up()
     {
         //'idUser', 'title', 'content'
-//        Schema::create('noticias', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->integer('idUser');
-//            $table->string('title');
-//            $table->longText('content');
-//            $table->string('image');
-//            $table->timestamps();
-//        });
+        Schema::create('noticias', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('idUser');
+            $table->string('title');
+            $table->longText('content');
+            $table->string('image');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -31,6 +31,6 @@ class CreateNoticiasTable extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('noticias');
+        Schema::dropIfExists('noticias');
     }
 }

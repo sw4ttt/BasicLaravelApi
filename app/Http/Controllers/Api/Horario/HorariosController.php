@@ -127,6 +127,8 @@ class HorariosController extends Controller
         if($input['entidad'] === 'GENERAL')
             unset($input['idEntidad']);
 
+        if(!isset($input['descripcion']))
+            $input['descripcion'] = "";
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 

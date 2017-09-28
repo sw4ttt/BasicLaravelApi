@@ -13,25 +13,25 @@ class CreateTarjetasTable extends Migration
      */
     public function up()
     {
-//        Schema::create('tarjetas', function (Blueprint $table) {
-//            $table->increments('id');
-//
-//            $table->integer('idUsuario');
-//            $table->string('tipo');
-//            $table->string('numero');
-//            $table->string('nombre');
-//            $table->string('cod');
-//            $table->string('vencimiento');
-//            $table->string('street1');
-//            $table->string('street2');
-//            $table->string('city');
-//            $table->string('state');
-//            $table->string('country');
-//            $table->string('postalCode');
-//            $table->string('phone');
-//
-//            $table->timestamps();
-//        });
+        Schema::create('tarjetas', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->integer('idUsuario');
+            $table->string('tipo');
+            $table->string('numero');
+            $table->string('nombre');
+            $table->string('cod');
+            $table->string('vencimiento');
+            $table->string('street1');
+            $table->string('street2');
+            $table->string('city');
+            $table->string('state');
+            $table->string('country');
+            $table->string('postalCode');
+            $table->string('phone');
+
+            $table->timestamps();
+        });
     }
 
     /**
@@ -41,6 +41,6 @@ class CreateTarjetasTable extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('tarjetas');
+        Schema::dropIfExists('tarjetas');
     }
 }

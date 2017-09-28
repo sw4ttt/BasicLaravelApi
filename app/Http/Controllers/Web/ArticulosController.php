@@ -33,10 +33,9 @@ class ArticulosController extends Controller
         $input = $request->only('nombre','cantidad','estado','precio','image','categoria','descripcion');
         $validator = Validator::make($input, [
             'nombre' => 'required|string|unique:articulos,nombre',
-            'cantidad' => 'required|numeric|between:1,9999',
+            'cantidad' => 'required_unless:categoria,MATRICULA|integer|between:1,999999',
             'estado' => 'required|string|in:HABILITADO,DESHABILITADO',
-            'precio' => 'required|numeric|between:1,100000',
-            'image' => 'required|image',
+            'precio' => 'required|integer|between:1,1000000',
             'categoria' => 'required|string',
             'descripcion' => 'required|string'
         ]);
@@ -45,16 +44,26 @@ class ArticulosController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return back()->withErrors($validator)->withInput();
         }
-        if (!$request->file('image')->isValid()) {
-            return back()->withErrors(["error"=>"error with image file."])->withInput();
+
+        if($input['categoria'] != 'MATRICULA')
+        {
+            $validator = Validator::make($input, [
+                'image' => 'required|image',
+            ]);
+            if($validator->fails()) {
+                //throw new ValidationHttpException($validator->errors()->all());
+                return back()->withErrors($validator)->withInput();
+            }
+
+            if (!$request->file('image')->isValid()) {
+                return response()->json(["error"=>"error with image file."],400);
+            }
+            $input['image'] = Storage::put('images', $input['image']);
+            $input['image'] = asset($input['image']);
         }
 
-//        $input['image'] = Storage::put('images', $request->image);
-//        $input['image'] = str_replace('public','storage',$input['image'],$i);
-//        $input['image'] = url('/')."/".$input['image'];
-
-        $input['image'] = Storage::put('images', $input['image']);
-        $input['image'] = asset($input['image']);
+        if($input['categoria'] === 'MATRICULA')
+            $input['cantidad'] = null;
 
         Articulo::create($input);
 

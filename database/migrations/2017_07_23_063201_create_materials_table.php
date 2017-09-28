@@ -13,15 +13,15 @@ class CreateMaterialsTable extends Migration
      */
     public function up()
     {
-//        Schema::create('materials', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string('idMateria');
-//            $table->string('titulo');
-//            $table->string('descripcion');
-//            $table->string('size');
-//            $table->string('file');
-//            $table->timestamps();
-//        });
+        Schema::create('materials', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('idMateria');
+            $table->string('titulo');
+            $table->string('descripcion');
+            $table->string('size');
+            $table->string('file');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -31,6 +31,6 @@ class CreateMaterialsTable extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('materials');
+        Schema::dropIfExists('materials');
     }
 }

@@ -28,17 +28,17 @@ class ArticuloController extends Controller
 
     public function all(Request $request)
     {
-        return Articulo::where('estado','HABILITADO')->get();
+        return Articulo::where('estado','HABILITADO')->where('categoria','<>','MATRICULA')->get();
     }
     public function add(Request $request)
     {
+        return response()->json(["error"=>"Los articulos se crean desde el admin."],400);
         $input = $request->only('nombre','cantidad','estado','precio','image','categoria','descripcion');
         $validator = Validator::make($input, [
             'nombre' => 'required|string|unique:articulos,nombre',
-            'cantidad' => 'required|numeric|between:1,9999',
+            'cantidad' => 'required_unless:categoria,MATRICULA|integer|between:1,999999',
             'estado' => 'required|string|in:HABILITADO,DESHABILITADO',
-            'precio' => 'required|numeric|between:1,100000',
-            'image' => 'required|image',
+            'precio' => 'required|integer|between:1,1000000',
             'categoria' => 'required|string',
             'descripcion' => 'required|string'
         ]);
@@ -47,17 +47,32 @@ class ArticuloController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
-        if (!$request->file('image')->isValid()) {
-            return response()->json(["error"=>"error with image file."],400);
+
+        if($input['categoria'] != 'MATRICULA')
+        {
+            $validator = Validator::make($input, [
+                'image' => 'required|image',
+            ]);
+            if($validator->fails()) {
+                //throw new ValidationHttpException($validator->errors()->all());
+                return response()->json($validator->errors(),400);
+            }
+
+            if (!$request->file('image')->isValid()) {
+                return response()->json(["error"=>"error with image file."],400);
+            }
+            $input['image'] = Storage::put('images', $input['image']);
+            $input['image'] = asset($input['image']);
         }
 //        $input['image'] = Storage::put('images', $request->image);
 //        $input['image'] = str_replace('public','storage',$input['image'],$i);
 //        $input['image'] = url('/')."/".$input['image'];
 
-        $input['image'] = Storage::put('images', $input['image']);
-        $input['image'] = asset($input['image']);
 
-        $nuevo = Articulo::create($input);
+        if(!isset($input['cantidad']))
+            $input['cantidad'] = 0;
+
+//        $nuevo = Articulo::create($input);
 
         return response()->json(['success'=>true,'creado'=>$nuevo]);
     }

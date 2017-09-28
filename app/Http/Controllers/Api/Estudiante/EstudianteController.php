@@ -59,7 +59,8 @@ class EstudianteController extends Controller
                     'idEstudiante'=>$estudiante->id,
                     'idMateria'=>$materia->id,
                     'periodo'=>'2017-2018',
-                    'evaluaciones'=>[]
+                    'evaluaciones'=>[],
+                    'acumulado'=>0,
                 ]);
             }
         }

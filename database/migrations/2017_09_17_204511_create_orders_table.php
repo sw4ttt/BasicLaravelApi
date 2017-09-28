@@ -20,20 +20,20 @@ class CreateOrdersTable extends Migration
 //'user_id'
     public function up()
     {
-//        Schema::create('orders', function (Blueprint $table) {
-//            $table->increments('id');
-//
-//            $table->string('reference');
-//            $table->string('payu_order_id')->nullable();
-//            $table->string('transaction_id')->nullable();
-//            $table->string('state');
-//            $table->string('value');
-//            $table->string('user_id');
-//            $table->string('user_name');
-//            $table->text('articulos');
-//
-//            $table->timestamps();
-//        });
+        Schema::create('orders', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->string('reference');
+            $table->string('payu_order_id')->nullable();
+            $table->string('transaction_id')->nullable();
+            $table->string('state');
+            $table->string('value');
+            $table->string('user_id');
+            $table->string('user_name');
+            $table->text('articulos');
+
+            $table->timestamps();
+        });
     }
 
     /**
@@ -43,6 +43,6 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('orders');
+        Schema::dropIfExists('orders');
     }
 }

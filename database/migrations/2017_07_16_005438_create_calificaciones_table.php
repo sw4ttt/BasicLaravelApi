@@ -13,15 +13,16 @@ class CreateCalificacionesTable extends Migration
      */
     public function up()
     {
-//        Schema::create('calificaciones', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->integer('idProfesor');//idUser tipo PROFESOR.
-//            $table->integer('idEstudiante');//idUser tipo ALUMNO.
-//            $table->integer('idMateria');//idUser tipo PROFESOR.
-//            $table->string('periodo'); //2017-2018.
-//            $table->text('evaluaciones');//Arreglo de Objetos con Nombre(evaluacion) y Nota(puntaje).
-//            $table->timestamps();
-//        });
+        Schema::create('calificaciones', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('idProfesor');//idUser tipo PROFESOR.
+            $table->integer('idEstudiante');//idUser tipo ALUMNO.
+            $table->integer('idMateria');//idUser tipo PROFESOR.
+            $table->string('periodo'); //2017-2018.
+            $table->text('evaluaciones');//Arreglo de Objetos con Nombre(evaluacion) y Nota(puntaje).
+            $table->float('acumulado',2,1);//idUser tipo PROFESOR.
+            $table->timestamps();
+        });
     }
 
     /**
@@ -31,6 +32,6 @@ class CreateCalificacionesTable extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('calificaciones');
+        Schema::dropIfExists('calificaciones');
     }
 }

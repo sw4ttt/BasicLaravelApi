@@ -12,7 +12,8 @@ class Calificacion extends Model
         'idEstudiante',
         'idMateria',
         'periodo',
-        'evaluaciones'
+        'evaluaciones',
+        'acumulado'
     ];
     protected $casts = [
         'evaluaciones' => 'array'

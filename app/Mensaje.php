@@ -8,7 +8,8 @@ class Mensaje extends Model
 {
     protected $table = 'mensajes';
     protected $fillable = [
-        'idUsuario',
+        'idEmisor',
+        'idReceptor',
         'nombre',
         'idMateria',
         'materia',

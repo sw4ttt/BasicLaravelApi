@@ -38,6 +38,20 @@ Route::get('images/{filename}', function ($filename)
     $response = Response::make($contents, 200);
     return $response->header("Content-Type", Storage::mimeType('images/'.$filename));
 });
+Route::get('images-app/{filename}', function ($filename)
+{
+    if(!Storage::exists('images-app/'.$filename))  return response('Imagen no existe.',404);
+    $contents = Storage::get('images-app/'.$filename);
+    $response = Response::make($contents, 200);
+    return $response->header("Content-Type", Storage::mimeType('images-app/'.$filename));
+});
+Route::get('images-app-default/{filename}', function ($filename)
+{
+    if(!Storage::exists('images-app-default/'.$filename))  return response('Imagen no existe.',404);
+    $contents = Storage::get('images-app-default/'.$filename);
+    $response = Response::make($contents, 200);
+    return $response->header("Content-Type", Storage::mimeType('images-app-default/'.$filename));
+});
 
 Route::get('files/{filename}', function ($filename)
 {
@@ -115,12 +129,28 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/delete/{id}', 'Web\MaterialesController@delete');
     });
 
+    Route::group(['prefix' => 'noticias'], function () {
+        Route::get('/', 'Web\NoticiasController@all');
+        Route::get('/add', function () {
+            return view('/noticias/add');
+        });
+        Route::post('/add', 'Web\NoticiasController@add');
+    });
+
     Route::group(['prefix' => 'notificaciones'], function () {
 //        Route::get('/', 'Web\HorariosController@all');
         Route::get('/add', function () {
             return view('/notificaciones/add');
         });
         Route::post('/add', 'Web\NotificacionesController@add');
+    });
+
+    Route::group(['prefix' => 'config'], function () {
+//        Route::get('/', 'Web\HorariosController@all');
+        Route::get('/images-app/add', function () {
+            return view('/config/images-app/add');
+        });
+        Route::post('/images-app/add', 'Web\Configuracion\WebResourcesController@addImagenesApp');
     });
 
 

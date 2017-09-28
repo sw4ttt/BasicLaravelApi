@@ -144,7 +144,7 @@
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Horarios<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-calendar"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
                                             <li><a href="{{URL::to('horarios')}}">Listado</a></li>
-                                            <li><a href="{{URL::to('horarios/add')}}">Crear</a></li>
+                                            {{--<li><a href="{{URL::to('horarios/add')}}">Crear</a></li>--}}
                                             {{--<li><a href="#">Modificar</a></li>--}}
                                         </ul>
                                     </li>
@@ -175,6 +175,29 @@
                                             {{--<li><a href="{{URL::to('materiales')}}">Listado</a></li>--}}
                                             <li><a href="{{URL::to('notificaciones/add')}}">Crear</a></li>
                                             {{--<li><a href="#">Modificar</a></li>--}}
+                                        </ul>
+                                    </li>
+
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Imagenes App<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-file"></span></a>
+                                        <ul class="dropdown-menu forAnimate" role="menu">
+                                            {{--<li><a href="{{URL::to('materiales')}}">Listado</a></li>--}}
+                                            <li><a href="{{URL::to('config/images-app/add')}}">Crear</a></li>
+                                            {{--<li><a href="#">Modificar</a></li>--}}
+                                        </ul>
+                                    </li>
+
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Noticias <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a>
+                                        <ul class="dropdown-menu forAnimate" role="menu">
+                                            <li><a href="{{URL::to('noticias')}}">Listado</a></li>
+                                            <li><a href="{{URL::to('noticias/add')}}">Crear</a></li>
+                                            {{--<li><a href="#">Modificar</a></li>--}}
+                                            {{--<li><a href="#">Reportar</a></li>--}}
+                                            {{--<li class="divider"></li>--}}
+                                            {{--<li><a href="#">Separated link</a></li>--}}
+                                            {{--<li class="divider"></li>--}}
+                                            {{--<li><a href="#">Noticias</a></li>--}}
                                         </ul>
                                     </li>
                                     {{--<li ><a href="#">Noticias<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-th-list"></span></a></li>--}}

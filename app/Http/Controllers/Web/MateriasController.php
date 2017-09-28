@@ -65,6 +65,7 @@ class MateriasController extends Controller
                 'idMateria'=>$materia->id,
                 'periodo'=>'2017-2018',
                 'evaluaciones'=>[],
+                'acumulado'=>0,
                 'created_at'=>$input['created_at'],
                 'updated_at'=>$input['updated_at'],
             ]);

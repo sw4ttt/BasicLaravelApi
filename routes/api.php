@@ -29,11 +29,11 @@ Route::group(['middleware' => ['api','cors'],'prefix' => 'api'], function () {
 
 Route::group(['middleware' => ['api','cors']], function ()
 {
-    Route::post('/testpayu1', 'Api\User\UserController@testConsultaPayu');
-
     Route::post('register', 'Api\AuthController@register');
     Route::post('login', 'Api\AuthController@login');
     Route::post('refreshToken', 'Api\AuthController@refreshToken');
+
+    Route::get('config/images-app', 'Api\Configuracion\ResourcesController@getImagenesApp');
 
     //Este Grupo Necesita Token (usa el middleware jwt-auth)
     Route::group(['middleware' => 'jwt-auth'], function () {
@@ -42,6 +42,7 @@ Route::group(['middleware' => ['api','cors']], function ()
 
         Route::group(['prefix' => 'users'], function () {
             Route::get('/', 'Api\User\UserController@all');
+            Route::put('edit', 'Api\User\UserController@edit');
             Route::get('{id}', 'Api\User\UserController@find');
             Route::get('{id}/estudiantes', 'Api\User\UserController@estudiantes');
             Route::get('{id}/materias', 'Api\User\UserController@materias');
@@ -71,12 +72,14 @@ Route::group(['middleware' => ['api','cors']], function ()
         Route::group(['prefix' => 'calificaciones'], function () {
             Route::get('/', 'Api\Calificaciones\CalificacionesController@all');
             Route::post('add', 'Api\Calificaciones\CalificacionesController@add');
+            Route::post('evaluacion', 'Api\Calificaciones\CalificacionesController@addEvaluacion');
             Route::put('edit', 'Api\Calificaciones\CalificacionesController@edit');
             Route::get('/estudiante/{idEstudiante}', 'Api\Calificaciones\CalificacionesController@byEstudiante');
             Route::get('/estudiante/{idEstudiante}/materia/{idMateria}', 'Api\Calificaciones\CalificacionesController@byEstudianteByMateria');
             Route::get('/profesor/{idProfesor}', 'Api\Calificaciones\CalificacionesController@byProfesor');
             Route::put('/profesor/{idProfesor}', 'Api\Calificaciones\CalificacionesController@editByProfesor');
             Route::get('/profesor/{idProfesor}/materia/{idMateria}', 'Api\Calificaciones\CalificacionesController@byProfesorByMateria');
+            Route::get('/fix-calificaciones','Api\Calificaciones\CalificacionesController@fixCalificaciones');
         });
 
         Route::group(['prefix' => 'horarios'], function () {
@@ -123,6 +126,11 @@ Route::group(['middleware' => ['api','cors']], function ()
             Route::get('/', 'Api\Mensajes\MensajesController@all');
             Route::get('/destinatarios', 'Api\Mensajes\MensajesController@destinatarios');
             Route::post('/add', 'Api\Mensajes\MensajesController@enviar');
+        });
+
+        Route::group(['prefix' => 'config'], function () {
+//            Route::get('/images-app', 'Api\Configuracion\ResourcesController@getImagenesApp');
+            Route::post('/images-app', 'Api\Configuracion\ResourcesController@addImagenesApp');
         });
     });
 
