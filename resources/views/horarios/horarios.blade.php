@@ -17,7 +17,7 @@
                         <th>fin</th>
                         <th>grado</th>
                         <th>lugar</th>
-                        <th>Opcion</th>
+                        {{--<th>Opcion</th>--}}
                     </tr>
                 </thead>
                 <tbody>
@@ -33,14 +33,14 @@
                                 <td>{{ $horario->fin }}</td>
                                 <td>{{ $horario->grado }}</td>
                                 <td>{{ $horario->lugar }}</td>
-                                <td>
-                                    <a class="btn btn-primary" href="{{ url('/horarios/edit/'.$horario->id) }}" role="button">Editar</a>
-                                    <a class="btn btn-danger" href="{{ url('/horarios/delete/'.$horario->id) }}"
-                                       role="button"
-                                       onclick="return confirm('Esta seguro? Se eliminara toda la informacion relacionada a el horario. ')">
-                                        Eliminar
-                                    </a>
-                                </td>
+                                {{--<td>--}}
+                                    {{--<a class="btn btn-primary" href="{{ url('/horarios/edit/'.$horario->id) }}" role="button">Editar</a>--}}
+                                    {{--<a class="btn btn-danger" href="{{ url('/horarios/delete/'.$horario->id) }}"--}}
+                                       {{--role="button"--}}
+                                       {{--onclick="return confirm('Esta seguro? Se eliminara toda la informacion relacionada a el horario. ')">--}}
+                                        {{--Eliminar--}}
+                                    {{--</a>--}}
+                                {{--</td>--}}
                             </tr>
                         @endforeach
                     @else
@@ -54,7 +54,7 @@
                             <td>..</td>
                             <td>..</td>
                             <td>..</td>
-                            <td>..</td>
+                            {{--<td>..</td>--}}
                         </tr>
                     @endif
                 </tbody>
