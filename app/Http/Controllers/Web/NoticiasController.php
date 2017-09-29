@@ -76,42 +76,47 @@ class NoticiasController extends Controller
 
     public function edit(Request $request,$id)
     {
-        $input = $request->only('idMateria','titulo','descripcion');
-        $input['id'] = $id;
+        $noticia = Noticia::find($id);
+        if(!$noticia)
+            back()->withErrors(['invalid'=>['El id de Noticia seleccionado no es valido.']]);
+
+        $input = $request->only('image','title','content');
+
         $validator = Validator::make($input, [
-            'id' => 'required|numeric|exists:materials,id',
-            'idMateria' => 'required|numeric|exists:materias,id',
-            'titulo' => 'required|string',
-            'descripcion' => 'required|string'
+            'image' => 'required|image',
+            'title' => 'required|string',
+            'content' => 'required|string'
         ]);
 
         if ($validator->fails()) {
             //throw new ValidationHttpException($validator->errors()->all());
-
             return back()->withErrors($validator)->withInput();
         }
+        if (!$request->file('image')->isValid()) {
+            return response()->json(["error"=>"error with image file."],400);
+        }
 
+        $auxPath = explode("images",$noticia->image);
 
-        $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
-        $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        if(Storage::exists('images'.$auxPath[1]))  Storage::delete('images'.$auxPath[1]);
 
-        $material = Material::find($id);
+        $input['image'] = Storage::put('images', $input['image']);
 
-        $material->idMateria = $input['idMateria'];
-        $material->titulo = $input['titulo'];
-        $material->descripcion = $input['descripcion'];
-        $material->updated_at = $input['updated_at'];
+        $noticia->image = asset($input['image']);
 
-        $material->save();
+        $noticia->title = $input['title'];
+        $noticia->content = $input['content'];
 
-        return back()->with('message', 'Material Editado!');
+        $noticia->save();
+
+        return back()->with('message', 'Noticia Editada!');
     }
 
     public function delete(Request $request,$id)
     {
         $input['id'] = $id;
         $validator = Validator::make($input, [
-            'id' => 'required|numeric|exists:materials,id'
+            'id' => 'required|numeric|exists:noticias,id'
         ]);
 
         if ($validator->fails()) {
@@ -119,19 +124,16 @@ class NoticiasController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $material = Material::find($input['id']);
+        $noticia = Noticia::find($input['id']);
 
-        $auxPath = explode("files",$material->file);
+        if(isset($noticia->image)){
+            $auxPath = explode("images",$noticia->image);
 
-//        return $auxPath[1];
+            if(Storage::exists('images'.$auxPath[1]))  Storage::delete('images'.$auxPath[1]);
+        }
+        $noticia->delete();
 
-        if(!Storage::exists('files'.$auxPath[1]))  return response('Archivo no existe.',404);
-
-        Storage::delete('files'.$auxPath[1]);
-
-        $material->delete();
-
-        return redirect("materiales")->with('message', 'Material Eliminado!');
+        return redirect("noticias")->with('message', 'Noticia Eliminada!');
 
     }
 

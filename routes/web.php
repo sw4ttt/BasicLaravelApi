@@ -17,6 +17,7 @@ use App\Horario;
 use Illuminate\Support\Facades\Storage;
 use App\Material;
 use App\Articulo;
+use App\Noticia;
 
 Route::get('/', function () {
     if (Auth::check())return view('/home');
@@ -144,6 +145,14 @@ Route::group(['middleware' => ['auth']], function () {
             return view('/noticias/add');
         });
         Route::post('/add', 'Web\NoticiasController@add');
+        Route::get('/edit/{id}', function ($id) {
+            $noticia = Noticia::find($id);
+            return !is_null($noticia)
+                ?view('/noticias/edit',['noticia'=>$noticia])
+                :back()->withErrors(['invalid'=>['El id de Noticia seleccionado no es valido.']]);
+        });
+        Route::post('/edit/{id}', 'Web\NoticiasController@edit');
+        Route::post('/delete/{id}', 'Web\NoticiasController@delete');
     });
 
     Route::group(['prefix' => 'notificaciones'], function () {

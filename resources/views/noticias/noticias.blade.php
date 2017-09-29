@@ -15,7 +15,7 @@
                     <th>Titulo</th>
                     <th>Contenido</th>
                     <th>Imagen</th>
-                    {{--<th>Opcion</th>--}}
+                    <th>Opcion</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -25,9 +25,9 @@
                             <td>{{ $noticia->title }}</td>
                             <td>{{ $noticia->content }}</td>
                             <td><a href="{{ $noticia->image }}">Imagen</a></td>
-                            {{--<td>--}}
-                                {{--<a class="btn btn-primary" href="{{ url('/noticias/edit/'.$noticia->id) }}" role="button">Editar</a>--}}
-                            {{--</td>--}}
+                            <td>
+                                <a class="btn btn-primary" href="{{ url('/noticias/edit/'.$noticia->id) }}" role="button">Editar</a>
+                            </td>
                         </tr>
                     @endforeach
                 @else
@@ -35,7 +35,7 @@
                         <td>..</td>
                         <td>..</td>
                         <td>..</td>
-                        {{--<td>..</td>--}}
+                        <td>..</td>
                     </tr>
                 @endif
                 </tbody>

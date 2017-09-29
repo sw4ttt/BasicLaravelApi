@@ -53,19 +53,28 @@
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
+                <row>
+                    <div class="col-md-2">
+                        <img src="{{asset("images/LOGO_COLEGIO.png")}}" class="pull-left" alt="imagen-articulo" style="width:70px;height:70px;">
+                    </div>
+                    <div class="col-md-10">
+                        <!-- Collapsed Hamburger -->
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
+                            <span class="sr-only">Toggle Navigation</span>
+                            <span class="icon-bar">A</span>
+                            <span class="icon-bar">B</span>
+                            <span class="icon-bar">C</span>
+                        </button>
 
-                <!-- Collapsed Hamburger -->
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                    <span class="sr-only">Toggle Navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+                        <!-- Branding Image -->
 
-                <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
+                        <a class="navbar-brand" href="{{ url('/') }}" style="text-align: center">
+                            {{ config('app.name', 'Laravel') }}
+                        </a>
+                    </div>
+                </row>
+
+
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
