@@ -135,21 +135,7 @@ class MateriasController extends Controller
 
         $materia->delete();
 
-        $materias = Materia::all();
-        return view('materias/materias', ['materias' => $materias]);
+        return redirect("materias")->with('message', 'Materia Eliminada!');
 
-//        return back()->with('message', 'Materia Eliminada!');
-
-//
-//
-//        $encryptedValue = encrypt("4097440000000004");
-//        try {
-//            $decrypted = decrypt($encryptedValue);
-//        } catch (DecryptException $e) {
-//            //
-//            $decrypted = 'ERROR-decripted';
-//        }
-//
-//        return "4097440000000004\n".$encryptedValue."\n".$decrypted;
     }
 }

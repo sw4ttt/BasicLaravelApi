@@ -68,9 +68,10 @@
                 <div class="form-group{{ $errors->has('categoria') ? ' has-error' : '' }}">
                     <label for="categoria" class="col-md-4 control-label">Categoria</label>
                     <div class="col-md-6">
-                        <select id="categoria" name="categoria" class="form-control" required>
+                        <select id="categoria" name="categoria" class="form-control selectpicker show-tick" required>
                             <option value="PAPELERIA">Papeleria</option>
                             <option value="LIBRERIA">Libreria</option>
+                            <option value="UTILES">Utiles</option>
                             <option value="MATRICULA">Matricula</option>
                         </select>
 
@@ -97,7 +98,7 @@
                 <div class="form-group{{ $errors->has('estado') ? ' has-error' : '' }}">
                     <label for="estado" class="col-md-4 control-label">Estado</label>
                     <div class="col-md-6">
-                        <select id="estado" name="estado" class="form-control" required>
+                        <select id="estado" name="estado" class="form-control selectpicker show-tick" required>
                             <option>HABILITADO</option>
                             <option>DESHABILITADO</option>
                         </select>

@@ -16,6 +16,7 @@ use App\Materia;
 use App\Horario;
 use Illuminate\Support\Facades\Storage;
 use App\Material;
+use App\Articulo;
 
 Route::get('/', function () {
     if (Auth::check())return view('/home');
@@ -103,6 +104,14 @@ Route::group(['middleware' => ['auth']], function () {
             return view('/articulos/add');
         });
         Route::post('/add', 'Web\ArticulosController@add');
+        Route::get('/edit/{id}', function ($id) {
+            $articulo = Articulo::find($id);
+            return !is_null($articulo)
+                ?view('/articulos/edit',['articulo'=>$articulo])
+                :back()->withErrors(['invalid'=>['El id de materia seleccionado no es valido.']]);
+        });
+        Route::post('/edit/{id}', 'Web\ArticulosController@edit');
+        Route::post('/delete/{id}', 'Web\ArticulosController@delete');
     });
 
     Route::group(['prefix' => 'horarios'], function () {

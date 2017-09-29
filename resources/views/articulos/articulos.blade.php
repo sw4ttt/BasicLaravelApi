@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="panel panel-default ">
-        <div class="panel-heading"><h2>Articulos <span class="badge"> {{count($articulos)}}</span></h2></div>
+        <div class="panel-heading"><h2>Articulos y Pagables <span class="badge"> {{count($articulos)}}</span></h2></div>
         <div class="panel-body">
             <table class="table table-striped">
                 <thead>
@@ -15,7 +15,7 @@
                         <th>Estado</th>
                         <th>Precio</th>
                         <th>Image</th>
-                        {{--<th>Opciones</th>--}}
+                        <th>Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,25 +32,34 @@
                                 <td>{{ $articulo->nombre }}</td>
                                 <td>{{ $articulo->descripcion }}</td>
                                 <td>{{ $articulo->categoria }}</td>
-                                <td>{{ $articulo->cantidad }}</td>
+                                <td>
+                                    @if(!isset($articulo->cantidad))
+                                        N/A
+                                    @else
+                                        {{ $articulo->cantidad }}
+                                    @endif
+                                </td>
                                 <td>{{ $articulo->estado }}</td>
                                 <td>{{ $articulo->precio }}</td>
                                 <td>
-                                    <a class="" href="{{ $articulo->image }}">Link</a>
-                                    {{--{{ $articulo->image }}--}}
+                                    @if(!isset($articulo->image))
+                                        N/A
+                                    @else
+                                        <img src="{{$articulo->image}}" alt="imagen-articulo" style="width:100px;height:100px;">
+                                    @endif
                                 </td>
-                                {{--<td>--}}
-                                    {{--<a class="btn btn-primary" href="{{ url('/articulos/edit/'.$articulo->id) }}" role="button">Editar</a>--}}
-                                    {{--<a class="btn btn-danger" href="{{ url('/articulos/delete/'.$articulo->id) }}"--}}
-                                       {{--role="button"--}}
-                                       {{--onclick="return confirm('Esta seguro? Se eliminara toda la informacion relacionada a el articulo. ')">--}}
-                                        {{--Eliminar--}}
-                                    {{--</a>--}}
-                                {{--</td>--}}
+                                <td>
+                                    <a class="btn btn-primary" href="{{ url('/articulos/edit/'.$articulo->id) }}" role="button">Editar</a>
+                                </td>
                             </tr>
                         @endforeach
                     @else
                         <tr>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
                             <td>..</td>
                             <td>..</td>
                             <td>..</td>

@@ -3,31 +3,31 @@
 @section('content')
 
     <div class="panel panel-default ">
-        <div class="panel-heading"><h2>Materiales <span class="badge"> {{count($materiales)}}</span></h2></div>
+        <div class="panel-heading"><h2>Noticias <span class="badge"> {{count($noticias)}}</span></h2></div>
         <div class="panel-body">
             <table class="table table-striped">
                 <thead>
                 <tr>
+                    {{--'idUser',--}}
+                    {{--'title',--}}
+                    {{--'content',--}}
+                    {{--'image'--}}
                     <th>Titulo</th>
-                    <th>Descripcion</th>
-                    <th>Materia</th>
-                    <th>Tamaño</th>
-                    <th>Archivo</th>
-                    <th>Opciones</th>
+                    <th>Contenido</th>
+                    <th>Imagen</th>
+                    {{--<th>Opcion</th>--}}
                 </tr>
                 </thead>
                 <tbody>
-                @if(count($materiales) > 0)
-                    @foreach ($materiales as $material)
+                @if(count($noticias) > 0)
+                    @foreach ($noticias as $noticia)
                         <tr>
-                            <td>{{ $material->titulo }}</td>
-                            <td>{{ $material->descripcion }}</td>
-                            <td>{{ $material->idMateria }}</td>
-                            <td>{{ $material->size }}</td>
-                            <td><a href="{{ $material->file }}">Archivo</a></td>
-                            <td>
-                                <a class="btn btn-primary" href="{{ url('/materiales/edit/'.$material->id) }}" role="button">Editar</a>
-                            </td>
+                            <td>{{ $noticia->title }}</td>
+                            <td>{{ $noticia->content }}</td>
+                            <td><a href="{{ $noticia->image }}">Imagen</a></td>
+                            {{--<td>--}}
+                                {{--<a class="btn btn-primary" href="{{ url('/noticias/edit/'.$noticia->id) }}" role="button">Editar</a>--}}
+                            {{--</td>--}}
                         </tr>
                     @endforeach
                 @else
@@ -35,9 +35,7 @@
                         <td>..</td>
                         <td>..</td>
                         <td>..</td>
-                        <td>..</td>
-                        <td>..</td>
-                        <td>..</td>
+                        {{--<td>..</td>--}}
                     </tr>
                 @endif
                 </tbody>

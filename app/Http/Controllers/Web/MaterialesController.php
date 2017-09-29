@@ -105,11 +105,7 @@ class MaterialesController extends Controller
 
         $auxPath = explode("files",$material->file);
 
-//        return $auxPath[1];
-
-        if(!Storage::exists('files'.$auxPath[1]))  return response('Archivo no existe.',404);
-
-        Storage::delete('files'.$auxPath[1]);
+        if(Storage::exists('files'.$auxPath[1]))  Storage::delete('files'.$auxPath[1]);
 
         $material->delete();
 
