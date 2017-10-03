@@ -143,22 +143,7 @@ class AuthController extends Controller
         }
 
         $tarjetas = $user->tarjetas()->get();
-        foreach ($tarjetas as $tarjeta) {
-            $tarjeta->numero = substr($tarjeta->numero,12);
-            unset($tarjeta->nombre);
-            unset($tarjeta->cod);
-            unset($tarjeta->vencimiento);
-            unset($tarjeta->street1);
-            unset($tarjeta->street2);
-            unset($tarjeta->city);
-            unset($tarjeta->state);
-            unset($tarjeta->country);
-            unset($tarjeta->postalCode);
-            unset($tarjeta->phone);
-            unset($tarjeta->created_at);
-            unset($tarjeta->updated_at);
 
-        }
         $user->tarjetas = $tarjetas;
 
         return response()->json(['user'=>$user,'token' => $token]);

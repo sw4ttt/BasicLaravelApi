@@ -11,17 +11,9 @@ class Tarjeta extends Model
         'idUsuario',
         'tipo',
         'numero',
-        'nombre',
-        'cod',
-        'vencimiento',
-        'street1',
-        'street2',
-        'city',
-        'state',
-        'country',
-        'postalCode',
-        'phone'
-    ];
+        'token',
+        'customerId'
+        ];
 }
 
 

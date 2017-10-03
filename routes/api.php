@@ -36,6 +36,11 @@ Route::group(['middleware' => ['api','cors']], function ()
     Route::get('config/images-app', 'Api\Configuracion\ResourcesController@getImagenesApp');
 
     //Este Grupo Necesita Token (usa el middleware jwt-auth)
+
+    Route::get('epaycotest', 'Api\Pagos\PagosController@epaycoTest');
+
+    Route::post('pagos/confirmacion', 'Api\Pagos\PagosController@confirmacion');
+
     Route::group(['middleware' => 'jwt-auth'], function () {
 
         Route::get('me', 'Api\AuthController@me');

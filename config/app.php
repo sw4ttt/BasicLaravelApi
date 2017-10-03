@@ -121,9 +121,11 @@ return [
     */
 
     //'log' => env('APP_LOG', 'single'),
-    'log' => 'errorlog',
+    'log' => 'daily',
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
+
+    'log_max_files' => 30,
 
     /*
     |--------------------------------------------------------------------------
@@ -186,6 +188,8 @@ return [
         Berkayk\OneSignal\OneSignalServiceProvider::class,
 
         Alexo\LaravelPayU\LaravelPayUServiceProvider::class,
+
+//        Epayco\Epayco::class,
     ],
 
     /*

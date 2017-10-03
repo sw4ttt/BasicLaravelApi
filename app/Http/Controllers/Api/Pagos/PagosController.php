@@ -24,6 +24,8 @@ use PayUException;
 use App\Order;
 use App\Tarjeta;
 use App\Articulo;
+use Epayco\Epayco;
+use Illuminate\Support\Facades\Log;
 
 
 class PagosController extends Controller
@@ -67,7 +69,191 @@ class PagosController extends Controller
         return response()->json(['orders'=>$orders,'pagables'=>$pagables]);
 
     }
+
     public function add(Request $request)
+    {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+        } catch (Exception $e) {
+            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
+                return response()->json(['error'=>'Token is Invalid'],401);
+            }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
+                return response()->json(['error'=>'Token is Expired'],401);
+            }else{
+                return response()->json(['error'=>'Token Missing'],400);
+            }
+        }
+
+        $input['idUsuario']= $user->id;
+
+        $input = $request->only(
+            'articulos',
+            'recibo',
+            'ref_payco',
+            'documento',
+            'factura',
+            'estado',
+            'valor',
+            'nombre',
+            'apellido',
+            'email'
+        );
+
+        $validator = Validator::make($input, [
+            'articulos'=> 'required|array',
+            'recibo'=> 'required|string',
+            'ref_payco'=> 'required|string',
+            'documento'=> 'required|string',
+            'factura'=> 'required|string',
+            'estado'=> 'required|string',
+            'valor'=> 'required|string',
+            'nombre'=> 'required|string',
+            'apellido'=> 'required|string',
+            'email'=> 'required|string'
+        ]);
+
+        if($validator->fails()) {
+            //throw new ValidationHttpException($validator->errors()->all());
+            return response()->json($validator->errors(),400);
+        }
+
+        $order = Order::create($input);
+
+        return response()->json(['success'=>true,'order'=>$order]);
+
+    }
+
+    public function edit(Request $request)
+    {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+        } catch (Exception $e) {
+            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
+                return response()->json(['error'=>'Token is Invalid'],401);
+            }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
+                return response()->json(['error'=>'Token is Expired'],401);
+            }else{
+                return response()->json(['error'=>'Token Missing'],400);
+            }
+        }
+
+        $input['idUsuario']= $user->id;
+
+        $input = $request->only(
+            'idOrder',
+            'recibo',
+            'ref_payco',
+            'documento',
+            'factura',
+            'estado'
+        );
+
+        $validator = Validator::make($input, [
+            'idOrder'=>'required|numeric|exists:orders,id',
+            'recibo'=> 'required|string',
+            'ref_payco'=> 'required|string',
+            'documento'=> 'required|string',
+            'factura'=> 'required|string',
+            'estado'=> 'required|string'
+        ]);
+
+        if($validator->fails()) {
+            //throw new ValidationHttpException($validator->errors()->all());
+            return response()->json($validator->errors(),400);
+        }
+
+        $input['estado'] = strtoupper($input['estado']);
+
+        if(($input['estado'] === 'FALLIDA') || ($input['estado'] ==='RECHAZADA'))
+        {
+            $order = Order::find($input['idOrder']);
+            $order->delete();
+            return response()->json(['success'=>true,'response'=>'orden cancelada']);
+        }
+
+        $order = Order::find($input['idOrder']);
+
+        $order->recibo=$input['recibo'];
+        $order->ref_payco=$input['ref_payco'];
+        $order->documento=$input['documento'];
+        $order->factura=$input['factura'];
+        $order->estado=$input['estado'];
+
+        $order->save();
+
+        return response()->json(['success'=>true,'order'=>$order]);
+
+    }
+
+    public function epaycoTest(Request $request)
+    {
+
+        $epayco = new Epayco(array(
+            "apiKey" => "74d69a0e9f1cc5eee5d600bffa313fbc",
+            "privateKey" => "032e97935cd5ac5dcc28809d04ee4c43",
+            "lenguage" => "ES",
+            "test" => true
+        ));
+
+
+//        $token = $epayco->token->create(array(
+//            "card[number]" => '4575623182290326',
+//            "card[exp_year]" => "2017",
+//            "card[exp_month]" => "07",
+//            "card[cvc]" => "123"
+//        ));
+//
+//        $customer = $epayco->customer->create(array(
+//            "token_card" => $token->id,
+//            "name" => "Joe Doe",
+//            "email" => "joe@payco.co",
+//            "phone" => "3005234321",
+//            "default" => true
+//        ));
+//
+//
+//        $logData = json_encode( get_object_vars($token));
+//        Log::info('TOKEN: RESPONSE= '.$logData);
+//
+//        $logData = json_encode( get_object_vars($customer));
+//        Log::info('CUSTOMER: RESPONSE= '.$logData);
+//
+
+
+        //TOKEN MGpZhGeD44X4FLLvF
+        //CUSTOMER SWwsdFbKynWb9wBno
+
+        $pay = $epayco->charge->create(array(
+            "token_card" => "MGpZhGeD44X4FLLvF",
+            "customer_id" => "SWwsdFbKynWb9wBno",
+            "doc_type" => "CC",
+            "doc_number" => "1035851980",
+            "name" => "John",
+            "last_name" => "Doe",
+            "email" => "example@email.com",
+            "bill" => "OR-1234",
+            "description" => "Test Payment",
+            "value" => "116000",
+            "tax" => "16000",
+            "tax_base" => "100000",
+            "currency" => "COP",
+            "dues" => "12",
+            "url_confirmation"=> "https://lacasacreativaapp.com/api/pagos/confirmacion",
+            "metodoconfirmacion"=>"POST"
+        ));
+        return response()->json(['pay'=>$pay]);
+
+    }
+
+    public function confirmacion(Request $request)
+    {
+        $logData = json_encode( get_object_vars($request));
+        Log::info('CONFIRMACION: RESPONSE= '.$logData);
+        return response()->json(['success'=>true]);
+    }
+
+
+    public function addOLD(Request $request)
     {
         try {
             $user = JWTAuth::parseToken()->authenticate();
@@ -343,123 +529,4 @@ class PagosController extends Controller
 
     }
 
-    public function testPayuApi2(Request $request)
-    {
-        LaravelPayU::setPayUEnvironment();
-
-        try {
-
-            $promise = new Promise(function () use (&$promise,&$request) {
-
-                LaravelPayU::doPing(function($response) use (&$promise) {
-                    var_dump(($response)) ;
-                    $promise->resolve($response->code);
-                }, function($error) use(&$promise) {
-                    echo ("WHAT\n".($error)."\nEND");
-                    $promise->resolve($error);
-                });
-
-            });
-
-            $out = $promise->wait();
-//            $outObj = json_decode($out,true);
-            return $out; // outputs "foo"
-//            echo $response->getBody();
-//            echo $response->getBody();
-//            return ["error"=>false,"body"=>$response->getBody()];
-        }
-        catch(RequestException $e) {
-            echo $e->getMessage();
-            return ["error"=>true,"body"=>null,"key"=>$e->getMessage()];
-        }
-
-
-    }
-
-    public function testPayuApi(Request $request)
-    {
-        $body = [
-            "test"=> true,
-            "language"=> "en",
-            "command"=> "PING",
-            "merchant"=> [
-                "apiLogin"=> "pRRXKOl8ikMmt9u",
-                "apiKey"=> "4Vj8eK4rloUd272L48hsrarnUA"
-            ]
-
-        ];
-        $client = new Client(['timeout'  => 30.0]);
-
-        try {
-            $response = $client->post('https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi',[
-                'headers'=>[
-                    'Content-Type'=>['application/json','charset=utf-8'],
-                    'Accept'=>'application/json'
-                ],
-                'json'=>$body
-            ]);
-            return $response->getBody();
-        }
-        catch(RequestException $e) {
-            return 'Message: ' .$e->getMessage();
-        }
-    }
-
-    public function testPayuApiPago(Request $request)
-    {
-
-
-        try {
-
-            $promise = new Promise(function () use (&$promise,&$request) {
-
-                $client = new Client(['timeout'  => 30.0]);
-                $response = $client->post('https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi',[
-                    'headers'=>[
-                        'Content-Type'=>['application/json','charset=utf-8'],
-                        'Accept'=>'application/json'
-                    ],
-                    'json'=>$request['body']
-                ]);
-                $promise->resolve($response->getBody()->getContents());
-            });
-
-            $out = $promise->wait();
-            $outObj = json_decode($out,true);
-            return $outObj; // outputs "foo"
-//            echo $response->getBody();
-//            echo $response->getBody();
-//            return ["error"=>false,"body"=>$response->getBody()];
-        }
-        catch(RequestException $e) {
-            echo $e->getMessage();
-            return ["error"=>true,"body"=>null,"key"=>$e->getMessage()];
-        }
-//        return $out;
-    }
-
-    private function calcularMonto($arrayArticulos)
-    {
-        $total = 0;
-        foreach ($arrayArticulos as $articulo) {
-            $total = $total + ($articulo->precio * $articulo->pivot->cantidad);
-        }
-
-        return $total;
-    }
-
-    static function buildSignature($order,$merchantId, $key, $algorithm){
-
-        $message = SignatureUtil::buildMessage($order, $merchantId, $key);
-
-        if (SignatureUtil::MD5_ALGORITHM == $algorithm) {
-            return md5($message);
-        }else if (SignatureUtil::SHA_ALGORITHM == $algorithm) {
-            return sha1($message);
-        }else {
-            throw new InvalidArgumentException("Could not create signature. Invalid algoritm");
-        }
-
-
-    }
 }

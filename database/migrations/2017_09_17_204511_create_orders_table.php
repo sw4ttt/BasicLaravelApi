@@ -11,26 +11,35 @@ class CreateOrdersTable extends Migration
      *
      * @return void
      */
+//'idUsuario',
 //'articulos',
-//'reference',
-//'payu_order_id',
-//'transaction_id',
-//'state',
-//'value',
-//'user_id'
+//'recibo',
+//'ref_payco',
+//'documento',
+//'factura',
+//'estado',
+//'valor',
+//'nombre',
+//'apellido',
+//'email'
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('reference');
-            $table->string('payu_order_id')->nullable();
-            $table->string('transaction_id')->nullable();
-            $table->string('state');
-            $table->string('value');
-            $table->string('user_id');
-            $table->string('user_name');
+            $table->integer('idUsuario');
             $table->text('articulos');
+
+            $table->string('recibo')->nullable();
+            $table->string('ref_payco')->nullable();
+            $table->string('documento')->nullable();
+            $table->string('factura')->nullable();
+
+            $table->string('estado');
+            $table->string('valor');
+            $table->string('nombre');
+            $table->string('apellido');
+            $table->string('email');
 
             $table->timestamps();
         });

@@ -33,20 +33,6 @@ class TarjetasController extends Controller
             }
         }
         $tarjetas = $user->tarjetas()->get();
-        foreach ($tarjetas as $tarjeta) {
-            $tarjeta->numero = substr($tarjeta->numero,12);
-            unset($tarjeta->nombre);
-            unset($tarjeta->cod);
-            unset($tarjeta->vencimiento);
-            unset($tarjeta->street1);
-            unset($tarjeta->street2);
-            unset($tarjeta->city);
-            unset($tarjeta->state);
-            unset($tarjeta->country);
-            unset($tarjeta->postalCode);
-            unset($tarjeta->phone);
-
-        }
         return $tarjetas;
     }
 
@@ -55,33 +41,18 @@ class TarjetasController extends Controller
         $input = $request->only(
             'tipo',
             'numero',
-            'nombre',
-            'cod',
-            'vencimiento',
-            'street1',
-            'street2',
-            'city',
-            'state',
-            'country',
-            'postalCode',
-            'phone'
+            'token',
+            'customerId'
         );
 
         $input['tipo'] = strtoupper($input['tipo']);
 
         $validator = Validator::make($input, [
-            'vencimiento' => 'required|string|regex:(^([0-9]{4}\/[0-9]{2})$)',
             'tipo' => 'required|string|in:VISA,MASTERCARD',
-            'numero' => 'required|digits:16',
-            'nombre' => 'required|string',
-            'cod' => 'required|string',
-            'street1' => 'required|string',
-            'street2' => 'required|string',
-            'city' => 'required|string',
-            'state' => 'required|string',
-            'country' => 'required|string',
-            'postalCode' => 'required|string',
-            'phone' => 'required|string'
+            'numero' => 'required|digits:4',
+            'token' => 'required|string',
+            'customerId' => 'required|string'
+
         ]);
 
         if($validator->fails()) {
@@ -103,53 +74,11 @@ class TarjetasController extends Controller
 
         $input['idUsuario'] = $user->id;
 
-        Tarjeta::create($input);
+        $tarjeta = Tarjeta::create($input);
 
-        return response()->json(['success'=>true]);
+        return response()->json(['success'=>true,'tarjeta'=>$tarjeta]);
     }
 
-    public function edit(Request $request,$id)
-    {
-        $input = $request->only(
-            'idUsuario',
-            'tipo',
-            'numero',
-            'nombre',
-            'cod',
-            'vencimiento',
-            'street1',
-            'street2',
-            'city',
-            'state',
-            'country',
-            'postalCode',
-            'phone'
-        );
-        $validator = Validator::make($input, [
-            'idUsuario'=>'required|numeric|exists:users,id',
-            'tipo' => 'required|string',
-            'numero' => 'required|string',
-            'nombre' => 'required|string',
-            'cod' => 'required|string',
-            'vencimiento' => 'required|string',
-            'street1' => 'required|string',
-            'street2' => 'required|string',
-            'city' => 'required|string',
-            'state' => 'required|string',
-            'country' => 'required|string',
-            'postalCode' => 'required|string',
-            'phone' => 'required|string'
-        ]);
-
-        if($validator->fails()) {
-            //throw new ValidationHttpException($validator->errors()->all());
-            return response()->json($validator->errors(),400);
-        }
-
-        Tarjeta::create($input);
-
-        return response()->json(['success'=>true]);
-    }
 
     public function eliminar(Request $request)
     {
