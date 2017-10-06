@@ -38,8 +38,12 @@ Route::group(['middleware' => ['api','cors']], function ()
     //Este Grupo Necesita Token (usa el middleware jwt-auth)
 
     Route::get('epaycotest', 'Api\Pagos\PagosController@epaycoTest');
+    Route::get('epaycotestCash', 'Api\Pagos\PagosController@epaycoTestCash');
+    Route::get('epaycotestPSE', 'Api\Pagos\PagosController@epaycoTestPSE');
+    Route::get('epaycotestPSEestado', 'Api\Pagos\PagosController@epaycoTestPSEESTADO');
 
-    Route::post('pagos/confirmacion', 'Api\Pagos\PagosController@confirmacion');
+    Route::get('pagos/respuesta', 'Api\Pagos\PagosController@respuesta');
+    Route::any('pagos/confirmacion', 'Api\Pagos\PagosController@confirmacion');
 
     Route::group(['middleware' => 'jwt-auth'], function () {
 
@@ -119,6 +123,7 @@ Route::group(['middleware' => ['api','cors']], function ()
             Route::get('/', 'Api\Pagos\PagosController@all');
 //            Route::get('/ping', 'Api\Pagos\PagosController@testPayuApi');
             Route::post('/add', 'Api\Pagos\PagosController@add');
+            Route::put('/edit', 'Api\Pagos\PagosController@edit');
         });
 
         Route::group(['prefix' => 'tarjetas'], function () {

@@ -48,7 +48,7 @@ class TarjetasController extends Controller
         $input['tipo'] = strtoupper($input['tipo']);
 
         $validator = Validator::make($input, [
-            'tipo' => 'required|string|in:VISA,MASTERCARD',
+            'tipo' => 'required|string',
             'numero' => 'required|digits:4',
             'token' => 'required|string',
             'customerId' => 'required|string'

@@ -28,15 +28,23 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
 
             $table->integer('idUsuario');
-            $table->text('articulos');
+            $table->text('articulos')->nullable();
+            $table->string('tipo');
+
+            $table->string('descripcion')->nullable();
 
             $table->string('recibo')->nullable();
             $table->string('ref_payco')->nullable();
-            $table->string('documento')->nullable();
-            $table->string('factura')->nullable();
+            $table->string('transactionID')->nullable();
+            $table->string('ticketId')->nullable();
+            $table->string('pin')->nullable();
+            $table->string('codigoproyecto')->nullable();
+
+            $table->string('factura');
 
             $table->string('estado');
             $table->string('valor');
+            $table->string('documento');
             $table->string('nombre');
             $table->string('apellido');
             $table->string('email');

@@ -26,7 +26,8 @@ use App\Tarjeta;
 use App\Articulo;
 use Epayco\Epayco;
 use Illuminate\Support\Facades\Log;
-
+use OneSignal;
+use App\Mensaje;
 
 class PagosController extends Controller
 {
@@ -44,7 +45,7 @@ class PagosController extends Controller
             }
         }
         
-        $pagables = Articulo::where('categoria','MATRICULA')->where('estado','HABILITADO')->get();
+        $pagables = Articulo::where('categoria','MATRICULA')->where('estado','HABILITADO')->orderBy('updated_at', 'desc')->get();
         
         //string(6) "nombre"
         //string(8) "cantidad"
@@ -65,7 +66,7 @@ class PagosController extends Controller
         });
         
         //return Order::where('user_id', $user->id)->where('state', 'APPROVED')->get();
-        $orders = Order::where('user_id', $user->id)->where('state', 'APPROVED')->get();
+        $orders = Order::where('idUsuario', $user->id)->orderBy('updated_at', 'desc')->get();
         return response()->json(['orders'=>$orders,'pagables'=>$pagables]);
 
     }
@@ -84,14 +85,20 @@ class PagosController extends Controller
             }
         }
 
-        $input['idUsuario']= $user->id;
-
+        
+        
         $input = $request->only(
             'articulos',
+            'descripcion',
+            'tipo',
             'recibo',
             'ref_payco',
             'documento',
             'factura',
+            'transactionID',
+            'ticketId',
+            'pin',
+            'codigoproyecto',
             'estado',
             'valor',
             'nombre',
@@ -100,11 +107,17 @@ class PagosController extends Controller
         );
 
         $validator = Validator::make($input, [
-            'articulos'=> 'required|array',
-            'recibo'=> 'required|string',
-            'ref_payco'=> 'required|string',
+            'articulos'=> 'required_if:tipo,CARRITO|array|nullable',
+            'tipo'=> 'required|string|in:CARRITO,MATRICULA',
+            'recibo'=> 'string',
+            'descripcion'=> 'required_if:tipo,MATRICULA|string|nullable',
+            'pin'=> 'string|nullable',
+            'codigoproyecto'=> 'string|nullable',
+            'ref_payco'=> 'string',
             'documento'=> 'required|string',
-            'factura'=> 'required|string',
+            'factura'=> 'string',
+            'transactionID'=> 'string',
+            'ticketId'=> 'string',
             'estado'=> 'required|string',
             'valor'=> 'required|string',
             'nombre'=> 'required|string',
@@ -116,6 +129,16 @@ class PagosController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return response()->json($validator->errors(),400);
         }
+
+        if($input['tipo']==='MATRICULA')
+            $input['articulos']=[];
+        if($input['tipo']==='CARRITO')
+            $input['descripcion']="";
+            
+
+        $input['idUsuario']= $user->id;
+        
+        $input['factura'] = Carbon::now()->format('Y-m-d_H-i-s')."_".str_random(10);
 
         $order = Order::create($input);
 
@@ -140,20 +163,24 @@ class PagosController extends Controller
         $input['idUsuario']= $user->id;
 
         $input = $request->only(
-            'idOrder',
+            'id',
             'recibo',
             'ref_payco',
-            'documento',
-            'factura',
+            'transactionID',
+            'ticketId',
+            'pin',
+            'codigoproyecto',
             'estado'
         );
 
         $validator = Validator::make($input, [
-            'idOrder'=>'required|numeric|exists:orders,id',
+            'id'=>'required|numeric|exists:orders,id',
             'recibo'=> 'required|string',
             'ref_payco'=> 'required|string',
-            'documento'=> 'required|string',
-            'factura'=> 'required|string',
+            'transactionID'=> 'string|nullable',
+            'ticketId'=> 'string|nullable',
+            'pin'=> 'string|nullable',
+            'codigoproyecto'=> 'string|nullable',
             'estado'=> 'required|string'
         ]);
 
@@ -166,23 +193,108 @@ class PagosController extends Controller
 
         if(($input['estado'] === 'FALLIDA') || ($input['estado'] ==='RECHAZADA'))
         {
-            $order = Order::find($input['idOrder']);
+            $order = Order::find($input['id']);
             $order->delete();
             return response()->json(['success'=>true,'response'=>'orden cancelada']);
         }
 
-        $order = Order::find($input['idOrder']);
+        $order = Order::find($input['id']);
 
         $order->recibo=$input['recibo'];
         $order->ref_payco=$input['ref_payco'];
-        $order->documento=$input['documento'];
-        $order->factura=$input['factura'];
+        $order->transactionID=$input['transactionID'];
+        $order->ticketId=$input['ticketId'];
+        $order->pin=$input['pin'];
+        $order->codigoproyecto=$input['codigoproyecto'];
         $order->estado=$input['estado'];
 
         $order->save();
 
         return response()->json(['success'=>true,'order'=>$order]);
 
+    }
+    public function epaycoTestPSEESTADO(Request $request)
+    {
+
+        $epayco = new Epayco(array(
+            "apiKey" => "74d69a0e9f1cc5eee5d600bffa313fbc",
+            "privateKey" => "032e97935cd5ac5dcc28809d04ee4c43",
+            "lenguage" => "ES",
+            "test" => true
+        ));
+
+        $pse = $epayco->bank->get("1347533");
+
+
+        return response()->json(['message'=>'ESTADO PSE','pse'=>$pse]);
+    }
+    public function epaycoTestCash(Request $request)
+    {
+
+        $epayco = new Epayco(array(
+            "apiKey" => "74d69a0e9f1cc5eee5d600bffa313fbc",
+            "privateKey" => "032e97935cd5ac5dcc28809d04ee4c43",
+            "lenguage" => "ES",
+            "test" => true
+        ));
+
+        $cash = $epayco->cash->create("efecty", array(
+            "invoice" => "1472050779",
+            "description" => "pay test",
+            "value" => "25000",
+            "tax" => "0",
+            "tax_base" => "0",
+            "currency" => "COP",
+            "type_person" => "0",
+            "doc_type" => "CC",
+            "doc_number" => "10358514",
+            "name" => "testing",
+            "last_name" => "PAYCO",
+            "email" => "test@mailinator.com",
+            "cell_phone" => "3010000001",
+            "end_date" => "2017-10-15",
+            "url_response" => "https://lacasacreativaapp.com/api/pagos/respuesta",
+            "url_confirmation" => "https://lacasacreativaapp.com/api/pagos/confirmacion",
+            "method_confirmation" => "GET",
+        ));
+
+
+        return response()->json(['cash'=>$cash]);
+    }
+    public function epaycoTestPSE(Request $request)
+    {
+
+        $epayco = new Epayco(array(
+            "apiKey" => "74d69a0e9f1cc5eee5d600bffa313fbc",
+            "privateKey" => "032e97935cd5ac5dcc28809d04ee4c43",
+            "lenguage" => "ES",
+            "test" => true
+        ));
+
+        $pse = $epayco->bank->create(array(
+            "bank" => "1022",
+            "invoice" => "1472050778",
+            "description" => "Pago pruebas",
+            "value" => "10000",
+            "tax" => "0",
+            "tax_base" => "0",
+            "currency" => "COP",
+            "type_person" => "0",
+            "doc_type" => "CC",
+            "doc_number" => "10358519",
+            "name" => "PRUEBAS",
+            "last_name" => "PAYCO",
+            "email" => "no-responder@payco.co",
+            "country" => "CO",
+            "cell_phone" => "3010000001",
+            "url_response" => "https://lacasacreativaapp.com/api/pagos/respuesta",
+            "url_confirmation" => "https://lacasacreativaapp.com/api/pagos/confirmacion",
+            "method_confirmation" => "GET",
+        ));
+
+//        pagos/respuesta/factura/{factura}/transaccion/{transactionID}
+
+        return response()->json(['pse'=>$pse]);
     }
 
     public function epaycoTest(Request $request)
@@ -223,33 +335,230 @@ class PagosController extends Controller
         //TOKEN MGpZhGeD44X4FLLvF
         //CUSTOMER SWwsdFbKynWb9wBno
 
-        $pay = $epayco->charge->create(array(
-            "token_card" => "MGpZhGeD44X4FLLvF",
-            "customer_id" => "SWwsdFbKynWb9wBno",
-            "doc_type" => "CC",
-            "doc_number" => "1035851980",
-            "name" => "John",
-            "last_name" => "Doe",
-            "email" => "example@email.com",
-            "bill" => "OR-1234",
-            "description" => "Test Payment",
-            "value" => "116000",
-            "tax" => "16000",
-            "tax_base" => "100000",
-            "currency" => "COP",
-            "dues" => "12",
-            "url_confirmation"=> "https://lacasacreativaapp.com/api/pagos/confirmacion",
-            "metodoconfirmacion"=>"POST"
-        ));
-        return response()->json(['pay'=>$pay]);
+        $p_cust_id_cliente = "16086";
+
+        // 6d8f198c0a0e399b18ba0dfaa8f557faa349ebc0fabad2f12bbf5832b7fbb0cf
+        $p_key = "032e97935cd5ac5dcc28809d04ee4c43";
+
+        $x_ref_payco = "418519";
+        $x_transaction_id = "418519";
+
+        $x_amount = "116000";
+        $x_currency_code = "COP";
+
+
+        $signature=hash('sha256',
+            $p_cust_id_cliente.'^'
+            .$p_key.'^'
+            .$x_ref_payco.'^'
+            .$x_transaction_id.'^'
+            .$x_amount.'^'
+            .$x_currency_code
+        );
+
+        $queryString = "x_amount=116000&x_amount_base=100000&x_amount_country=116000&x_amount_ok=116000&x_approval_code=000000&x_bank_name=Banco%20de%20Pruebas&x_business=PAOLA%20ROMERO&x_cardnumber=457562%2A%2A%2A%2A%2A%2A%2A0326&x_cod_response=1&x_cod_respuesta=1&x_currency_code=COP&x_cust_id_cliente=16086&x_customer_address=NA&x_customer_city=NA&x_customer_country=CO&x_customer_doctype=CC&x_customer_document=1035851980&x_customer_email=example%40email.com&x_customer_ip=169.254.74.36&x_customer_lastname=Doe&x_customer_name=John&x_customer_phone=0000000&x_description=Test%20Payment&x_errorcode=00&x_extra1=&x_extra2=&x_extra3=&x_fecha_transaccion=2017-10-03%2017%3A42%3A31&x_franchise=VS&x_id_factura=OR-1234&x_id_invoice=OR-1234&x_quotas=12&x_ref_payco=418519&x_response=Aceptada&x_response_reason_text=00-Aprobada&x_respuesta=Aceptada&x_signature=6d8f198c0a0e399b18ba0dfaa8f557faa349ebc0fabad2f12bbf5832b7fbb0cf&x_tax=16000&x_test_request=TRUE&x_transaction_date=2017-10-03%2017%3A42%3A31&x_transaction_id=418519";
+
+        $array = null;
+        parse_str($queryString, $array);
+
+        return response()->json(['array'=>$array]);
+//        if($signature === "6d8f198c0a0e399b18ba0dfaa8f557faa349ebc0fabad2f12bbf5832b7fbb0cf")
+//            return response()->json(['signature'=>'IGUAL']);
+//        else
+//            return response()->json(
+//                [
+//                    'signature'=>'DIFERENTE',
+//                    'A'=>$signature,
+//                    'B'=>"6d8f198c0a0e399b18ba0dfaa8f557faa349ebc0fabad2f12bbf5832b7fbb0cf"
+//                ]
+//            );
+//        $pay = $epayco->charge->create(array(
+//            "token_card" => "MGpZhGeD44X4FLLvF",
+//            "customer_id" => "SWwsdFbKynWb9wBno",
+//            "doc_type" => "CC",
+//            "doc_number" => "1035851980",
+//            "name" => "John",
+//            "last_name" => "Doe",
+//            "email" => "example@email.com",
+//            "bill" => "OR-1234",
+//            "description" => "Test Payment",
+//            "value" => "116000",
+//            "tax" => "16000",
+//            "tax_base" => "100000",
+//            "currency" => "COP",
+//            "dues" => "12",
+//            "url_confirmation"=> "https://lacasacreativaapp.com/api/pagos/confirmacion"
+//        ));
+//        return response()->json(['pay'=>$pay]);
+
+//        {
+//            "pay": {
+//            "success": true,
+//        "title_response": "payment",
+//        "text_response": "detalle de la transacción",
+//        "last_action": "insert payment",
+//        "data": {
+//                "ref_payco": 418519,
+//            "factura": "OR-1234",
+//            "descripcion": "Test Payment",
+//            "valor": "116000",
+//            "iva": "16000",
+//            "baseiva": 100000,
+//            "moneda": "COP",
+//            "banco": "Banco de Pruebas",
+//            "estado": "Aceptada",
+//            "respuesta": "Aprobada",
+//            "autorizacion": "000000",
+//            "recibo": 418519,
+//            "fecha": "2017-10-03 17:42:31",
+//            "cod_respuesta": 1,
+//            "ip": "169.254.74.36",
+//            "tipo_doc": "CC",
+//            "documento": "1035851980",
+//            "nombres": "John",
+//            "apellidos": "Doe",
+//            "email": "example@email.com",
+//            "enpruebas": 1
+//        }
+//    }
+//}
 
     }
 
     public function confirmacion(Request $request)
     {
-        $logData = json_encode( get_object_vars($request));
-        Log::info('CONFIRMACION: RESPONSE= '.$logData);
-        return response()->json(['success'=>true]);
+        $queryString = $request->getQueryString();
+//        Log::info('CONFIRMACION:');
+        Log::info('CONFIRMACION: getQueryString= '.$request->getQueryString());
+
+        $data = null;
+        parse_str($queryString, $data);
+
+        $cool = false;
+
+        if(!is_null($data)){
+
+            if(!isset($data['x_cust_id_cliente']) || !isset($data['x_id_invoice']))
+                return response()->json(['success'=>false,'message'=>'error en data'],400);
+
+            if((env('EPAYCO_CUSTOMER_ID', '16092')===$data['x_cust_id_cliente']))
+                $cool = true;
+
+            $order = Order::where("ref_payco",$data['x_ref_payco'])->where("factura",$data['x_id_invoice'])->first();
+
+            if(is_null($order))
+                return response()->json(['success'=>false,'message'=>'no existe orden con esa info.'],400);
+
+            switch (intval($data['x_cod_response'])){
+                case 1:{
+                    $order->estado = "APROBADO";
+                    $this->notificarEstadoOrder($order->idUsuario,"Su pago ha sido APROBADO, para la orden:".$order->factura);
+                    $order->save();
+                }
+                break;
+                case 2:{
+                    $order->estado = "RECHAZADO";
+                    $this->notificarEstadoOrder($order->idUsuario,"Su pago ha sido RECHAZADO, para la orden:".$order->factura);
+                    $order->delete();
+                }
+                    break;
+                case 3:{
+                    $order->estado = "PENDIENTE";
+                    $this->notificarEstadoOrder($order->idUsuario,"Su pago se encuentra en estado PENDIENTE, para la orden:".$order->factura);
+                    $order->save();
+                }
+                    break;
+                case 4:{
+                    $order->estado = "FALLIDO";
+                    $this->notificarEstadoOrder($order->idUsuario,"Su pago fue FALLIDO, para la orden:".$order->factura);
+                    $order->delete();
+                }
+                    break;
+                default:{
+                }
+            }
+        }
+        else{
+            return response()->json(['success'=>false]);
+        }
+
+//        $logData = json_encode( get_object_vars($request));
+        Log::info('CONFIRMACION: getQueryString= '.$request->getQueryString());
+        return response()->json(['success'=>$cool]);
+    }
+
+    private function notificarEstadoOrder($idUsuario,$mensaje){
+
+        $tag = new \stdClass;
+        $tag->key = 'userId';
+        $tag->relation = "=";
+        $tag->value = $idUsuario;
+
+        $tags = array();
+
+        array_push($tags,$tag);
+
+//        'idEmisor',
+//        'idReceptor',
+//        'nombre',
+//        'idMateria',
+//        'materia',
+//        'grado',
+//        'asunto',
+//        'mensaje'
+
+        $input['idEmisor'] = 1;
+        $input['idReceptor'] = $idUsuario;
+        $input['nombre'] = "ADMIN";
+        $input['idMateria'] = 0;
+        $input['materia'] = "";
+        $input['grado'] = 0;
+
+        $input['asunto'] = 'ESTADO DE PAGO: '.$mensaje;
+        $input['mensaje'] = $mensaje;
+
+        $mensaje = Mensaje::create($input);
+
+        OneSignal::sendNotificationUsingTags(
+            $input['asunto'],
+            $tags,
+            $url = null,
+            [
+                "key"=>"NOTIFICACION",
+                "id"=>$mensaje->id,
+                "idMateria"=>$input['idMateria'],
+                "materia"=>$input['materia'],
+                "idEmisor"=>$input['idEmisor'],
+                "idReceptor"=>$input['idReceptor'],
+                "nombre"=>$input['nombre'],
+                "asunto"=>$input['asunto'],
+                "mensaje"=>$input['mensaje'],
+                "created_at"=>$mensaje->created_at->format('Y-m-d H:i:s')
+            ],
+            $buttons = null,
+            $schedule = null
+        );
+
+    }
+    public function respuesta(Request $request,$factura,$transactionID)
+    {
+        $queryString = $request->getQueryString();
+
+        $data = null;
+        parse_str($queryString, $data);
+
+        Log::info('RESPUESTA: getQueryString= '.$request->getQueryString());
+
+        $epayco = new Epayco(array(
+            "apiKey" => "74d69a0e9f1cc5eee5d600bffa313fbc",
+            "privateKey" => "032e97935cd5ac5dcc28809d04ee4c43",
+            "lenguage" => "ES",
+            "test" => true
+        ));
+
+        $pse = $epayco->bank->get($transactionID);
+
+        return response()->json(['success'=>true,'pse'=>$pse]);
     }
 
 
