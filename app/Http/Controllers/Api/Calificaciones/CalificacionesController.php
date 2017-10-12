@@ -158,7 +158,7 @@ class CalificacionesController extends Controller
                     'idMateria' => $calificacion->idMateria,
                     'periodo' => $calificacion->periodo,
                     'evaluaciones' => $calificacion->evaluaciones,
-                    'acumulado' => $calificacion->acumulado
+                    'acumulado' => isset($calificacion->acumulado)?$calificacion->acumulado:0
                 ]);
         }
         return response()->json(['success'=>true],201);

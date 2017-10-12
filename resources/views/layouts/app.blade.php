@@ -131,45 +131,45 @@
                             </div>
                             <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
                                 <ul class="nav navbar-nav">
-                                    <li class=""><a href="{{URL::to('home')}}">Home<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
-                                    <li class=""><a href="{{URL::to('orders')}}">Ordenes de Pago<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-usd"></span></a></li>
+                                    <li class=""><a href="{{URL::to('home')}}"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-home"></span>Home</a></li>
+                                    <li class=""><a href="{{URL::to('orders')}}"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-usd"></span>Ordenes de Pago</a></li>
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Materias <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-book"></span></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-education"></span>Materias <span class="caret"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
-                                            <li><a href="{{URL::to('materias')}}">Listado</a></li>
-                                            <li><a href="{{URL::to('materias/add')}}">Crear</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('materias')}}">Listado</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('materias/add')}}">Crear</a></li>
                                             {{--<li><a href="#">Modificar</a></li>--}}
                                         </ul>
                                     </li>
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tienda y Pagables<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-shopping-cart"></span></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-shopping-cart"></span>Tienda y Pagables<span class="caret"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
-                                            <li><a href="{{URL::to('articulos')}}">Listado</a></li>
-                                            <li><a href="{{URL::to('articulos/add')}}">Crear</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('articulos')}}">Listado</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('articulos/add')}}">Crear</a></li>
                                             {{--<li><a href="#">Modificar</a></li>--}}
                                         </ul>
                                     </li>
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Horarios<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-calendar"></span></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-calendar"></span>Horarios<span class="caret"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
-                                            <li><a href="{{URL::to('horarios')}}">Listado</a></li>
-                                            {{--<li><a href="{{URL::to('horarios/add')}}">Crear</a></li>--}}
+                                            <li style="padding-left:20px;"><a href="{{URL::to('horarios')}}">Listado</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('horarios/add')}}">Crear</a></li>
                                             {{--<li><a href="#">Modificar</a></li>--}}
                                         </ul>
                                     </li>
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Materiales<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-file"></span></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-book"></span>Materiales<span class="caret"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
-                                            <li><a href="{{URL::to('materiales')}}">Listado</a></li>
-                                            <li><a href="{{URL::to('materiales/add')}}">Crear</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('materiales')}}">Listado</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('materiales/add')}}">Crear</a></li>
                                             {{--<li><a href="#">Modificar</a></li>--}}
                                         </ul>
                                     </li>
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuarios <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-user"></span>Usuarios <span class="caret"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
-                                            <li><a href="{{URL::to('users')}}">Listado</a></li>
-                                            <li><a href="{{URL::to('users/add')}}">Crear</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('users')}}">Listado</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('users/add')}}">Crear</a></li>
                                             {{--<li><a href="#">Modificar</a></li>--}}
                                             {{--<li><a href="#">Reportar</a></li>--}}
                                             {{--<li class="divider"></li>--}}
@@ -179,28 +179,28 @@
                                         </ul>
                                     </li>
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Notificaciones<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-file"></span></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-comment"></span>Notificaciones<span class="caret"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
                                             {{--<li><a href="{{URL::to('materiales')}}">Listado</a></li>--}}
-                                            <li><a href="{{URL::to('notificaciones/add')}}">Crear</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('notificaciones/add')}}">Crear</a></li>
                                             {{--<li><a href="#">Modificar</a></li>--}}
                                         </ul>
                                     </li>
 
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Imagenes App<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-file"></span></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-picture"></span>Imagenes App<span class="caret"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
                                             {{--<li><a href="{{URL::to('materiales')}}">Listado</a></li>--}}
-                                            <li><a href="{{URL::to('config/images-app/add')}}">Crear</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('config/images-app/add')}}">Crear</a></li>
                                             {{--<li><a href="#">Modificar</a></li>--}}
                                         </ul>
                                     </li>
 
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Noticias <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a>
+                                    <li class="dropdown" >
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-inbox"></span>Noticias<span class="caret"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
-                                            <li><a href="{{URL::to('noticias')}}">Listado</a></li>
-                                            <li><a href="{{URL::to('noticias/add')}}">Crear</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('noticias')}}">Listado</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('noticias/add')}}">Crear</a></li>
                                             {{--<li><a href="#">Modificar</a></li>--}}
                                             {{--<li><a href="#">Reportar</a></li>--}}
                                             {{--<li class="divider"></li>--}}
@@ -225,27 +225,20 @@
 
     <!-- Scripts -->
     <script src="{{ url('/') }}/js/app.js"></script>
-
+    <script src="{{ url('/') }}/js/loadingoverlay.min.js"></script>
     <script>
-      jQuery(document).ready(function($) {
-        $( "#type" ).change(function() {
-          var selectedText = $("#type option:selected" ).text();
-          if(selectedText === 'REPRESENTANTE')
-            $("#opcionalEstudiante").removeClass('hidden');
-          else
-            $("#opcionalEstudiante").addClass('hidden');
-        });
-
-        $( "#grupo" ).change(function() {
-          var selectedText = $("#grupo option:selected" ).text();
-
-          console.log("selectedText=",selectedText);
-          if(selectedText === 'GRADO')
-            $("#opcionalNotificaciones").removeClass('hidden');
-          else
-            $("#opcionalNotificaciones").addClass('hidden');
-        });
+      jQuery.LoadingOverlay("show");
+    </script>
+    <script>
+      jQuery(document).ready(function() {
+        jQuery.LoadingOverlay("hide",true);
       });
     </script>
+
+    @stack('userType')
+    @stack('notificacionesGrupo')
+    @stack('userTlf')
+
+
 </body>
 </html>

@@ -53,7 +53,7 @@
                 </div>
 
 
-                <div id="opcionalNotificaciones" >
+                <div id="opcionalNotificaciones">
                     <div class="form-group{{ $errors->has('idGrupo') ? ' has-error' : '' }}">
                         <label for="idGrupo" class="col-md-4 control-label">Grado</label>
                         <div class="col-md-6">
@@ -84,4 +84,18 @@
             </form>
         </div>
     </div>
+
+    @push('notificacionesGrupo')
+    <script>
+      jQuery(document).ready(function($) {
+        $( "#grupo" ).change(function() {
+          var selectedText = $("#grupo option:selected" ).text();
+          if(selectedText === 'GRADO')
+            $("#opcionalNotificaciones").show( "slow");
+          else
+            $("#opcionalNotificaciones").hide( "slow");
+        });
+      });
+    </script>
+    @endpush
 @endsection

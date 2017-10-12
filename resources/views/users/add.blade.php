@@ -114,7 +114,7 @@
                         <select id="type" name="type" class="form-control" required>
                             <option>ADMIN</option>
                             <option>PROFESOR</option>
-                            <option>REPRESENTANTE</option>
+                            <option selected>REPRESENTANTE</option>
                         </select>
 
                         @if ($errors->has('type'))
@@ -125,7 +125,7 @@
                     </div>
                 </div>
 
-                <div id="opcionalEstudiante" class="hidden">
+                <div id="opcionalEstudiante">
                     <div class="form-group{{ $errors->has('nombreEstudiante') ? ' has-error' : '' }}">
                         <label for="nombreEstudiante" class="col-md-4 control-label">Nombre Estudiante</label>
                         <div class="col-md-6">
@@ -151,7 +151,17 @@
                     <div class="form-group{{ $errors->has('grado') ? ' has-error' : '' }}">
                         <label for="grado" class="col-md-4 control-label">Grado</label>
                         <div class="col-md-6">
-                            <input id="grado" type="text" class="form-control" name="grado" value="{{ old('grado') }}">
+                            {{--<input id="grado" type="text" class="form-control" name="grado" value="{{ old('grado') }}">--}}
+
+                            <select id="grado" name="grado" class="form-control" required>
+                                <option value="1">Primero</option>
+                                <option value="2">Segundo</option>
+                                <option value="3">Tercero</option>
+                                <option value="4">Cuarto</option>
+                                <option value="5">Quinto</option>
+                                <option value="6">Transición</option>
+                            </select>
+
                             @if ($errors->has('grado'))
                                 <span class="help-block">
                                 <strong>{{ $errors->first('grado') }}</strong>
@@ -181,8 +191,8 @@
 
                         @if ($errors->has('password'))
                             <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
+                                <strong>{{ $errors->first('password') }}</strong>
+                            </span>
                         @endif
                     </div>
                 </div>
@@ -195,8 +205,8 @@
 
                         @if ($errors->has('password_confirmation'))
                             <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
+                                <strong>{{ $errors->first('password_confirmation') }}</strong>
+                            </span>
                         @endif
                     </div>
                 </div>
@@ -218,4 +228,24 @@
             </form>
         </div>
     </div>
+    @push('userType')
+        <script>
+          jQuery(document).ready(function($) {
+            $( "#type" ).change(function() {
+              var selectedText = $("#type option:selected" ).text();
+              if(selectedText === 'REPRESENTANTE')
+                $( "#opcionalEstudiante" ).show( "slow");
+              else
+                $( "#opcionalEstudiante" ).hide( "slow");
+            });
+          });
+        </script>
+    @endpush
+
+    @push('userTlf')
+    <script>
+
+    </script>
+    @endpush
+
 @endsection

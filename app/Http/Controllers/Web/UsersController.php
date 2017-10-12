@@ -20,6 +20,8 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use App\Materia;
 use OneSignal;
+use App\Mail\OlvidoPassword;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Class UsersController
@@ -34,6 +36,8 @@ class UsersController extends Controller
     public function all(Request $request)
     {
         $users = User::all();
+
+//        Mail::to('oscar.marquez.to@gmail.com')->send(new OlvidoPassword);
 
 //        OneSignal::sendNotificationToAll("Some Message", $url = 'do_not_open', $data = ["dataTest"=>'test value'], $buttons = null, $schedule = null);
 
@@ -89,7 +93,7 @@ class UsersController extends Controller
 
             $validator = Validator::make($input, [
                 'nombreEstudiante' => 'required|string',
-                'idPersonalEstudiante' => 'required|numeric',
+                'idPersonalEstudiante' => 'required|numeric|unique:estudiantes,idPersonal',
                 'grado' => 'required|integer'
             ]);
             if($validator->fails()) {

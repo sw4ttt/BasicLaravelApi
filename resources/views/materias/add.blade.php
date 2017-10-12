@@ -54,7 +54,7 @@
 
                 <div class="form-group">
                     <div class="col-md-8 col-md-offset-4">
-                        <button type="submit" class="btn btn-primary" style="font-size:18px;" onclick="return confirm('Estas seguro?')">
+                        <button type="submit" class="btn btn-primary save" style="font-size:18px;" onclick="return confirm('Estas seguro?')">
                             <span class="glyphicon glyphicon-floppy-save"></span>
                             Crear Materia
                         </button>

@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="panel panel-default ">
-        <div class="panel-heading"><h2>Crear Materia</h2></div>
+        <div class="panel-heading"><h2>Crear Horario</h2></div>
         <div class="panel-body">
             <form class="form-horizontal" role="form" method="POST" action="{{ url('/materias/add') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}

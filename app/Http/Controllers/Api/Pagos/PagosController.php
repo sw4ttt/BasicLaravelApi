@@ -251,7 +251,7 @@ class PagosController extends Controller
             "name" => "testing",
             "last_name" => "PAYCO",
             "email" => "test@mailinator.com",
-            "cell_phone" => "3010000001",
+            "cell_phone" => "11111111111",
             "end_date" => "2017-10-15",
             "url_response" => "https://lacasacreativaapp.com/api/pagos/respuesta",
             "url_confirmation" => "https://lacasacreativaapp.com/api/pagos/confirmacion",
