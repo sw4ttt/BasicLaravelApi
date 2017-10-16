@@ -23,7 +23,17 @@
                 <div class="form-group{{ $errors->has('grado') ? ' has-error' : '' }}">
                     <label for="grado" class="col-md-4 control-label">Grado</label>
                     <div class="col-md-6">
-                        <input id="grado" type="text" class="form-control" name="grado" value="{{ old('grado')?old('grado'):$materia->grado }}" required>
+                        {{--<input id="grado" type="text" class="form-control" name="grado" value="{{ old('grado') }}">--}}
+
+                        <select id="grado" name="grado" class="form-control" required>
+                            <option {{$materia->grado === 1?"selected":""}} value="1">Primero</option>
+                            <option {{$materia->grado === 2?"selected":""}} value="2">Segundo</option>
+                            <option {{$materia->grado === 3?"selected":""}} value="3">Tercero</option>
+                            <option {{$materia->grado === 4?"selected":""}} value="4">Cuarto</option>
+                            <option {{$materia->grado === 5?"selected":""}} value="5">Quinto</option>
+                            <option {{$materia->grado === 6?"selected":""}} value="6">Transición</option>
+                        </select>
+
                         @if ($errors->has('grado'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('grado') }}</strong>
@@ -38,7 +48,7 @@
                         <select id="idProfesor" name="idProfesor" class="form-control" required>
                             @if(isset($profesores) && count($profesores) > 0)
                                 @foreach ($profesores as $profesor)
-                                    <option value="{{$profesor->id}}">{{$profesor->id}} - {{$profesor->nombre}}</option>
+                                    <option {{(strtoupper($profesor->nombre) === strtoupper($materia->profesor))?"selected":""}} value="{{$profesor->id}}">{{$profesor->id}} - {{$profesor->nombre}}</option>
                                 @endforeach
                             @endif
                         </select>

@@ -42,6 +42,8 @@
     <link href="{{ url('/') }}/css/app.css" rel="stylesheet">
     <link href="{{ url('/') }}/css/sidebar.css" rel="stylesheet">
 
+    <link href="{{ url('/') }}/css/jquery.timepicker.min.css" rel="stylesheet">
+
     <!-- Scripts -->
     <script>
         window.Laravel = <?php echo json_encode([
@@ -226,6 +228,8 @@
     <!-- Scripts -->
     <script src="{{ url('/') }}/js/app.js"></script>
     <script src="{{ url('/') }}/js/loadingoverlay.min.js"></script>
+    <script src="{{ url('/') }}/js/jquery.timepicker.min.js"></script>
+    <script src="{{ url('/') }}/js/lodash.min.js"></script>
     <script>
       jQuery.LoadingOverlay("show");
     </script>
@@ -237,7 +241,9 @@
 
     @stack('userType')
     @stack('notificacionesGrupo')
+    @stack('horarioSelectorEntidad')
     @stack('userTlf')
+    @stack('horarioInputHoras')
 
 
 </body>

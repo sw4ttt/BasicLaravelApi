@@ -232,7 +232,7 @@
         <script>
           jQuery(document).ready(function($) {
             $( "#type" ).change(function() {
-              var selectedText = $("#type option:selected" ).text();
+              var selectedText = $(this).val();
               if(selectedText === 'REPRESENTANTE')
                 $( "#opcionalEstudiante" ).show( "slow");
               else
@@ -243,9 +243,9 @@
     @endpush
 
     @push('userTlf')
-    <script>
+        <script>
 
-    </script>
+        </script>
     @endpush
 
 @endsection

@@ -9,7 +9,6 @@
                 <thead>
                     <tr>
                         <th>entidad</th>
-                        <th>idEntidad</th>
                         <th>nombreEntidad</th>
                         <th>descripcion</th>
                         <th>dia</th>
@@ -25,7 +24,6 @@
                         @foreach ($horarios as $horario)
                             <tr>
                                 <td>{{ $horario->entidad }}</td>
-                                <td>{{ $horario->idEntidad }}</td>
                                 <td>{{ $horario->nombreEntidad }}</td>
                                 <td>{{ $horario->descripcion }}</td>
                                 <td>{{ $horario->dia }}</td>

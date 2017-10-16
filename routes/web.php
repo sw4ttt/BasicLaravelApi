@@ -88,7 +88,7 @@ Route::group(['middleware' => ['auth']], function () {
 
             if(!is_null($materia))
                 return view('/materias/edit',[
-                    'materia'=>Materia::find($id),
+                    'materia'=>$materia,
                     'profesores'=>User::where('type','PROFESOR')->get(),
                 ]);
             return back()->withErrors(['invalid'=>['El id de materia seleccionado no es valido.']]);
@@ -118,8 +118,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'horarios'], function () {
         Route::get('/', 'Web\HorariosController@all');
         Route::get('/add', function () {
-            return view('/horarios/add',['horarios'=>Horario::all()]);
+            return view('/horarios/add',[
+                'horarios'=>Horario::all(),
+                'materias'=>Materia::all(),
+                'profesores'=>User::where('type','PROFESOR')->get()
+            ]);
         });
+        Route::post('/add', 'Web\HorariosController@add');
     });
 
     Route::group(['prefix' => 'materiales'], function () {

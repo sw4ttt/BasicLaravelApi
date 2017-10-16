@@ -23,7 +23,17 @@
                 <div class="form-group{{ $errors->has('grado') ? ' has-error' : '' }}">
                     <label for="grado" class="col-md-4 control-label">Grado</label>
                     <div class="col-md-6">
-                        <input id="grado" type="text" class="form-control" name="grado" value="{{ old('grado') }}" required>
+                        {{--<input id="grado" type="text" class="form-control" name="grado" value="{{ old('grado') }}">--}}
+
+                        <select id="grado" name="grado" class="form-control" required>
+                            <option value="1">Primero</option>
+                            <option value="2">Segundo</option>
+                            <option value="3">Tercero</option>
+                            <option value="4">Cuarto</option>
+                            <option value="5">Quinto</option>
+                            <option value="6">Transición</option>
+                        </select>
+
                         @if ($errors->has('grado'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('grado') }}</strong>

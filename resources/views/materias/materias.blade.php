@@ -18,7 +18,9 @@
                         @foreach ($materias as $materia)
                             <tr>
                                 <td>{{ $materia->nombre }}</td>
-                                <td>{{ $materia->grado }}</td>
+                                <td>
+                                    {{ isset($materia->gradoTexto)?$materia->gradoTexto:$materia->grado }}
+                                </td>
                                 <td>
                                     <a class="btn btn-primary" href="{{ url('/materias/edit/'.$materia->id) }}" role="button">Editar</a>
                                 </td>

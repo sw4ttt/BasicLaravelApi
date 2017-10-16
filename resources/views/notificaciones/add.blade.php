@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="panel panel-default ">
-        <div class="panel-heading"><h2>Crear Materia</h2></div>
+        <div class="panel-heading"><h2>Crear Notificación</h2></div>
         <div class="panel-body">
             <form class="form-horizontal" role="form" method="POST" action="{{ url('/notificaciones/add') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
@@ -41,8 +41,8 @@
                     <label for="grupo" class="col-md-4 control-label">Grupo</label>
                     <div class="col-md-6">
                         <select id="grupo" name="grupo" class="form-control" required>
-                            <option value="GRADO">GRADO</option>
-                            <option value="TODOS">TODOS</option>
+                            <option value="GRADO">Grado</option>
+                            <option value="TODOS">Todos</option>
                         </select>
                         @if ($errors->has('grupo'))
                             <span class="help-block">
@@ -57,7 +57,15 @@
                     <div class="form-group{{ $errors->has('idGrupo') ? ' has-error' : '' }}">
                         <label for="idGrupo" class="col-md-4 control-label">Grado</label>
                         <div class="col-md-6">
-                            <input id="idGrupo" type="text" class="form-control" name="idGrupo" value="{{ old('idGrupo') }}">
+                            {{--<input id="idGrupo" type="text" class="form-control" name="idGrupo" value="{{ old('idGrupo') }}">--}}
+                            <select id="idGrupo" name="idGrupo" class="form-control" required>
+                                <option value="1">Primero</option>
+                                <option value="2">Segundo</option>
+                                <option value="3">Tercero</option>
+                                <option value="4">Cuarto</option>
+                                <option value="5">Quinto</option>
+                                <option value="6">Transición</option>
+                            </select>
                             @if ($errors->has('idGrupo'))
                                 <span class="help-block">
                                 <strong>{{ $errors->first('idGrupo') }}</strong>
@@ -89,7 +97,7 @@
     <script>
       jQuery(document).ready(function($) {
         $( "#grupo" ).change(function() {
-          var selectedText = $("#grupo option:selected" ).text();
+          var selectedText = $(this).val();
           if(selectedText === 'GRADO')
             $("#opcionalNotificaciones").show( "slow");
           else

@@ -23,6 +23,31 @@ class MateriasController extends Controller
     public function all(Request $request)
     {
         $materias = Materia::all();
+        $materias->transform(function ($item, $key) {
+            switch ($item->grado) {
+                case 1:
+                    $item->gradoTexto = "Primero";
+                    break;
+                case 2:
+                    $item->gradoTexto = "Segundo";
+                    break;
+                case 3:
+                    $item->gradoTexto = "Tercero";
+                    break;
+                case 4:
+                    $item->gradoTexto = "Cuarto";
+                    break;
+                case 5:
+                    $item->gradoTexto = "Quinto";
+                    break;
+                case 6:
+                    $item->gradoTexto = "Transición";
+                    break;
+                default:
+                    $item->gradoTexto = "Otro";
+            }
+            return $item;
+        });
         return view('materias/materias', ['materias' => $materias]);
     }
 
@@ -81,10 +106,16 @@ class MateriasController extends Controller
         $input['nombre'] = strtoupper($input['nombre']);
         $validator = Validator::make($input, [
             'grado' => 'required|numeric|between:1,15',
-            'nombre' => 'required|string|unique:materias,nombre',
+//            'nombre' => 'required|string|unique:materias,nombre',
             'idProfesor' => 'required|numeric|exists:users,id',
             'id' => 'required|numeric|exists:materias,id'
         ]);
+
+        $materiaNombre = Materia::where('nombre',$input['nombre'])->first();
+
+        if(!is_null($materiaNombre) && ($materiaNombre->id != $input['id'])) {
+            return back()->withErrors(['nombre'=>['Ya existe una materia con ese nombre']])->withInput();
+        }
 
         if ($validator->fails()) {
             //throw new ValidationHttpException($validator->errors()->all());
