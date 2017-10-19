@@ -110,7 +110,7 @@
                             <option value="MARTES">Martes</option>
                             <option value="MIERCOLES">Miercoles</option>
                             <option value="JUEVES">Jueves</option>
-                            <option value="VIERNES">Vierens</option>
+                            <option value="VIERNES">Viernes</option>
                             <option value="SABADO">Sabado</option>
                             <option value="DOMINGO">Domingo</option>
                         </select>

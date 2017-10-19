@@ -8,15 +8,15 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>entidad</th>
-                        <th>nombreEntidad</th>
-                        <th>descripcion</th>
-                        <th>dia</th>
-                        <th>inicio</th>
-                        <th>fin</th>
-                        <th>grado</th>
-                        <th>lugar</th>
-                        {{--<th>Opcion</th>--}}
+                        <th>Entidad</th>
+                        <th>Nombre</th>
+                        <th>Descripcion</th>
+                        <th>Dia</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
+                        <th>Grado</th>
+                        <th>Lugar</th>
+                        <th>Opcion</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,21 +24,16 @@
                         @foreach ($horarios as $horario)
                             <tr>
                                 <td>{{ $horario->entidad }}</td>
-                                <td>{{ $horario->nombreEntidad }}</td>
-                                <td>{{ $horario->descripcion }}</td>
+                                <td>{{ isset($horario->nombreEntidad)?$horario->nombreEntidad:"N/A" }}</td>
+                                <td>{{ isset($horario->descripcion)?$horario->descripcion:"N/A" }}</td>
                                 <td>{{ $horario->dia }}</td>
                                 <td>{{ $horario->inicio }}</td>
                                 <td>{{ $horario->fin }}</td>
                                 <td>{{ $horario->grado }}</td>
                                 <td>{{ $horario->lugar }}</td>
-                                {{--<td>--}}
-                                    {{--<a class="btn btn-primary" href="{{ url('/horarios/edit/'.$horario->id) }}" role="button">Editar</a>--}}
-                                    {{--<a class="btn btn-danger" href="{{ url('/horarios/delete/'.$horario->id) }}"--}}
-                                       {{--role="button"--}}
-                                       {{--onclick="return confirm('Esta seguro? Se eliminara toda la informacion relacionada a el horario. ')">--}}
-                                        {{--Eliminar--}}
-                                    {{--</a>--}}
-                                {{--</td>--}}
+                                <td>
+                                    <a class="btn btn-primary" href="{{ url('/horarios/edit/'.$horario->id) }}" role="button">Editar</a>
+                                </td>
                             </tr>
                         @endforeach
                     @else

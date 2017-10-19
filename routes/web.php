@@ -109,7 +109,7 @@ Route::group(['middleware' => ['auth']], function () {
             $articulo = Articulo::find($id);
             return !is_null($articulo)
                 ?view('/articulos/edit',['articulo'=>$articulo])
-                :back()->withErrors(['invalid'=>['El id de materia seleccionado no es valido.']]);
+                :redirect("articulos");
         });
         Route::post('/edit/{id}', 'Web\ArticulosController@edit');
         Route::post('/delete/{id}', 'Web\ArticulosController@delete');
@@ -124,7 +124,19 @@ Route::group(['middleware' => ['auth']], function () {
                 'profesores'=>User::where('type','PROFESOR')->get()
             ]);
         });
+        Route::get('/edit/{id}', function ($id) {
+            $horario = Horario::find($id);
+            return !is_null($horario)
+                ?view('/horarios/edit',[
+                    'horario'=>$horario,
+                    'materias'=>Materia::all(),
+                    'profesores'=>User::where('type','PROFESOR')->get()
+                ])
+                :redirect("horarios");
+        });
+        Route::post('/edit/{id}', 'Web\HorariosController@edit');
         Route::post('/add', 'Web\HorariosController@add');
+        Route::post('/delete/{id}', 'Web\HorariosController@delete');
     });
 
     Route::group(['prefix' => 'materiales'], function () {
@@ -135,10 +147,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/add', 'Web\MaterialesController@add');
         Route::get('/edit/{id}', function ($id) {
             $material = Material::find($id);
-            return view('/materiales/edit',[
-                'material'=>$material,
-                'materias'=>Materia::all(),
-            ]);
+
+            return !is_null($material)
+                ?view('/materiales/edit',[
+                    'material'=>$material,
+                    'materias'=>Materia::all(),
+                ])
+                :redirect("materiales");
         });
         Route::post('/edit/{id}', 'Web\MaterialesController@edit');
         Route::post('/delete/{id}', 'Web\MaterialesController@delete');
@@ -154,7 +169,7 @@ Route::group(['middleware' => ['auth']], function () {
             $noticia = Noticia::find($id);
             return !is_null($noticia)
                 ?view('/noticias/edit',['noticia'=>$noticia])
-                :back()->withErrors(['invalid'=>['El id de Noticia seleccionado no es valido.']]);
+                :redirect("noticias");
         });
         Route::post('/edit/{id}', 'Web\NoticiasController@edit');
         Route::post('/delete/{id}', 'Web\NoticiasController@delete');

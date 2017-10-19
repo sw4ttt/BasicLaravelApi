@@ -243,8 +243,7 @@
     @stack('notificacionesGrupo')
     @stack('horarioSelectorEntidad')
     @stack('userTlf')
+    @stack('horarioInicio')
     @stack('horarioInputHoras')
-
-
 </body>
 </html>

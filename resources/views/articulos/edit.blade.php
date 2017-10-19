@@ -75,9 +75,9 @@
                     <label for="categoria" class="col-md-4 control-label">Categoria</label>
                     <div class="col-md-6">
                         <select id="categoria" name="categoria" class="form-control selectpicker show-tick" required disabled>
-                            <option value="PAPELERIA">Papeleria</option>
-                            <option value="LIBRERIA">Libreria</option>
-                            <option value="UTILES">Utiles</option>
+                            <option {{($articulo->categoria === 'PAPELERIA')?"SELECTED":""}} value="PAPELERIA">Papeleria</option>
+                            <option {{($articulo->categoria === 'LIBRERIA')?"SELECTED":""}} value="LIBRERIA">Libreria</option>
+                            <option {{($articulo->categoria === 'UTILES')?"SELECTED":""}} value="UTILES">Utiles</option>
                             <option {{($articulo->categoria === 'MATRICULA')?"SELECTED":""}} value="MATRICULA">Matricula</option>
                         </select>
 
