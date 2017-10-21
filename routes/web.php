@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Material;
 use App\Articulo;
 use App\Noticia;
+use App\Calificacion;
+use App\Estudiante;
 
 Route::get('/', function () {
     if (Auth::check())return view('/home');
@@ -181,6 +183,19 @@ Route::group(['middleware' => ['auth']], function () {
             return view('/notificaciones/add');
         });
         Route::post('/add', 'Web\NotificacionesController@add');
+    });
+
+    Route::group(['prefix' => 'calificaciones'], function () {
+        Route::get('/', 'Web\CalificacionesController@all');
+        Route::get('/materia/{id}', 'Web\CalificacionesController@getForMateria');
+        Route::post('/evaluacion/add/materia/{id}', 'Web\CalificacionesController@addEvaluacion');
+        Route::get('/data', function () {
+            return response()->json(['success'=>true,'materias'=>Materia::all()]);
+        });
+//        Route::get('/add', function () {
+//            return view('/notificaciones/add');
+//        });
+//        Route::post('/add', 'Web\NotificacionesController@add');
     });
 
     Route::group(['prefix' => 'config'], function () {
