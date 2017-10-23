@@ -80,7 +80,7 @@
                                                         <label for="titulo" class="col-md-2 control-label">Titulo: {{$evaluacion['nombre']}}</label>
                                                         <label for="nota" class="col-md-2 control-label">Nota:</label>
                                                         <div class="col-md-4">
-                                                            <input id="nota" type="text" data-validation="number" data-validation-allowing="float" class="form-control" name="nota" value="{{ $evaluacion['nota'] }}">
+                                                            <input id="nota" type="text" data-validation="number" data-validation-allowing="float,range[1;100]" data-validation-help="Valor de 0-100" class="form-control input-sm" name="nota" value="{{ $evaluacion['nota'] }}">
                                                             @if ($errors->has('nota'))
                                                                 <span class="help-block">
                                                                 <strong>{{ $errors->first('nota') }}</strong>
@@ -101,10 +101,28 @@
                                     @endif
                                 </ul>
                             </td>
-                            <td class="col-md-2" style="text-align: center">
+                            <td class="col-md-3" style="text-align: center">
                                 <ul class="list-group">
                                     <li class="list-group-item">
-                                        {{ $calificacion->acumulado }}
+                                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/calificaciones/'.$calificacion->id.'/acumulado') }}" enctype="multipart/form-data">
+                                            {{ csrf_field() }}
+                                            <div class="form-group{{ $errors->has('acumulado') ? ' has-error' : '' }}">
+                                                <label for="acumulado" class="col-md-4 control-label">Acumulado:</label>
+                                                <div class="col-md-4">
+                                                    <input id="acumulado" type="text" data-validation="number" data-validation-allowing="float,range[1;99]" data-validation-help="Valor de 0-99" class="form-control input-sm" name="acumulado" value="{{ $calificacion->acumulado }}">
+                                                    @if ($errors->has('acumulado'))
+                                                        <span class="help-block">
+                                                            <strong>{{ $errors->first('acumulado') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Guardar? no se pueden revertir los cambios.')">
+                                                        Guardar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </li>
                                 </ul>
                             </td>
@@ -127,19 +145,4 @@
             @endif
         </div>
     </div>
-
-    @push('calificacionesValidate')
-    <script>
-      jQuery(document).ready(function($) {
-        $.validate({
-          lang: 'es'
-        });
-      })
-    </script>
-    @endpush
-    <script>
-
-    </script>
-
-
 @endsection

@@ -191,6 +191,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/evaluacion/add/materia/{id}', 'Web\CalificacionesController@addEvaluacion');
 //        /calificaciones/'.$calificacion->id.'/evaluacion/'.$evaluacion['nombre']
         Route::post('/{id}/evaluacion/{nombreEvaluacion}', 'Web\CalificacionesController@editarEvaluacion');
+        Route::post('/{id}/acumulado', 'Web\CalificacionesController@editarAcumulado');
         Route::get('/data', function () {
             return response()->json(['success'=>true,'materias'=>Materia::all()]);
         });

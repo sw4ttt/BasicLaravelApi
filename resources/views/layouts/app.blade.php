@@ -247,7 +247,13 @@
         jQuery.LoadingOverlay("hide",true);
       });
     </script>
-
+    <script>
+      jQuery(document).ready(function($) {
+        $.validate({
+          lang: 'es'
+        });
+      })
+    </script>
     @stack('userType')
     @stack('notificacionesGrupo')
     @stack('horarioSelectorEntidad')
@@ -255,6 +261,6 @@
     @stack('horarioInicio')
     @stack('horarioInputHoras')
     @stack('calificacionEditar')
-    @stack('calificacionesValidate')
+
 </body>
 </html>

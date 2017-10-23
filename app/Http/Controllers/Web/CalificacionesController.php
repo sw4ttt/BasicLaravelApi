@@ -91,6 +91,29 @@ class CalificacionesController extends Controller
 
     }
 
+    public function editarAcumulado(Request $request,$id)
+    {
+        $input = $request->only('acumulado');
+        $validator = Validator::make($input, [
+            'acumulado' => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            //throw new ValidationHttpException($validator->errors()->all());
+            return back()->withErrors($validator)->withInput();
+        }
+        $calificacion = Calificacion::find($id);
+
+        if (is_null($calificacion))
+            return redirect("calificaciones");
+
+        $calificacion->acumulado = $input['acumulado'];
+        $calificacion->save();
+
+        return redirect("calificaciones/materia/".$calificacion->idMateria)->with('message', 'Acumulado Editado!');
+
+    }
+
 
     public function getForMateria(Request $request,$id)
     {
@@ -153,6 +176,8 @@ class CalificacionesController extends Controller
                 ]);
             }
         }
+
+        $calificaciones = Calificacion::where('idMateria',$materia->id)->get();
 
         $auxCalificacion = $calificaciones->first();
 

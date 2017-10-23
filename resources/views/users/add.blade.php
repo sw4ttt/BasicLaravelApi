@@ -25,7 +25,7 @@
                 <div class="form-group{{ $errors->has('tipoIdPersonal') ? ' has-error' : '' }}">
                     <label for="tipoIdPersonal" class="col-md-4 control-label">Tipo Id Personal</label>
                     <div class="col-md-6">
-                        <input id="tipoIdPersonal" type="text" class="form-control" name="tipoIdPersonal" value="{{ old('tipoIdPersonal') }}" required autofocus>
+                        <input id="tipoIdPersonal" type="text" class="form-control" name="tipoIdPersonal" value="{{ old('tipoIdPersonal') }}" data-validation="length" data-validation-length="min5,max30" data-validation-optional="true" required autofocus>
                         @if ($errors->has('tipoIdPersonal'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('tipoIdPersonal') }}</strong>
@@ -37,7 +37,7 @@
                 <div class="form-group{{ $errors->has('idPersonal') ? ' has-error' : '' }}">
                     <label for="idPersonal" class="col-md-4 control-label">Id Personal</label>
                     <div class="col-md-6">
-                        <input id="idPersonal" type="text" class="form-control" name="idPersonal" value="{{ old('idPersonal') }}" required>
+                        <input id="idPersonal" type="text" class="form-control" name="idPersonal" value="{{ old('idPersonal') }}" data-validation="length" data-validation-length="min5,max30" data-validation-optional="true" required>
                         @if ($errors->has('idPersonal'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('idPersonal') }}</strong>
@@ -49,7 +49,7 @@
                 <div class="form-group{{ $errors->has('nombre') ? ' has-error' : '' }}">
                     <label for="nombre" class="col-md-4 control-label">Nombre</label>
                     <div class="col-md-6">
-                        <input id="nombre" type="text" class="form-control" name="nombre" value="{{ old('nombre') }}" required>
+                        <input id="nombre" type="text" class="form-control" name="nombre" value="{{ old('nombre') }}" data-validation="length" data-validation-length="min5,max30" data-validation-optional="true" required>
                         @if ($errors->has('nombre'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('nombre') }}</strong>
@@ -73,7 +73,7 @@
                 <div class="form-group{{ $errors->has('tlfDomicilio') ? ' has-error' : '' }}">
                     <label for="tlfDomicilio" class="col-md-4 control-label">Tlf Domicilio</label>
                     <div class="col-md-6">
-                        <input id="tlfDomicilio" type="text" class="form-control" name="tlfDomicilio" value="{{ old('tlfDomicilio') }}" required>
+                        <input id="tlfDomicilio" type="text" class="form-control" name="tlfDomicilio" data-validation="custom" data-validation-regexp="\+(57\d{8,9})" data-validation-help="ejemplo +5712345678" value="{{ old('tlfDomicilio') }}" required>
                         @if ($errors->has('tlfDomicilio'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('tlfDomicilio') }}</strong>
@@ -85,7 +85,7 @@
                 <div class="form-group{{ $errors->has('tlfCelular') ? ' has-error' : '' }}">
                     <label for="tlfCelular" class="col-md-4 control-label">Tlf Celular</label>
                     <div class="col-md-6">
-                        <input id="tlfCelular" type="text" class="form-control" name="tlfCelular" value="{{ old('tlfCelular') }}" required>
+                        <input id="tlfCelular" type="text" class="form-control" name="tlfCelular" data-validation="custom" data-validation-regexp="\+(57\d{8,9})" data-validation-help="ejemplo +5712345678" value="{{ old('tlfCelular') }}" required>
                         @if ($errors->has('tlfCelular'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('tlfCelular') }}</strong>
@@ -97,7 +97,7 @@
                 <div class="form-group{{ $errors->has('direccion') ? ' has-error' : '' }}">
                     <label for="direccion" class="col-md-4 control-label">Direccion</label>
                     <div class="col-md-6">
-                        <input id="direccion" type="text" class="form-control" name="direccion" value="{{ old('direccion') }}" required>
+                        <input id="direccion" type="text" class="form-control" name="direccion" value="{{ old('direccion') }}" data-validation="length" data-validation-length="min5,max50" data-validation-optional="true" required>
                         @if ($errors->has('direccion'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('direccion') }}</strong>
@@ -129,7 +129,7 @@
                     <div class="form-group{{ $errors->has('nombreEstudiante') ? ' has-error' : '' }}">
                         <label for="nombreEstudiante" class="col-md-4 control-label">Nombre Estudiante</label>
                         <div class="col-md-6">
-                            <input id="nombreEstudiante" type="text" class="form-control" name="nombreEstudiante" value="{{ old('nombreEstudiante') }}">
+                            <input id="nombreEstudiante" type="text" class="form-control" name="nombreEstudiante" value="{{ old('nombreEstudiante') }}" data-validation="length" data-validation-length="min5,max30" data-validation-optional="true">
                             @if ($errors->has('nombreEstudiante'))
                                 <span class="help-block">
                                 <strong>{{ $errors->first('nombreEstudiante') }}</strong>
@@ -140,7 +140,7 @@
                     <div class="form-group{{ $errors->has('idPersonalEstudiante') ? ' has-error' : '' }}">
                         <label for="idPersonalEstudiante" class="col-md-4 control-label">Id Personal Estudiante</label>
                         <div class="col-md-6">
-                            <input id="idPersonalEstudiante" type="text" class="form-control" name="idPersonalEstudiante" value="{{ old('idPersonalEstudiante') }}">
+                            <input id="idPersonalEstudiante" type="text" class="form-control" name="idPersonalEstudiante" value="{{ old('idPersonalEstudiante') }}" data-validation="length" data-validation-length="min5,max30" data-validation-optional="true">
                             @if ($errors->has('idPersonalEstudiante'))
                                 <span class="help-block">
                                 <strong>{{ $errors->first('idPersonalEstudiante') }}</strong>
@@ -242,9 +242,13 @@
         </script>
     @endpush
 
-    @push('userTlf')
+    @push('validate')
         <script>
-
+          jQuery(document).ready(function($) {
+            $.validate({
+              lang: 'es'
+            });
+          })
         </script>
     @endpush
 

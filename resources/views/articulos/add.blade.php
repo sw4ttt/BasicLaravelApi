@@ -19,7 +19,7 @@
                 <div class="form-group{{ $errors->has('nombre') ? ' has-error' : '' }}">
                     <label for="nombre" class="col-md-4 control-label">Nombre</label>
                     <div class="col-md-6">
-                        <input id="nombre" type="text" class="form-control" name="nombre" value="{{ old('nombre') }}" required autofocus>
+                        <input id="nombre" type="text" class="form-control" name="nombre" value="{{ old('nombre') }}" data-validation="length" data-validation-length="min5,max20" data-validation-optional="true" required autofocus>
                         @if ($errors->has('nombre'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('nombre') }}</strong>
@@ -31,7 +31,7 @@
                 <div class="form-group{{ $errors->has('cantidad') ? ' has-error' : '' }}">
                     <label for="cantidad" class="col-md-4 control-label">Cantidad</label>
                     <div class="col-md-6">
-                        <input id="cantidad" type="text" class="form-control" name="cantidad" value="{{ old('cantidad') }}" autofocus>
+                        <input id="cantidad" type="text" class="form-control" name="cantidad" value="{{ old('cantidad') }}" data-validation="number" autofocus>
                         @if ($errors->has('cantidad'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('cantidad') }}</strong>
@@ -43,7 +43,7 @@
                 <div class="form-group{{ $errors->has('precio') ? ' has-error' : '' }}">
                     <label for="precio" class="col-md-4 control-label">Precio</label>
                     <div class="col-md-6">
-                        <input id="precio" type="text" class="form-control" name="precio" value="{{ old('precio') }}" required autofocus>
+                        <input id="precio" type="text" class="form-control" name="precio" value="{{ old('precio') }}" data-validation="number" required>
                         @if ($errors->has('precio'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('precio') }}</strong>

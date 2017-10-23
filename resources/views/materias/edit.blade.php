@@ -11,7 +11,7 @@
                 <div class="form-group{{ $errors->has('nombre') ? ' has-error' : '' }}">
                     <label for="nombre" class="col-md-4 control-label">Nombre</label>
                     <div class="col-md-6">
-                        <input id="nombre" type="text" class="form-control" name="nombre" value="{{ old('nombre')?old('nombre'):$materia->nombre }}" required autofocus>
+                        <input id="nombre" type="text" class="form-control" name="nombre" value="{{ old('nombre')?old('nombre'):$materia->nombre }}" data-validation="length" data-validation-length="min5,max50" data-validation-optional="true" required autofocus>
                         @if ($errors->has('nombre'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('nombre') }}</strong>

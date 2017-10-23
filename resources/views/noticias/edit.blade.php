@@ -10,7 +10,7 @@
                 <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
                     <label for="title" class="col-md-4 control-label">Titulo</label>
                     <div class="col-md-6">
-                        <input id="title" type="text" class="form-control" name="title" value="{{ old('title')?old('title'):$noticia->title }}" required autofocus>
+                        <input id="title" type="text" class="form-control" name="title" value="{{ old('title')?old('title'):$noticia->title }}" data-validation="length" data-validation-length="min5,max50" data-validation-optional="true" required autofocus>
                         @if ($errors->has('title'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('title') }}</strong>
@@ -22,7 +22,7 @@
                 <div class="form-group{{ $errors->has('content') ? ' has-error' : '' }}">
                     <label for="content" class="col-md-4 control-label">Contenido</label>
                     <div class="col-md-6">
-                        <input id="content" type="text" class="form-control" name="content" value="{{ old('content')?old('content'):$noticia->content }}" required>
+                        <input id="content" type="text" class="form-control" name="content" value="{{ old('content')?old('content'):$noticia->content }}" data-validation="length" data-validation-length="min5,max100" data-validation-optional="true" required>
                         @if ($errors->has('content'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('content') }}</strong>
