@@ -16,7 +16,7 @@
                 <div class="form-group{{ $errors->has('asunto') ? ' has-error' : '' }}">
                     <label for="asunto" class="col-md-4 control-label">Asunto</label>
                     <div class="col-md-6">
-                        <input id="asunto" type="text" class="form-control" name="asunto" value="{{ old('asunto') }}" data-validation="length" data-validation-length="min10,max70" autofocus>
+                        <input id="asunto" type="text" class="form-control" name="asunto" value="{{ old('asunto') }}" data-validation="length" data-validation-length="10-70" autofocus>
                         @if ($errors->has('asunto'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('asunto') }}</strong>
@@ -28,7 +28,7 @@
                 <div class="form-group{{ $errors->has('mensaje') ? ' has-error' : '' }}">
                     <label for="mensaje" class="col-md-4 control-label">Mensaje</label>
                     <div class="col-md-6">
-                        <textarea id="mensaje" name="mensaje" class="form-control" rows="4" data-validation="length" data-validation-length="min10,max100"></textarea>
+                        <textarea id="mensaje" name="mensaje" class="form-control" rows="4" data-validation="length" data-validation-length="10-100"></textarea>
                         @if ($errors->has('mensaje'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('mensaje') }}</strong>

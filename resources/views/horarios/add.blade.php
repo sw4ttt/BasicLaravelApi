@@ -150,7 +150,7 @@
                 <div class="form-group{{ $errors->has('lugar') ? ' has-error' : '' }}">
                     <label for="lugar" class="col-md-4 control-label">lugar</label>
                     <div class="col-md-6">
-                        <input id="lugar" type="text" class="form-control" name="lugar" value="{{ old('lugar') }}" required>
+                        <input id="lugar" type="text" class="form-control" name="lugar" value="{{ old('lugar') }}" data-validation="length" data-validation-length="2-50" data-validation-optional="true" required>
                         @if ($errors->has('lugar'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('lugar') }}</strong>

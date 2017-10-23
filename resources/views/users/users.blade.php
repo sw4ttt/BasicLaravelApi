@@ -11,6 +11,7 @@
                         <th>Nombre</th>
                         <th>Id Personal</th>
                         <th>Email</th>
+                        <th>Tipo</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -20,10 +21,13 @@
                                 <td>{{ $user->nombre }}</td>
                                 <td>{{ $user->idPersonal }}</td>
                                 <td>{{ $user->email }}</td>
+                                <td>{{ $user->type }}</td>
                             </tr>
                         @endforeach
                     @else
                         <tr>
+                            <td>..</td>
+                            <td>..</td>
                             <td>..</td>
                             <td>..</td>
                         </tr>
