@@ -203,6 +203,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['prefix' => 'config'], function () {
 //        Route::get('/', 'Web\HorariosController@all');
+        Route::get('/datos', function () {
+            return view('/config/datos/datos');
+        });
         Route::get('/images-app/add', function () {
             return view('/config/images-app/add');
         });
