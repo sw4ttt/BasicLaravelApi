@@ -189,6 +189,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/', 'Web\CalificacionesController@all');
         Route::get('/materia/{id}', 'Web\CalificacionesController@getForMateria');
         Route::post('/evaluacion/add/materia/{id}', 'Web\CalificacionesController@addEvaluacion');
+//        /calificaciones/'.$calificacion->id.'/evaluacion/'.$evaluacion['nombre']
+        Route::post('/{id}/evaluacion/{nombreEvaluacion}', 'Web\CalificacionesController@editarEvaluacion');
         Route::get('/data', function () {
             return response()->json(['success'=>true,'materias'=>Materia::all()]);
         });

@@ -55,6 +55,42 @@ class CalificacionesController extends Controller
         return view('calificaciones/calificaciones', ['materias' => $materias]);
     }
 
+    public function editarEvaluacion(Request $request,$id,$nombreEvaluacion)
+    {
+        $input = $request->only('nota');
+        $validator = Validator::make($input, [
+            'nota' => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            //throw new ValidationHttpException($validator->errors()->all());
+            return back()->withErrors($validator)->withInput();
+        }
+        $calificacion = Calificacion::find($id);
+
+        if (is_null($calificacion))
+            return redirect("calificaciones");
+
+//        return response()->json(['success' => true, 'nombre' => $evaluaciones[0]['nombre']]);
+
+        $evaluaciones = $calificacion->evaluaciones;
+
+        $position = 0;
+        foreach ($calificacion->evaluaciones as $itemEvaluacion){
+            if ($itemEvaluacion['nombre'] === $nombreEvaluacion){
+                $evaluaciones[$position]['nota'] = $input['nota'];
+                continue;
+            }
+            $position++;
+        }
+
+        $calificacion->evaluaciones = $evaluaciones;
+        $calificacion->save();
+
+        return redirect("calificaciones/materia/".$calificacion->idMateria)->with('message', 'Evaluacion Editada!');
+
+    }
+
 
     public function getForMateria(Request $request,$id)
     {

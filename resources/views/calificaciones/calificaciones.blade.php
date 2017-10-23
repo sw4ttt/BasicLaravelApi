@@ -44,26 +44,4 @@
         </div>
     </div>
 
-    @push('test')
-    <script>
-      $( document ).ready(function()
-      {
-//        $.LoadingOverlay("show");
-        $.get( {!! json_encode(url('/')) !!}+ "/calificaciones/data", function(response) {
-//          $.LoadingOverlay("hide",true);
-          console.log("get.response=",JSON.stringify(response));
-//          if (response.success == true && response.data)
-//          {
-//
-//          }
-        })
-          .done(function() {})
-          .fail(function(data,error) {
-            console.log("get.fail.error=",JSON.stringify(error));
-            console.log("get.fail.data=",JSON.stringify(data));
-          });
-      });
-    </script>
-    @endpush
-
 @endsection

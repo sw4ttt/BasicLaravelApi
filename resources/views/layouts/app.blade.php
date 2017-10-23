@@ -144,7 +144,7 @@
                                         </ul>
                                     </li>
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-education"></span>Calificaciones <span class="caret"></span></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-pencil"></span>Calificaciones <span class="caret"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
                                             <li style="padding-left:20px;"><a href="{{URL::to('calificaciones')}}">Listado</a></li>
 {{--                                            <li style="padding-left:20px;"><a href="{{URL::to('materias/add')}}">Crear</a></li>--}}
@@ -238,6 +238,7 @@
     <script src="{{ url('/') }}/js/loadingoverlay.min.js"></script>
     <script src="{{ url('/') }}/js/jquery.timepicker.min.js"></script>
     <script src="{{ url('/') }}/js/lodash.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
     <script>
       jQuery.LoadingOverlay("show");
     </script>
@@ -253,6 +254,7 @@
     @stack('userTlf')
     @stack('horarioInicio')
     @stack('horarioInputHoras')
-    @stack('test')
+    @stack('calificacionEditar')
+    @stack('calificacionesValidate')
 </body>
 </html>

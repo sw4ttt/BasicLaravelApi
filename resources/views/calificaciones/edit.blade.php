@@ -52,29 +52,62 @@
         <div class="panel-body">
             <table class="table table-striped">
                 <thead>
-                <tr>
-                    <th>Estudiante</th>
-                    <th>Evaluaciones</th>
-                    <th>Acumulado</th>
-                </tr>
+                    <tr>
+                        <th class="col-md-2" style="text-align: center">Estudiante</th>
+                        <th class="col-md-3" style="text-align: center">Evaluaciones</th>
+                        <th class="col-md-2" style="text-align: center">Acumulado</th>
+                    </tr>
                 </thead>
                 <tbody>
                 @if(isset($calificaciones) && count($calificaciones) > 0)
                     @foreach ($calificaciones as $calificacion)
                         <tr>
-                            <td>{{ $calificacion->nombreEstudiante }}</td>
-                            <td>
+                            <td class="col-md-2" style="text-align: center">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        {{ $calificacion->nombreEstudiante }}
+                                    </li>
+                                </ul>
+                            </td>
+                            <td class="col-md-3" style="text-align: center">
                                 <ul class="list-group">
                                     @if(count($calificacion->evaluaciones)>0)
                                         @foreach ($calificacion->evaluaciones as $evaluacion)
-                                            <li class="list-group-item"><strong>Titulo:</strong> {{$evaluacion['nombre']}} <strong>Nota:</strong> {{$evaluacion['nota']}}</li>
+                                            <li class="list-group-item">
+                                                <form class="form-horizontal" role="form" method="POST" action="{{ url('/calificaciones/'.$calificacion->id.'/evaluacion/'.$evaluacion['nombre']) }}" enctype="multipart/form-data">
+                                                    {{ csrf_field() }}
+                                                    <div class="form-group{{ $errors->has('nota') ? ' has-error' : '' }}">
+                                                        <label for="titulo" class="col-md-2 control-label">Titulo: {{$evaluacion['nombre']}}</label>
+                                                        <label for="nota" class="col-md-2 control-label">Nota:</label>
+                                                        <div class="col-md-4">
+                                                            <input id="nota" type="text" data-validation="number" data-validation-allowing="float" class="form-control" name="nota" value="{{ $evaluacion['nota'] }}">
+                                                            @if ($errors->has('nota'))
+                                                                <span class="help-block">
+                                                                <strong>{{ $errors->first('nota') }}</strong>
+                                                            </span>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Estas seguro que deseas eliminar el horario? no se pueden revertir los cambios.')">
+                                                                Guardar
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </li>
                                         @endforeach
                                     @else
                                         <li class="list-group-item">-</li>
                                     @endif
                                 </ul>
                             </td>
-                            <td>{{ $calificacion->acumulado }}</td>
+                            <td class="col-md-2" style="text-align: center">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        {{ $calificacion->acumulado }}
+                                    </li>
+                                </ul>
+                            </td>
                         </tr>
                     @endforeach
                 @else
@@ -94,5 +127,19 @@
             @endif
         </div>
     </div>
+
+    @push('calificacionesValidate')
+    <script>
+      jQuery(document).ready(function($) {
+        $.validate({
+          lang: 'es'
+        });
+      })
+    </script>
+    @endpush
+    <script>
+
+    </script>
+
 
 @endsection
