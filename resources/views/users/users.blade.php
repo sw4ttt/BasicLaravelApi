@@ -12,6 +12,7 @@
                         <th>Id Personal</th>
                         <th>Email</th>
                         <th>Tipo</th>
+                        <th>Opción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,6 +23,9 @@
                                 <td>{{ $user->idPersonal }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->type }}</td>
+                                <td>
+                                    <a class="btn btn-primary" href="{{ url('/users/edit/'.$user->id) }}" role="button">Editar</a>
+                                </td>
                             </tr>
                         @endforeach
                     @else
@@ -30,10 +34,17 @@
                             <td>..</td>
                             <td>..</td>
                             <td>..</td>
+                            <td>..</td>
                         </tr>
                     @endif
                 </tbody>
             </table>
+            @if (Session::has('message'))
+                <div class="alert alert-success alert-dismissable fade in" style="margin-top: 10px">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>{{ Session::get('message') }}</strong>
+                </div>
+            @endif
         </div>
     </div>
 @endsection

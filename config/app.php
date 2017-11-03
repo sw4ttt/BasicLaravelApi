@@ -189,6 +189,7 @@ return [
 
         Alexo\LaravelPayU\LaravelPayUServiceProvider::class,
 
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 //        Epayco\Epayco::class,
     ],
 
@@ -240,7 +241,8 @@ return [
 
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
-        'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class
+        'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class
 
     ],
 

@@ -134,10 +134,9 @@ class CalificacionesController extends Controller
             return $calItem;
         });
 
-//        return response()->json(['success'=>true,'calificaciones'=>$calificaciones]);
-
         return view('/calificaciones/edit',[
             'materia'=>$materia,
+            'profesor'=>$materia->profesores()->first(),
             'calificaciones'=>$calificaciones
         ]);
 

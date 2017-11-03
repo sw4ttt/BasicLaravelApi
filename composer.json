@@ -11,7 +11,8 @@
         "laravel-notification-channels/onesignal": "^1.0",
         "guzzlehttp/guzzle": "~6.0",
         "alexo/laravel-payu": "^1.0",
-        "epayco/epayco-php": "dev-master"
+        "epayco/epayco-php": "dev-master",
+        "maatwebsite/excel": "~2.1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -50,6 +50,10 @@ class Handler extends ExceptionHandler
             return response()->json(['token_invalid'], $exception->getStatusCode());
         }
 
+        if($exception instanceof \Illuminate\Session\TokenMismatchException){
+            return redirect('login');
+        }
+
         return parent::render($request, $exception);
     }
 

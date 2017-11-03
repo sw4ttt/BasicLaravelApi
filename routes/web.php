@@ -73,7 +73,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', 'Web\UsersController@all');
         Route::get('/add', function () {  return view('/users/add');});
+        Route::get('/add/masivo', function () {  return view('/users/addbulk');});
+        Route::post('/add/masivo', 'Web\UsersController@addBulk');
         Route::post('/add', 'Web\UsersController@add');
+        Route::get('/edit/{id}', function ($id) {
+            $usuario = User::find($id);
+            return !is_null($usuario)
+                ?view('/users/edit',['usuario'=>$usuario])
+                :redirect("users");
+        });
+        Route::post('/edit/{id}', 'Web\UsersController@edit');
+        Route::post('/delete/{id}', 'Web\UsersController@delete');
     });
 
     Route::group(['prefix' => 'materias'], function () {

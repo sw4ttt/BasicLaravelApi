@@ -14,12 +14,7 @@
     {{--<script src="{{ url('/') }}/js/jquery-3.2.1.js"></script>--}}
     {{--<script src="js/jquery-1.9.1.min.js" type="text/javascript"></script>--}}
 
-
-    {{--<script src="{{ url('/') }}/js/jquery-3.2.1.js"></script>--}}
-    {{--<script src="{{ url('/') }}/js/loadingoverlay.min.js"></script>--}}
-
     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
-    {{--<script src="{{ url('/') }}/js/loadingoverlay.min.js"></script>--}}
     <script>
       var OneSignal = window.OneSignal || [];
       OneSignal.push(["init", {
@@ -180,6 +175,7 @@
                                         <ul class="dropdown-menu forAnimate" role="menu">
                                             <li style="padding-left:20px;"><a href="{{URL::to('users')}}">Listado</a></li>
                                             <li style="padding-left:20px;"><a href="{{URL::to('users/add')}}">Crear</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('users/add/masivo')}}">Carga Masiva</a></li>
                                             {{--<li><a href="#">Modificar</a></li>--}}
                                             {{--<li><a href="#">Reportar</a></li>--}}
                                             {{--<li class="divider"></li>--}}
@@ -238,6 +234,8 @@
     <script src="{{ url('/') }}/js/loadingoverlay.min.js"></script>
     <script src="{{ url('/') }}/js/jquery.timepicker.min.js"></script>
     <script src="{{ url('/') }}/js/lodash.min.js"></script>
+    <script src="{{ url('/') }}/js/papaparse.min.js"></script>
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
     <script>
       jQuery.LoadingOverlay("show");
@@ -250,7 +248,8 @@
     <script>
       jQuery(document).ready(function($) {
         $.validate({
-          lang: 'es'
+          lang: 'es',
+          modules : 'file'
         });
       })
     </script>
@@ -261,6 +260,7 @@
     @stack('horarioInicio')
     @stack('horarioInputHoras')
     @stack('calificacionEditar')
+    @stack('usersAddMasivo')
 
 </body>
 </html>

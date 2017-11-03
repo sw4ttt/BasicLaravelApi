@@ -241,15 +241,4 @@
           });
         </script>
     @endpush
-
-    @push('validate')
-        <script>
-          jQuery(document).ready(function($) {
-            $.validate({
-              lang: 'es'
-            });
-          })
-        </script>
-    @endpush
-
 @endsection

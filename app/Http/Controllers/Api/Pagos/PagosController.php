@@ -138,7 +138,7 @@ class PagosController extends Controller
 
         $input['idUsuario']= $user->id;
         
-        $input['factura'] = Carbon::now()->format('Y-m-d_H-i-s')."_".str_random(10);
+        $input['factura'] = Carbon::now()->format('His').str_random(10);
 
         $order = Order::create($input);
 
