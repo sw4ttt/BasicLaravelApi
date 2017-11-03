@@ -278,8 +278,8 @@ class UsersController extends Controller
             $rowValidation['tipoidpersonal'] = strval($rowValidation['tipoidpersonal']);
             $rowValidation['idpersonal'] = strval($rowValidation['idpersonal']);
             $rowValidation['nombre'] = strval($rowValidation['nombre']);
-            $rowValidation['tlfdomicilio'] = strval($rowValidation['tlfdomicilio']);
-            $rowValidation['tlfcelular'] = strval($rowValidation['tlfcelular']);
+            $rowValidation['tlfdomicilio'] = "+".strval($rowValidation['tlfdomicilio']);
+            $rowValidation['tlfcelular'] = "+".strval($rowValidation['tlfcelular']);
             $rowValidation['direccion'] = strval($rowValidation['direccion']);
             $rowValidation['email'] = strval($rowValidation['email']);
             $rowValidation['password'] = strval($rowValidation['password']);
@@ -293,11 +293,10 @@ class UsersController extends Controller
                 'tipoidpersonal' => 'required|string',
                 'idpersonal' => 'required|numeric|unique:users,idPersonal',
                 'nombre' => 'required|string',
-                'tlfdomicilio' => 'required|string',
-                'tlfcelular' => 'required|string',
+                'tlfdomicilio' => 'required|string|regex:/^((\+57)(\d){6,8})$/',
+                'tlfcelular' => 'required|string|regex:/^((\+57)(\d){6,8})$/',
                 'direccion' => 'required|string',
                 'email' => 'required|email|unique:users,email',
-                'password' => 'required|min:4',
                 'type' => 'required|string|in:ADMIN,PROFESOR,REPRESENTANTE'
             ]);
 

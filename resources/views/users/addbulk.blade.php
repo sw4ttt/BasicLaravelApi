@@ -3,7 +3,21 @@
 @section('content')
 
     <div class="panel panel-default ">
-        <div class="panel-heading"><h2>Carga Masiva de Usuarios</h2></div>
+        <div class="panel-heading">
+            <h2>Carga Masiva de Usuarios</h2><h4>Archivo de Ejemplo: <a href="{{url("/")."/"."files/usuarios_template.csv"}}" download="{{url("/")."/"."files/usuarios_template.csv"}}">Descargar</a></h4>
+            <div>
+                <h3>Consideraciones:</h3>
+                <ul>
+                    <li>El campo <strong>email</strong> debe ser unico.</li>
+                    <li>El campo <strong>type</strong> hace referencia al tipo de usuario, las opciones son: <strong>ADMIN, PROFESOR y REPRESENTANTE</strong></li>
+                    <li>Los campos <strong>tlfdomicilio</strong> y <strong>tlfcelular</strong> deben tener el formato "57123456".</li>
+                    <li>El campo <strong>idpersonal</strong> debe ser unico.</li>
+                    <li>En caso del usuario ser tipo "REPRESENTANTE" el campo "idpersonalestudiante" debe ser unico.</li>
+                    <li>En caso del usuario ser tipo "REPRESENTANTE" el campo "grado" debe ser un numero entero del 1 al 6.</li>
+                    <li>A los Usuarios creados se les coloca una clave por defecto. <strong>123456</strong></li>
+                </ul>
+            </div>
+        </div>
         <div class="panel-body">
             <form class="form-horizontal" role="form" method="POST" accept-charset="UTF-8" action="{{ url('/users/add/masivo') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
@@ -45,23 +59,50 @@
                 <div><h2>Lineas del Archivo Rechazadas</h2></div>
                 <table class="table table-striped">
                     <thead>
-                        <tr>
+                        <tr style="font-size: 10px">
                             <th>Linea</th>
                             <th>Nombre</th>
                             <th>Email</th>
+                            <th>Tipo id Personal</th>
+                            <th>Id Personal</th>
+                            <th>Tlf Domicilio</th>
+                            <th>Tlf Celular</th>
+                            <th>Direccion</th>
+                            <th>Tipo de Usuario</th>
+                            <th>Nombre Estudiante</th>
+                            <th>ID Personal Estudiante</th>
+                            <th>Grado</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="font-size: 10px">
                     @if(count(Session::get('rejected')) > 0)
                         @foreach (Session::get('rejected') as $item)
                             <tr>
                                 <td>{{ $item['index'] }}</td>
                                 <td>{{ $item['nombre'] }}</td>
                                 <td>{{ $item['email'] }}</td>
+                                <td>{{ $item['tipoidpersonal'] }}</td>
+                                <td>{{ $item['idpersonal'] }}</td>
+                                <td>{{ $item['tlfdomicilio'] }}</td>
+                                <td>{{ $item['tlfcelular'] }}</td>
+                                <td>{{ $item['direccion'] }}</td>
+                                <td>{{ $item['type'] }}</td>
+                                <td>{{ $item['nombreestudiante'] }}</td>
+                                <td>{{ $item['idpersonalestudiante'] }}</td>
+                                <td>{{ $item['grado'] }}</td>
                             </tr>
                         @endforeach
                     @else
                         <tr>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
                             <td>..</td>
                             <td>..</td>
                             <td>..</td>
