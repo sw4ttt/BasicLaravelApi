@@ -202,17 +202,29 @@ class UsersController extends Controller
 
         $estudiante = $usuario->estudiantes()->first();
 
+
         if(!is_null($estudiante)){
             Calificacion::where("idEstudiante",$estudiante->id)->delete();
             $estudiante->delete();
         }
 
+
+
         $materias = $usuario->materias()->get();
+
+        $usuario->materias()->detach();
+
 
         if(is_array($materias) && count($materias) > 0){
             $usuario->materias()->detach();
             Calificacion::where("idProfesor",$usuario->id)->delete();
         }
+
+
+        foreach ($materias as $materia){
+            $materia->delete();
+        }
+
         $usuario->delete();
 
         return redirect("users")->with('message', 'Usuario Eliminado!');

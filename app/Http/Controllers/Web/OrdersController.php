@@ -29,7 +29,7 @@ class OrdersController extends Controller
 
         if($user->type === 'ADMIN')
         {
-            $orders = Order::all();
+            $orders = Order::all()->sortByDesc('factura');
             return view('orders/orders', ['orders' => $orders]);
         }
         else
