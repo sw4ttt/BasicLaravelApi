@@ -3,28 +3,28 @@
 @section('content')
 
     <div class="panel panel-default ">
-        <div class="panel-heading"><h2>Materias <span class="badge"> {{count($materias)}}</span></h2></div>
+        <div class="panel-heading"><h2>Cursos <span class="badge"> {{count($cursos)}}</span></h2></div>
         <div class="panel-body">
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
                         <th>Grado</th>
                         <th>Seccion</th>
+                        <th>Cupos</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if(count($materias) > 0)
-                        @foreach ($materias as $materia)
+                    @if(count($cursos) > 0)
+                        @foreach ($cursos as $curso)
                             <tr>
-                                <td>{{ $materia->nombre }}</td>
                                 <td>
-                                    {{ isset($materia->gradoTexto)?$materia->gradoTexto:$materia->grado }}
+                                    {{ isset($curso->gradoTexto)?$curso->gradoTexto:$curso->grado }}
                                 </td>
-                                <td>{{ $materia->seccion }}</td>
+                                <td>{{ $curso->seccion }}</td>
+                                <td>{{ $curso->cupos }}</td>
                                 <td>
-                                    <a class="btn btn-primary" href="{{ url('/materias/edit/'.$materia->id) }}" role="button">Editar</a>
+                                    <a class="btn btn-primary" href="{{ url('/cursos/edit/'.$curso->id) }}" role="button">Editar</a>
                                 </td>
                             </tr>
                         @endforeach

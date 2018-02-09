@@ -20,23 +20,21 @@
                     </div>
                 </div>
 
-                <div class="form-group{{ $errors->has('grado') ? ' has-error' : '' }}">
-                    <label for="grado" class="col-md-4 control-label">Grado</label>
+                <div class="form-group{{ $errors->has('curso') ? ' has-error' : '' }}">
+                    <label for="curso" class="col-md-4 control-label">Curso</label>
                     <div class="col-md-6">
-                        {{--<input id="grado" type="text" class="form-control" name="grado" value="{{ old('grado') }}">--}}
-
-                        <select id="grado" name="grado" class="form-control" required>
-                            <option {{$materia->grado === 1?"selected":""}} value="1">Primero</option>
-                            <option {{$materia->grado === 2?"selected":""}} value="2">Segundo</option>
-                            <option {{$materia->grado === 3?"selected":""}} value="3">Tercero</option>
-                            <option {{$materia->grado === 4?"selected":""}} value="4">Cuarto</option>
-                            <option {{$materia->grado === 5?"selected":""}} value="5">Quinto</option>
-                            <option {{$materia->grado === 6?"selected":""}} value="6">Transición</option>
+                        <select id="curso" name="curso" class="form-control" required>
+                            @if(isset($cursos) && count($cursos) > 0)
+                                @foreach ($cursos as $curso)
+                                    <option {{(($materia->grado === $curso->grado) && ($materia->seccion === $curso->seccion))?"selected":""}} value="{{$curso->id}}">{{$curso->gradoTexto}} - {{$curso->seccion}}</option>
+                                @endforeach
+                            @else
+                                <option>-</option>
+                            @endif
                         </select>
-
-                        @if ($errors->has('grado'))
+                        @if ($errors->has('curso'))
                             <span class="help-block">
-                                <strong>{{ $errors->first('grado') }}</strong>
+                                <strong>{{ $errors->first('curso') }}</strong>
                             </span>
                         @endif
                     </div>

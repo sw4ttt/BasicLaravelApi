@@ -21,6 +21,7 @@
                 {{--'nombreEstudiante' => 'required|string',--}}
                 {{--'idPersonalEstudiante' => 'required|string',--}}
                 {{--'grado' => 'required|integer'--}}
+                {{--'seccion' => 'required|string'--}}
 
                 <div class="form-group{{ $errors->has('tipoIdPersonal') ? ' has-error' : '' }}">
                     <label for="tipoIdPersonal" class="col-md-4 control-label">Tipo Id Personal</label>
@@ -148,23 +149,21 @@
                             @endif
                         </div>
                     </div>
-                    <div class="form-group{{ $errors->has('grado') ? ' has-error' : '' }}">
-                        <label for="grado" class="col-md-4 control-label">Grado</label>
+                    <div class="form-group{{ $errors->has('curso') ? ' has-error' : '' }}">
+                        <label for="curso" class="col-md-4 control-label">Curso</label>
                         <div class="col-md-6">
-                            {{--<input id="grado" type="text" class="form-control" name="grado" value="{{ old('grado') }}">--}}
-
-                            <select id="grado" name="grado" class="form-control" required>
-                                <option value="1">Primero</option>
-                                <option value="2">Segundo</option>
-                                <option value="3">Tercero</option>
-                                <option value="4">Cuarto</option>
-                                <option value="5">Quinto</option>
-                                <option value="6">Transición</option>
+                            <select id="curso" name="curso" class="form-control" required>
+                                @if(isset($cursos) && count($cursos) > 0)
+                                    @foreach ($cursos as $curso)
+                                        <option value="{{$curso->id}}">{{$curso->gradoTexto}} - {{$curso->seccion}}</option>
+                                    @endforeach
+                                @else
+                                    <option>-</option>
+                                @endif
                             </select>
-
-                            @if ($errors->has('grado'))
+                            @if ($errors->has('curso'))
                                 <span class="help-block">
-                                <strong>{{ $errors->first('grado') }}</strong>
+                                <strong>{{ $errors->first('curso') }}</strong>
                             </span>
                             @endif
                         </div>

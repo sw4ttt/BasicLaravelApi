@@ -10,6 +10,7 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Grado</th>
+                    <th>Seccion</th>
                     <th>Opciones</th>
                 </tr>
                 </thead>
@@ -21,6 +22,7 @@
                             <td>
                                 {{ isset($materia->gradoTexto)?$materia->gradoTexto:$materia->grado }}
                             </td>
+                            <td>{{ $materia->seccion }}</td>
                             <td>
                                 <a class="btn btn-primary" href="{{ url('/calificaciones/materia/'.$materia->id) }}" role="button">Consultar</a>
                             </td>
@@ -28,6 +30,7 @@
                     @endforeach
                 @else
                     <tr>
+                        <td>..</td>
                         <td>..</td>
                         <td>..</td>
                         <td>..</td>

@@ -20,6 +20,7 @@ use App\Notifications\NotificacionGeneral;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use App\Materia;
+use App\Curso;
 use OneSignal;
 use App\Mail\OlvidoPassword;
 use Illuminate\Support\Facades\Mail;
@@ -55,17 +56,18 @@ class UsersController extends Controller
             'email',
             'image',
             'password',
+            'password_confirmation',
             'type');
         $validator = Validator::make($input, [
             'tipoIdPersonal' => 'required|string',
-            'idPersonal' => 'required|numeric|unique:users,idPersonal',
+            'idPersonal' => 'required|numeric',
             'nombre' => 'required|string',
             'tlfDomicilio' => 'required|string',
             'tlfCelular' => 'required|string',
             'direccion' => 'required|string',
             'email' => 'required|email|unique:users,email',
             'image' => 'required|image',
-            'password' => 'required|min:4',
+            'password' => 'required|min:4|confirmed',
             'type' => 'required|string|in:ADMIN,PROFESOR,REPRESENTANTE'
         ]);
 
@@ -76,24 +78,36 @@ class UsersController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return back()->withErrors($validator)->withInput();
         }
-        $userType = $input['type'];
+
+
+        $userType = strtoupper($input['type']);
+
 
         if($userType === 'REPRESENTANTE')
         {
             $input['nombreEstudiante'] = $request['nombreEstudiante'];
             $input['idPersonalEstudiante'] = $request['idPersonalEstudiante'];
-            $input['grado'] = $request['grado'];
+            $input['curso'] = $request['curso'];
 
             $validator = Validator::make($input, [
                 'nombreEstudiante' => 'required|string',
-                'idPersonalEstudiante' => 'required|numeric|unique:estudiantes,idPersonal',
-                'grado' => 'required|integer'
+                'idPersonalEstudiante' => 'required|numeric',
+                'curso' => 'required|numeric|exists:cursos,id'
             ]);
             if($validator->fails()) {
                 return back()->withErrors($validator)->withInput();
             }
-        }
 
+            $curso = Curso::find($input['curso']);
+
+            if($curso->cupos <= 0)
+                return back()->withErrors([
+                    'curso'=>['No hay cupos disponibles para el curso indicado.']
+                ])->withInput();
+
+            $curso->decrement('cupos');
+            $curso->save();
+        }
 
         $input['email'] = strtolower($input['email']);
         $input['image'] = Storage::put('images', $request->image);
@@ -104,17 +118,21 @@ class UsersController extends Controller
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
+//        return response()->json(["what2"=>true],400);
+
         $user = User::create($input);
 
         if($userType === 'REPRESENTANTE')
         {
             $input['idUser'] = $user->id;
             $input['idPersonal'] = $input['idPersonalEstudiante'];
-            $input['nombre'] = $input['nombreEstudiante'];
+            $input['nombre'] = strtoupper($input['nombreEstudiante']);
+            $input['seccion'] = $curso->seccion;
+            $input['grado'] = $curso->grado;
 
             $estudiante = Estudiante::create($input);
 
-            $materias = Materia::where('grado',$input['grado'])->get();
+            $materias = Materia::where('grado',$curso->grado)->where('seccion',$curso->seccion)->get();
             foreach ($materias as $materia) {
                 $profesor = $materia->profesores()->get()->first();
                 if(!is_null($profesor))
@@ -125,13 +143,15 @@ class UsersController extends Controller
                         'idMateria'=>$materia->id,
                         'periodo'=>'2017-2018',
                         'evaluaciones'=>[],
+                        'acumulado'=>0,
                         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                         'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
                 }
             }
         }
-        return back()->with('message', 'Usuario Creado!');
+
+        return redirect("users/add")->with('message', 'Usuario Creado!');
     }
 
     public function edit(Request $request,$id)
@@ -166,7 +186,7 @@ class UsersController extends Controller
 
         $usuario->save();
 
-        return back()->with('message', 'Usuario Editado!');
+        return redirect("users/edit/".$id)->with('message', 'Usuario Editado!');
     }
 
     public function delete(Request $request,$id)
@@ -188,7 +208,6 @@ class UsersController extends Controller
             if($auxPath[1] !== 'default-profile.jpg' && Storage::exists('images'.$auxPath[1]))  Storage::delete('images'.$auxPath[1]);
         }
 
-
         $tarjetas = $usuario->tarjetas();
         if(is_array($tarjetas) && count($tarjetas) > 0)
             $usuario->tarjetas()->detach();
@@ -199,27 +218,21 @@ class UsersController extends Controller
         if(is_array($carrito) && count($carrito) > 0)
             $usuario->carrito()->detach();
 
-
         $estudiante = $usuario->estudiantes()->first();
-
 
         if(!is_null($estudiante)){
             Calificacion::where("idEstudiante",$estudiante->id)->delete();
             $estudiante->delete();
         }
 
-
-
         $materias = $usuario->materias()->get();
 
         $usuario->materias()->detach();
-
 
         if(is_array($materias) && count($materias) > 0){
             $usuario->materias()->detach();
             Calificacion::where("idProfesor",$usuario->id)->delete();
         }
-
 
         foreach ($materias as $materia){
             $materia->delete();
@@ -228,7 +241,6 @@ class UsersController extends Controller
         $usuario->delete();
 
         return redirect("users")->with('message', 'Usuario Eliminado!');
-
     }
 
     public function addBulk(Request $request)
@@ -250,7 +262,7 @@ class UsersController extends Controller
         $valid = true;
 
         Excel::load($input['usersFile'], function($reader) use (&$results,&$filtered,&$valid) {
-            $results = $reader->takeRows(3)->get();
+            $results = $reader->takeRows(200)->get();
 
             if($results->count()===0){
                 $valid = false;
@@ -268,7 +280,8 @@ class UsersController extends Controller
                         'type',
                         'nombreestudiante',
                         'idpersonalestudiante',
-                        'grado'
+                        'grado',
+                        'seccion'
                     ]);
                     if(!$check)
                         $valid = false;
@@ -276,8 +289,7 @@ class UsersController extends Controller
         });
 
         if(!$valid)
-            return back()->withErrors(['usersFile'=>['El archivo contiene un estructura invalida. utiliza el archivo de ejemplo.']])->withInput();
-
+            return back()->withErrors(['usersFile'=>['1-El archivo contiene un estructura invalida. utiliza el archivo de ejemplo.']])->withInput();
 
         $index = 1;
         foreach ($results as $row){
@@ -290,8 +302,8 @@ class UsersController extends Controller
             $rowValidation['tipoidpersonal'] = strval($rowValidation['tipoidpersonal']);
             $rowValidation['idpersonal'] = strval($rowValidation['idpersonal']);
             $rowValidation['nombre'] = strval($rowValidation['nombre']);
-            $rowValidation['tlfdomicilio'] = "+".strval($rowValidation['tlfdomicilio']);
-            $rowValidation['tlfcelular'] = "+".strval($rowValidation['tlfcelular']);
+            $rowValidation['tlfdomicilio'] = "+57".strval($rowValidation['tlfdomicilio']);
+            $rowValidation['tlfcelular'] = "+57".strval($rowValidation['tlfcelular']);
             $rowValidation['direccion'] = strval($rowValidation['direccion']);
             $rowValidation['email'] = strval($rowValidation['email']);
             $rowValidation['password'] = strval($rowValidation['password']);
@@ -300,27 +312,89 @@ class UsersController extends Controller
             $rowValidation['nombreestudiante'] = strval($rowValidation['nombreestudiante']);
             $rowValidation['idpersonalestudiante'] = strval($rowValidation['idpersonalestudiante']);
             $rowValidation['grado'] = strval($rowValidation['grado']);
+            $rowValidation['seccion'] = strval($rowValidation['seccion']);
+
+            foreach ($rowValidation as $key => $value){
+                if($key === "email" && $value === ""){
+
+                    $number = rand(1, 3);
+
+                    $rowValidation[$key] = "emailprueba1@";
+                }
+
+
+                if($key !== "type" && $key !== "grado" && $key !== "seccion" && $key !== "email" && ($value === "" || $value === "+57")){
+
+                    $rowValidation[$key] = "VALOR";
+                    switch ($value) {
+                        case "tipoidpersonal":{
+                            $rowValidation[$key] = "Numero Identificacion";
+                        }
+                            break;
+                        case "idpersonal":{
+                            $rowValidation[$key] = "123456789";
+                        }
+                            break;
+                        case "tlfdomicilio":{
+                            $rowValidation[$key] = "+57312345678";
+
+                        }
+                            break;
+                        case "tlfcelular":{
+                            $rowValidation[$key] = "+57312345678";
+                        }
+                            break;
+                        case "direccion":{
+                            $rowValidation[$key] = "Colombia";
+                        }
+                            break;
+                    }
+                }
+
+                if($key === "type" && $value === "REPRESENTANTE"){
+                    switch ($value) {
+                        case "idpersonalestudiante":{
+                            $rowValidation[$key] = "123456789";
+                        }
+                            break;
+                    }
+
+                }
+            }
 
             $validator = Validator::make($rowValidation, [
                 'tipoidpersonal' => 'required|string',
-                'idpersonal' => 'required|numeric|unique:users,idPersonal',
+                'idpersonal' => 'required|numeric',
                 'nombre' => 'required|string',
-                'tlfdomicilio' => 'required|string|regex:/^((\+57)(\d){6,8})$/',
-                'tlfcelular' => 'required|string|regex:/^((\+57)(\d){6,8})$/',
+                'tlfdomicilio' => 'required|string|regex:/^((\+57)(\d){6,10})$/',
+                'tlfcelular' => 'required|string|regex:/^((\+57)(\d){6,10})$/',
                 'direccion' => 'required|string',
                 'email' => 'required|email|unique:users,email',
                 'type' => 'required|string|in:ADMIN,PROFESOR,REPRESENTANTE'
             ]);
 
+            $curso = Curso::where("grado",$rowValidation['grado'])->where("grado",$rowValidation['grado'])->get()->first();
+
             if(!$validator->fails()) {
                 if(strtoupper($rowValidation['type']) === 'REPRESENTANTE'){
                     $validator = Validator::make($rowValidation, [
                         'nombreestudiante' => 'required|string',
-                        'idpersonalestudiante' => 'required|numeric|unique:estudiantes,idPersonal',
-                        'grado' => 'required|numeric|in:1,2,3,4,5,6',
+                        'idpersonalestudiante' => 'required|numeric',
+                        'grado' => 'required|numeric|in:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15',
+                        'seccion' => 'required|string'
                     ]);
                     if(!$validator->fails()){
-                        array_push($filtered,$rowValidation);
+                        $curso = Curso::where("grado",strtoupper($rowValidation['grado']))->where("seccion",strtoupper($rowValidation['seccion']))->get()->first();
+
+                        if(!is_null($curso) && $curso->cupos > 0){
+                            $curso->decrement('cupos');
+                            $curso->save();
+                            array_push($filtered,$rowValidation);
+                        }
+                        else{
+                            $rowValidation['index'] = $index;
+                            array_push($rejected,$rowValidation);
+                        }
                     }
                     else {
                         $rowValidation['index'] = $index;
@@ -338,9 +412,12 @@ class UsersController extends Controller
             $index++;
         }
 
+
         if(count($filtered)===0){
-            return back()->withErrors(['usersFile'=>['El archivo contiene un estructura invalida. utiliza el archivo de ejemplo.']])->with('rejected',$rejected);
+            return back()->withErrors(['usersFile'=>['2-El archivo contiene un estructura invalida. utiliza el archivo de ejemplo.']])->with('rejected',$rejected);
         }
+
+        return response()->json(['BIEN' => "BIEN",'filtered' => $filtered,'rejected' => $rejected],400);
 
         foreach ($filtered as $account){
 
@@ -366,10 +443,11 @@ class UsersController extends Controller
                 $auxEstudiante['idPersonal'] = $account['idpersonalestudiante'];
                 $auxEstudiante['nombre'] = $account['nombreestudiante'];
                 $auxEstudiante['grado'] = $account['grado'];
+                $auxEstudiante['seccion'] = $account['seccion'];
 
                 $estudiante = Estudiante::create($auxEstudiante);
 
-                $materias = Materia::where('grado',$account['grado'])->get();
+                $materias = Materia::where('grado',$account['grado'])->where('seccion',$account['seccion'])->get();
                 foreach ($materias as $materia) {
                     $profesor = $materia->profesores()->get()->first();
                     if(!is_null($profesor))

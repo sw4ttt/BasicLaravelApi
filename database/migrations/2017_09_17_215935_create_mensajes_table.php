@@ -20,20 +20,20 @@ class CreateMensajesTable extends Migration
 //'mensaje'
     public function up()
     {
-//        Schema::create('mensajes', function (Blueprint $table) {
-//            $table->increments('id');
-//
-//            $table->integer('idEmisor');
-//            $table->string('nombre');
-//            $table->integer('idMateria');
-//            $table->string('materia');
-//            $table->integer('idReceptor');
-//            $table->integer('grado');
-//            $table->string('asunto');
-//            $table->string('mensaje');
-//
-//            $table->timestamps();
-//        });
+        Schema::create('mensajes', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->integer('idEmisor');
+            $table->string('nombre');
+            $table->integer('idMateria');
+            $table->string('materia');
+            $table->integer('idReceptor');
+            $table->integer('grado');
+            $table->string('asunto');
+            $table->string('mensaje');
+
+            $table->timestamps();
+        });
     }
 
     /**
@@ -43,6 +43,6 @@ class CreateMensajesTable extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('mensajes');
+        Schema::dropIfExists('mensajes');
     }
 }

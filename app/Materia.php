@@ -10,7 +10,8 @@ class Materia extends Model
     protected $table = 'materias';
     protected $fillable = [
         "nombre",
-        'grado'
+        'grado',
+        'seccion'
     ];
 
     public function profesores()

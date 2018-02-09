@@ -11,7 +11,8 @@ class Estudiante extends Model
         'idUser',
         'idPersonal',
         'nombre',
-        'grado'
+        'grado',
+        'seccion'
     ];
     public function user()
     {

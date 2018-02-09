@@ -196,7 +196,7 @@ class UserController extends Controller
             $estudiante = User::find($id)->estudiantes->first();
             if (is_null($estudiante))
                 return [];
-            return Materia::where('grado', $estudiante->grado)->get();
+            return Materia::where('grado', $estudiante->grado)->where('seccion', $estudiante->seccion)->get();
         }
     }
 }

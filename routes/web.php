@@ -20,6 +20,7 @@ use App\Articulo;
 use App\Noticia;
 use App\Calificacion;
 use App\Estudiante;
+use App\Curso;
 
 Route::get('/', function () {
     if (Auth::check())return view('/home');
@@ -72,7 +73,36 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', 'Web\UsersController@all');
-        Route::get('/add', function () {  return view('/users/add');});
+        Route::get('/add', function () {
+            $cursos = Curso::all();
+            $cursos->transform(function ($item, $key) {
+                switch ($item->grado) {
+                    case 1:
+                        $item->gradoTexto = "Primero";
+                        break;
+                    case 2:
+                        $item->gradoTexto = "Segundo";
+                        break;
+                    case 3:
+                        $item->gradoTexto = "Tercero";
+                        break;
+                    case 4:
+                        $item->gradoTexto = "Cuarto";
+                        break;
+                    case 5:
+                        $item->gradoTexto = "Quinto";
+                        break;
+                    case 6:
+                        $item->gradoTexto = "Transición";
+                        break;
+                    default:
+                        $item->gradoTexto = "Otro";
+                }
+                return $item;
+            });
+
+            return view('/users/add',["cursos"=>$cursos]);
+        });
         Route::get('/add/masivo', function () {  return view('/users/addbulk');});
         Route::post('/add/masivo', 'Web\UsersController@addBulk');
         Route::post('/add', 'Web\UsersController@add');
@@ -89,24 +119,102 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'materias'], function () {
         Route::get('/', 'Web\MateriasController@all');
         Route::get('/add', function () {
-            return view('/materias/add',['profesores'=>User::where('type','PROFESOR')->get()]);
+
+            $cursos = Curso::all();
+            $cursos->transform(function ($item, $key) {
+                switch ($item->grado) {
+                    case 1:
+                        $item->gradoTexto = "Primero";
+                        break;
+                    case 2:
+                        $item->gradoTexto = "Segundo";
+                        break;
+                    case 3:
+                        $item->gradoTexto = "Tercero";
+                        break;
+                    case 4:
+                        $item->gradoTexto = "Cuarto";
+                        break;
+                    case 5:
+                        $item->gradoTexto = "Quinto";
+                        break;
+                    case 6:
+                        $item->gradoTexto = "Transición";
+                        break;
+                    default:
+                        $item->gradoTexto = "Otro";
+                }
+                return $item;
+            });
+
+            return view('/materias/add',['profesores'=>User::where('type','PROFESOR')->get(),'cursos'=>$cursos]);
         });
         Route::post('/add', 'Web\MateriasController@add');
         Route::get('/edit/{id}', function ($id) {
             $materia = Materia::find($id);
+
+            if(is_null($materia))
+                return back()->withErrors(['invalid'=>['El id de materia seleccionado no es valido.']]);
+
             $profesor = $materia->profesores()->first();
 
             $materia->profesor = $profesor->nombre;
 
-            if(!is_null($materia))
-                return view('/materias/edit',[
-                    'materia'=>$materia,
-                    'profesores'=>User::where('type','PROFESOR')->get(),
-                ]);
-            return back()->withErrors(['invalid'=>['El id de materia seleccionado no es valido.']]);
+            $cursos = Curso::all();
+            $cursos->transform(function ($item, $key) {
+                switch ($item->grado) {
+                    case 1:
+                        $item->gradoTexto = "Primero";
+                        break;
+                    case 2:
+                        $item->gradoTexto = "Segundo";
+                        break;
+                    case 3:
+                        $item->gradoTexto = "Tercero";
+                        break;
+                    case 4:
+                        $item->gradoTexto = "Cuarto";
+                        break;
+                    case 5:
+                        $item->gradoTexto = "Quinto";
+                        break;
+                    case 6:
+                        $item->gradoTexto = "Transición";
+                        break;
+                    default:
+                        $item->gradoTexto = "Otro";
+                }
+                return $item;
+            });
+
+            return view('/materias/edit',[
+                'materia'=>$materia,
+                'profesores'=>User::where('type','PROFESOR')->get(),
+                'cursos'=>$cursos
+            ]);
         });
         Route::post('/edit/{id}', 'Web\MateriasController@edit');
         Route::post('/delete/{id}', 'Web\MateriasController@delete');
+    });
+
+    Route::group(['prefix' => 'cursos'], function () {
+        Route::get('/', 'Web\CursosController@all');
+        Route::get('/add', function () {
+            return view('/cursos/add');
+        });
+        Route::post('/add', 'Web\CursosController@add');
+        Route::get('/edit/{id}', function ($id) {
+            $curso = Curso::find($id);
+
+            if(is_null($curso))
+                return back()->withErrors(['invalid'=>['El id de Curso seleccionado no es valido.']]);
+
+            return view('/cursos/edit',[
+                'curso'=>$curso
+            ]);
+        });
+        Route::post('/edit/{id}', 'Web\CursosController@edit');
+        Route::post('/delete/{id}', 'Web\CursosController@delete');
     });
 
     Route::get('/orders', 'Web\OrdersController@all');

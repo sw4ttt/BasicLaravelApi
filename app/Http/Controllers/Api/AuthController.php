@@ -169,6 +169,7 @@ class AuthController extends Controller
         {
             $estudiante = $user->estudiantes()->first();
             $user->grado = $estudiante->grado;
+            $user->seccion = $estudiante->seccion;
         }
 
         return $user;

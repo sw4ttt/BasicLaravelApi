@@ -16,6 +16,7 @@ use App\Noticia;
 use App\Calificacion;
 use App\Estudiante;
 use App\Material;
+use App\Curso;
 use Illuminate\Contracts\Encryption\DecryptException;
 
 class MateriasController extends Controller
@@ -53,11 +54,11 @@ class MateriasController extends Controller
 
     public function add(Request $request)
     {
-        $input = $request->only('nombre', 'grado', 'idProfesor');
+        $input = $request->only('nombre', 'curso', 'idProfesor');
         $input['nombre'] = strtoupper($input['nombre']);
         $validator = Validator::make($input, [
-            'grado' => 'required|numeric|between:1,15',
-            'nombre' => 'required|string|unique:materias,nombre',
+            'curso' => 'required|numeric|exists:cursos,id',
+            'nombre' => 'required|string',
             'idProfesor' => 'required|numeric|exists:users,id'
         ]);
 
@@ -65,6 +66,21 @@ class MateriasController extends Controller
             //throw new ValidationHttpException($validator->errors()->all());
             return back()->withErrors($validator)->withInput();
         }
+
+        $curso = Curso::find($input['curso']);
+
+        $materiaExistente = Materia::where('nombre',$input['nombre'])->where('grado',$curso->grado)->where('seccion',$curso->seccion)->first();
+
+
+        if(!is_null($materiaExistente)) {
+            return back()->withErrors([
+                'curso'=>['Ya existe una materia con ese nombre, grado y seccion']
+            ])->withInput();
+        }
+
+        $input['grado'] = $curso->grado;
+        $input['seccion'] = $curso->seccion;
+
 
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
@@ -96,25 +112,29 @@ class MateriasController extends Controller
             ]);
         }
 
-        return back()->with('message', 'Materia Creada!');
+        return redirect("materias/add")->with('message', 'Materia Creada!');
     }
 
     public function edit(Request $request,$id)
     {
-        $input = $request->only('nombre', 'grado', 'idProfesor');
+        $input = $request->only('nombre', 'curso', 'idProfesor');
         $input['id'] = $id;
         $input['nombre'] = strtoupper($input['nombre']);
         $validator = Validator::make($input, [
-            'grado' => 'required|numeric|between:1,15',
-//            'nombre' => 'required|string|unique:materias,nombre',
+            'curso' => 'required|numeric|exists:cursos,id',
+            'nombre' => 'required|string',
             'idProfesor' => 'required|numeric|exists:users,id',
             'id' => 'required|numeric|exists:materias,id'
         ]);
 
-        $materiaNombre = Materia::where('nombre',$input['nombre'])->first();
+        $curso = Curso::find($input['curso']);
 
-        if(!is_null($materiaNombre) && ($materiaNombre->id != $input['id'])) {
-            return back()->withErrors(['nombre'=>['Ya existe una materia con ese nombre']])->withInput();
+        $materiaExistente = Materia::where('nombre',$input['nombre'])->where('grado',$curso->grado)->where('seccion',$curso->grado)->first();
+
+        if(!is_null($materiaExistente) && ($materiaExistente->id != $input['id'])) {
+            return back()->withErrors([
+                'curso'=>['Ya existe una materia con ese nombre, grado y seccion']
+            ])->withInput();
         }
 
         if ($validator->fails()) {
@@ -138,12 +158,13 @@ class MateriasController extends Controller
             );
 
         $materia->nombre = $input['nombre'];
-        $materia->grado = $input['grado'];
+        $materia->grado = $curso->grado;
+        $materia->seccion = $curso->seccion;
         $materia->updated_at = $input['updated_at'];
 
         $materia->save();
 
-        return back()->with('message', 'Materia Editada!');
+        return redirect("materias/edit/".$id)->with('message', 'Materia Editada!');
     }
 
     public function delete(Request $request,$id)

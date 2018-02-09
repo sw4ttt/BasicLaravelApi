@@ -83,6 +83,6 @@ class EstudianteController extends Controller
         }
 
         $estudiante = Estudiante::find($id);
-        return Materia::where('grado', $estudiante->grado)->get();
+        return Materia::where('grado', $estudiante->grado)->where('seccion', $estudiante->seccion)->get();
     }
 }

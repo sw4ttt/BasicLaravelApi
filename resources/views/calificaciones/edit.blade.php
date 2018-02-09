@@ -10,6 +10,7 @@
                     <h3 style="text-align: left">Nombre: {{ $materia->nombre }}</h3>
                     <h3 style="text-align: left">Profesor: {{ $profesor->nombre }}</h3>
                     <h3 style="text-align: left">Grado: {{ $materia->grado }}</h3>
+                    <h3 style="text-align: left">Seccion: {{ $materia->seccion }}</h3>
                 </div>
                 <div class="col-md-4" style="margin-top: 22px">
                     <div class="row">

@@ -161,7 +161,7 @@ class CalificacionesController extends Controller
             $created = Carbon::now()->format('Y-m-d H:i:s');
             $updated = Carbon::now()->format('Y-m-d H:i:s');
 
-            $estudiantes = Estudiante::where('grado',$materia->grado)->get();
+            $estudiantes = Estudiante::where('grado',$materia->grado)->where('seccion',$materia->seccion)->get();
             foreach ($estudiantes as $estudiante) {
                 Calificacion::create([
                     'idProfesor'=>$profesor->id,
@@ -190,8 +190,6 @@ class CalificacionesController extends Controller
             if($existe === true)
                 return back()->withErrors(['titulo'=>['Ya existe una evaluacion con ese titulo']])->withInput();
         }
-
-//        return back()->withErrors(['titulo'=>['TODO BIEN']])->withInput();
 
         foreach ($calificaciones as $calificacion){
 

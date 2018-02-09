@@ -139,6 +139,14 @@
                                         </ul>
                                     </li>
                                     <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-education"></span>Cursos <span class="caret"></span></a>
+                                        <ul class="dropdown-menu forAnimate" role="menu">
+                                            <li style="padding-left:20px;"><a href="{{URL::to('cursos')}}">Listado</a></li>
+                                            <li style="padding-left:20px;"><a href="{{URL::to('cursos/add')}}">Crear</a></li>
+                                            {{--<li><a href="#">Modificar</a></li>--}}
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span style="font-size:16px;padding-right: 10px;" class="pull-left hidden-xs showopacity glyphicon glyphicon-pencil"></span>Calificaciones <span class="caret"></span></a>
                                         <ul class="dropdown-menu forAnimate" role="menu">
                                             <li style="padding-left:20px;"><a href="{{URL::to('calificaciones')}}">Listado</a></li>

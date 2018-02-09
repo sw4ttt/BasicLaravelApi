@@ -13,17 +13,17 @@ class CreateTarjetasTable extends Migration
      */
     public function up()
     {
-//        Schema::create('tarjetas', function (Blueprint $table) {
-//            $table->increments('id');
-//
-//            $table->integer('idUsuario');
-//            $table->string('tipo');
-//            $table->string('numero');
-//            $table->string('token');
-//            $table->string('customerId');
-//
-//            $table->timestamps();
-//        });
+        Schema::create('tarjetas', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->integer('idUsuario');
+            $table->string('tipo');
+            $table->string('numero');
+            $table->string('token');
+            $table->string('customerId');
+
+            $table->timestamps();
+        });
     }
 
     /**
@@ -33,6 +33,6 @@ class CreateTarjetasTable extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('tarjetas');
+        Schema::dropIfExists('tarjetas');
     }
 }
