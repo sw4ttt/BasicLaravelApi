@@ -289,7 +289,7 @@ class UsersController extends Controller
         });
 
         if(!$valid)
-            return back()->withErrors(['usersFile'=>['1-El archivo contiene un estructura invalida. utiliza el archivo de ejemplo.']])->withInput();
+            return back()->withErrors(['usersFile'=>['El archivo contiene un estructura invalida. utiliza el archivo de ejemplo.']])->withInput();
 
         $index = 1;
         foreach ($results as $row){
@@ -315,18 +315,36 @@ class UsersController extends Controller
             $rowValidation['seccion'] = strval($rowValidation['seccion']);
 
             foreach ($rowValidation as $key => $value){
-                if($key === "email" && $value === ""){
+                if($key === "email" && $value === "" && $rowValidation['nombre'] !== ""){
 
-                    $number = rand(1, 3);
+                    $number = rand(1, 999);
+                    $auxName = str_word_count(strtolower($rowValidation['nombre']), 2);
+                    $validName = true;
+                    foreach ($auxName as $auxNameKey => $auxNameValue){
 
-                    $rowValidation[$key] = "emailprueba1@";
+                        $itemToValidate = ['nombre'=>$auxNameValue];
+                        $validator = Validator::make($itemToValidate, [
+                            'nombre' => 'required|string|regex:/^[a-zA-Z]{4,10}$/'
+                        ]);
+
+                        if($validator->fails()){
+                            $validName = false;
+                        }
+                    }
+
+                    if($validName === true){
+                        $lastName = end($auxName);
+                        $sureName = reset($auxName);
+                        if($lastName && $sureName)
+                            $rowValidation[$key] = $lastName.$sureName.$number."@tucede.com";
+                    }
                 }
 
 
                 if($key !== "type" && $key !== "grado" && $key !== "seccion" && $key !== "email" && ($value === "" || $value === "+57")){
 
-                    $rowValidation[$key] = "VALOR";
-                    switch ($value) {
+//                    $rowValidation[$key] = "VALOR";
+                    switch ($key) {
                         case "tipoidpersonal":{
                             $rowValidation[$key] = "Numero Identificacion";
                         }
@@ -373,8 +391,6 @@ class UsersController extends Controller
                 'type' => 'required|string|in:ADMIN,PROFESOR,REPRESENTANTE'
             ]);
 
-            $curso = Curso::where("grado",$rowValidation['grado'])->where("grado",$rowValidation['grado'])->get()->first();
-
             if(!$validator->fails()) {
                 if(strtoupper($rowValidation['type']) === 'REPRESENTANTE'){
                     $validator = Validator::make($rowValidation, [
@@ -393,11 +409,17 @@ class UsersController extends Controller
                         }
                         else{
                             $rowValidation['index'] = $index;
+                            if(!isset($rowValidation['errors']))
+                                $rowValidation['errors'] = [];
+                            $rowValidation['errors'] = array_merge($rowValidation['errors'], ['curso']);
                             array_push($rejected,$rowValidation);
                         }
                     }
                     else {
                         $rowValidation['index'] = $index;
+                        if(!isset($rowValidation['errors']))
+                            $rowValidation['errors'] = [];
+                        $rowValidation['errors'] = array_merge($rowValidation['errors'], $validator->errors()->keys());
                         array_push($rejected,$rowValidation);
                     }
                 }
@@ -407,6 +429,9 @@ class UsersController extends Controller
             }
             else{
                 $rowValidation['index'] = $index;
+                if(!isset($rowValidation['errors']))
+                    $rowValidation['errors'] = [];
+                $rowValidation['errors'] = array_merge($rowValidation['errors'], $validator->errors()->keys());
                 array_push($rejected,$rowValidation);
             }
             $index++;
@@ -414,10 +439,10 @@ class UsersController extends Controller
 
 
         if(count($filtered)===0){
-            return back()->withErrors(['usersFile'=>['2-El archivo contiene un estructura invalida. utiliza el archivo de ejemplo.']])->with('rejected',$rejected);
+            return back()->withErrors(['usersFile'=>['El archivo contiene un estructura invalida. utiliza el archivo de ejemplo.']])->with('rejected',$rejected);
         }
 
-        return response()->json(['BIEN' => "BIEN",'filtered' => $filtered,'rejected' => $rejected],400);
+//        return response()->json(['BIEN' => "BIEN",'filtered' => $filtered,'rejected' => $rejected],400);
 
         foreach ($filtered as $account){
 
@@ -467,7 +492,7 @@ class UsersController extends Controller
             }
 
         }
-        return redirect("users/add/masivo")->with(['message'=>'Usuarios Agregados!','rejected'=>$rejected]);
+        return redirect("users/add/masivo")->with(['message'=>'Usuarios Agregados!','rejected'=>$rejected,'accepted'=>$filtered]);
     }
 
 }

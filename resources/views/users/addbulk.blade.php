@@ -57,9 +57,10 @@
             @endif
             @if(Session::has('rejected') && is_array(Session::get('rejected')) && count(Session::get('rejected')) > 0)
                 <div><h2>Lineas del Archivo Rechazadas</h2></div>
-                <table class="table table-striped">
-                    <thead>
-                        <tr style="font-size: 10px">
+                <div class="table-responsive">
+                    <table class="table table-condensed">
+                        <thead>
+                        <tr style="font-size: 8px">
                             <th>Linea</th>
                             <th>Nombre</th>
                             <th>Email</th>
@@ -72,44 +73,56 @@
                             <th>Nombre Estudiante</th>
                             <th>ID Personal Estudiante</th>
                             <th>Grado</th>
+                            <th>Seccion</th>
+                            <th>Campos con Errores</th>
                         </tr>
-                    </thead>
-                    <tbody style="font-size: 10px">
-                    @if(count(Session::get('rejected')) > 0)
-                        @foreach (Session::get('rejected') as $item)
+                        </thead>
+                        <tbody style="font-size: 10px">
+                        @if(count(Session::get('rejected')) > 0)
+                            @foreach (Session::get('rejected') as $item)
+                                <tr class="danger">
+                                    <td>{{ $item['index'] }}</td>
+                                    <td>{{ $item['nombre'] }}</td>
+                                    <td>{{ $item['email'] }}</td>
+                                    <td>{{ $item['tipoidpersonal'] }}</td>
+                                    <td>{{ $item['idpersonal'] }}</td>
+                                    <td>{{ $item['tlfdomicilio'] }}</td>
+                                    <td>{{ $item['tlfcelular'] }}</td>
+                                    <td>{{ $item['direccion'] }}</td>
+                                    <td>{{ $item['type'] }}</td>
+                                    <td>{{ $item['nombreestudiante'] }}</td>
+                                    <td>{{ $item['idpersonalestudiante'] }}</td>
+                                    <td>{{ $item['grado'] }}</td>
+                                    <td>{{ $item['seccion'] }}</td>
+                                    <td>
+                                        @foreach ($item['errors'] as $error)
+                                            {{$error}}
+                                        @endforeach
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
                             <tr>
-                                <td>{{ $item['index'] }}</td>
-                                <td>{{ $item['nombre'] }}</td>
-                                <td>{{ $item['email'] }}</td>
-                                <td>{{ $item['tipoidpersonal'] }}</td>
-                                <td>{{ $item['idpersonal'] }}</td>
-                                <td>{{ $item['tlfdomicilio'] }}</td>
-                                <td>{{ $item['tlfcelular'] }}</td>
-                                <td>{{ $item['direccion'] }}</td>
-                                <td>{{ $item['type'] }}</td>
-                                <td>{{ $item['nombreestudiante'] }}</td>
-                                <td>{{ $item['idpersonalestudiante'] }}</td>
-                                <td>{{ $item['grado'] }}</td>
+                                <td>..</td>
+                                <td>..</td>
+                                <td>..</td>
+                                <td>..</td>
+                                <td>..</td>
+                                <td>..</td>
+                                <td>..</td>
+                                <td>..</td>
+                                <td>..</td>
+                                <td>..</td>
+                                <td>..</td>
+                                <td>..</td>
+                                <td>..</td>
+                                <td>..</td>
                             </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td>..</td>
-                            <td>..</td>
-                            <td>..</td>
-                            <td>..</td>
-                            <td>..</td>
-                            <td>..</td>
-                            <td>..</td>
-                            <td>..</td>
-                            <td>..</td>
-                            <td>..</td>
-                            <td>..</td>
-                            <td>..</td>
-                        </tr>
-                    @endif
-                    </tbody>
-                </table>
+                        @endif
+                        </tbody>
+                    </table>
+                </div>
+
             @endif
         </div>
     </div>

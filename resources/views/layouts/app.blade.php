@@ -112,10 +112,10 @@
         </div>
     </nav>
 
-    <div class="container" style="margin-left: 20px;">
+    <div class="container" style="margin: 20px;">
         <div class="row">
             @if (!Auth::guest())
-                <div class="col-xs-3 col-sm-3 col-md-3">
+                <div class="col-xs-3 col-sm-3 col-md-3" style="margin-right: -40px;">
                     <nav class="navbar navbar-default sidebar" role="navigation">
                         <div class="container-fluid">
                             <div class="navbar-header">
