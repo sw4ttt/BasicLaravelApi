@@ -40,8 +40,9 @@ class NotificacionesController extends Controller
 //        return "SIN ERROR";
 
         if($input['grupo'] === 'TODOS') {
-            OneSignal::sendNotificationToAll(
-                "Notificacion: ".$input['asunto'],
+            OneSignal::sendNotificationToSegment(
+                $input['asunto'],
+                "usersActive",
                 $url = null,
                 [
                     "key"=>"NOTIFICACION",

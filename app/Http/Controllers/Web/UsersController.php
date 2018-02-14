@@ -118,8 +118,6 @@ class UsersController extends Controller
         $input['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
-//        return response()->json(["what2"=>true],400);
-
         $user = User::create($input);
 
         if($userType === 'REPRESENTANTE')
@@ -163,7 +161,9 @@ class UsersController extends Controller
             'idPersonal',
             'tlfDomicilio',
             'tlfCelular',
-            'direccion'
+            'direccion',
+            'password',
+            'password_confirmation'
         );
         $input['id'] = $id;
 
@@ -192,6 +192,15 @@ class UsersController extends Controller
         }
 
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
+
+        if(isset($input['password']) && $input['password'] !== ''){
+            $validator = Validator::make($input, [
+                'password' => 'required|min:4|confirmed',
+            ]);
+            if ($validator->fails())
+                return back()->withErrors($validator)->withInput();
+            $usuario->password = Hash::make($input['password']);
+        }
 
         $usuario->nombre = $input['nombre'];
         $usuario->email = $input['email'];

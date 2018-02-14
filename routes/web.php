@@ -108,9 +108,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/add', 'Web\UsersController@add');
         Route::get('/edit/{id}', function ($id) {
             $usuario = User::find($id);
-            return !is_null($usuario)
-                ?view('/users/edit',['usuario'=>$usuario])
-                :redirect("users");
+            if(!is_null($usuario)){
+                return view('/users/edit',['usuario'=>$usuario]);
+            }
+            else
+                return redirect("users");
         });
         Route::post('/edit/{id}', 'Web\UsersController@edit');
         Route::post('/delete/{id}', 'Web\UsersController@delete');
