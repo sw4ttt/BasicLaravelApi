@@ -56,8 +56,9 @@ class NoticiasController extends Controller
         $input['idUser'] = 1;
         $noticia = Noticia::create($input);
 
-        OneSignal::sendNotificationToAll(
+        OneSignal::sendNotificationToSegment(
             "Nueva Noticia: ".$noticia->title,
+            "usersActive",
             $url = null,
             [
                 "key"=>"NOTICIA",
