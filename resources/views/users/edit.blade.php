@@ -23,10 +23,70 @@
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                     <label for="email" class="col-md-4 control-label">Email</label>
                     <div class="col-md-6">
-                        <input id="email" type="text" class="form-control" name="email" value="{{ old('email')?old('email'):$usuario->email }}" data-validation="email" required autofocus>
+                        <input id="email" type="text" class="form-control" name="email" value="{{ old('email')?old('email'):$usuario->email }}" data-validation="email" required>
                         @if ($errors->has('email'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('email') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group{{ $errors->has('tipoIdPersonal') ? ' has-error' : '' }}">
+                    <label for="tipoIdPersonal" class="col-md-4 control-label">Tipo Id Personal</label>
+                    <div class="col-md-6">
+                        <input id="tipoIdPersonal" type="text" class="form-control" name="tipoIdPersonal" value="{{ old('tipoIdPersonal')?old('tipoIdPersonal'):$usuario->tipoIdPersonal }}" data-validation="length" data-validation-length="5-30" data-validation-optional="true" required>
+                        @if ($errors->has('tipoIdPersonal'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('tipoIdPersonal') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group{{ $errors->has('idPersonal') ? ' has-error' : '' }}">
+                    <label for="idPersonal" class="col-md-4 control-label">Id Personal</label>
+                    <div class="col-md-6">
+                        <input id="idPersonal" type="text" class="form-control" name="idPersonal" value="{{ old('idPersonal')?old('idPersonal'):$usuario->idPersonal }}" data-validation="length" data-validation-length="5-30" data-validation-optional="true" required>
+                        @if ($errors->has('idPersonal'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('idPersonal') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group{{ $errors->has('tlfDomicilio') ? ' has-error' : '' }}">
+                    <label for="tlfDomicilio" class="col-md-4 control-label">Tlf Domicilio</label>
+                    <div class="col-md-6">
+                        <input id="tlfDomicilio" type="text" class="form-control" name="tlfDomicilio" data-validation="custom" data-validation-regexp="\+(57\d{8,9})" data-validation-help="ejemplo +5712345678" value="{{ old('tlfDomicilio')?old('tlfDomicilio'):$usuario->tlfDomicilio }}" data-validation-optional="true" required>
+                        @if ($errors->has('tlfDomicilio'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('tlfDomicilio') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group{{ $errors->has('tlfCelular') ? ' has-error' : '' }}">
+                    <label for="tlfCelular" class="col-md-4 control-label">Tlf Celular</label>
+                    <div class="col-md-6">
+                        <input id="tlfCelular" type="text" class="form-control" name="tlfCelular" data-validation="custom" data-validation-regexp="\+(57\d{8,9})" data-validation-help="ejemplo +5712345678" value="{{ old('tlfCelular')?old('tlfCelular'):$usuario->tlfCelular }}" data-validation-optional="true" required>
+                        @if ($errors->has('tlfCelular'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('tlfCelular') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group{{ $errors->has('direccion') ? ' has-error' : '' }}">
+                    <label for="direccion" class="col-md-4 control-label">Direccion</label>
+                    <div class="col-md-6">
+                        <input id="direccion" type="text" class="form-control" name="direccion" value="{{ old('direccion')?old('direccion'):$usuario->direccion }}" data-validation="length" data-validation-length="5-50" data-validation-optional="true" required>
+                        @if ($errors->has('direccion'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('direccion') }}</strong>
                             </span>
                         @endif
                     </div>

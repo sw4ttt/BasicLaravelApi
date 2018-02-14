@@ -156,12 +156,25 @@ class UsersController extends Controller
 
     public function edit(Request $request,$id)
     {
-        $input = $request->only('nombre', 'email');
+        $input = $request->only(
+            'nombre',
+            'email',
+            'tipoIdPersonal',
+            'idPersonal',
+            'tlfDomicilio',
+            'tlfCelular',
+            'direccion'
+        );
         $input['id'] = $id;
 
         $validator = Validator::make($input, [
-            'email' => 'required|string',
+            'email' => 'required|string|email',
             'nombre' => 'required|string',
+            'tipoIdPersonal' => 'required|string',
+            'idPersonal' => 'required|numeric',
+            'tlfDomicilio' => 'required|string',
+            'tlfCelular' => 'required|string',
+            'direccion' => 'required|string',
             'id' => 'required|numeric|exists:users,id'
         ]);
 
@@ -182,6 +195,11 @@ class UsersController extends Controller
 
         $usuario->nombre = $input['nombre'];
         $usuario->email = $input['email'];
+        $usuario->tipoIdPersonal = $input['tipoIdPersonal'];
+        $usuario->idPersonal = $input['idPersonal'];
+        $usuario->tlfDomicilio = $input['tlfDomicilio'];
+        $usuario->tlfCelular = $input['tlfCelular'];
+        $usuario->direccion = $input['direccion'];
         $usuario->updated_at = $input['updated_at'];
 
         $usuario->save();
@@ -202,6 +220,14 @@ class UsersController extends Controller
         }
 
         $usuario = User::find($input['id']);
+
+        if($usuario->type === "PROFESOR"){
+            $materias = $usuario->materias()->get();
+            if(count($materias)>0){
+                return back()->withErrors(['nombre'=>['El Usuario es Profesor y tiene materias asignadas. Asigne las materias a otro profesor o elimine la materia para no perder la informacion asociada..']])->withInput();
+            }
+        }
+
 
         if(isset($usuario->image)){
             $auxPath = explode("images",$usuario->image);
