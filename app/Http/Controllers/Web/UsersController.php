@@ -355,11 +355,12 @@ class UsersController extends Controller
                     $number = rand(1, 999);
                     $auxName = str_word_count(strtolower($rowValidation['nombre']), 2);
                     $validName = true;
+
                     foreach ($auxName as $auxNameKey => $auxNameValue){
 
                         $itemToValidate = ['nombre'=>$auxNameValue];
                         $validator = Validator::make($itemToValidate, [
-                            'nombre' => 'required|string|regex:/^[a-zA-Z]{4,10}$/'
+                            'nombre' => 'required|string|regex:/^[a-zA-Z]{1,40}$/'
                         ]);
 
                         if($validator->fails()){
@@ -378,7 +379,6 @@ class UsersController extends Controller
 
                 if($key !== "type" && $key !== "grado" && $key !== "seccion" && $key !== "email" && ($value === "" || $value === "+57")){
 
-//                    $rowValidation[$key] = "VALOR";
                     switch ($key) {
                         case "tipoidpersonal":{
                             $rowValidation[$key] = "Numero Identificacion";
@@ -404,15 +404,13 @@ class UsersController extends Controller
                     }
                 }
 
-                if($key === "type" && $value === "REPRESENTANTE"){
-                    switch ($value) {
-                        case "idpersonalestudiante":{
-                            $rowValidation[$key] = "123456789";
-                        }
-                            break;
+                if(isset($rowValidation['type']) && $rowValidation['type'] === 'REPRESENTANTE' ){
+                    if(isset($rowValidation['idpersonalestudiante']) &&
+                        $rowValidation['idpersonalestudiante'] === '' ){
+                        $rowValidation['idpersonalestudiante'] = "123456789";
                     }
-
                 }
+
             }
 
             $validator = Validator::make($rowValidation, [
