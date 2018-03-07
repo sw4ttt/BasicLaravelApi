@@ -43,7 +43,15 @@
                             <option value="3">Tercero</option>
                             <option value="4">Cuarto</option>
                             <option value="5">Quinto</option>
-                            <option value="6">Transición</option>
+                            <option value="6">Sexto</option>
+                            <option value="7">Septimo</option>
+                            <option value="8">Octavo</option>
+                            <option value="9">Noveno</option>
+                            <option value="10">Decimo</option>
+                            <option value="11">Pre-Jardin</option>
+                            <option value="12">Jardin</option>
+                            <option value="13">Transicion</option>
+                            <option value="14">Parvulo</option>
                         </select>
 
                         @if ($errors->has('grado'))
