@@ -336,7 +336,16 @@ class UsersController extends Controller
 
             $rowValidation['tipoidpersonal'] = strval($rowValidation['tipoidpersonal']);
             $rowValidation['idpersonal'] = strval($rowValidation['idpersonal']);
-            $rowValidation['nombre'] = strval($rowValidation['nombre']);
+
+//            $rowValidation['nombre'] = utf8_encode($rowValidation['nombre']);
+//            echo "Palabra=".$rowValidation['nombre']."\n";
+
+//            $rowValidation['nombre'] = $this->removeAccents($rowValidation['nombre']);
+
+//            echo "Palabra-Out=".$rowValidation['nombre']."\n";
+
+//            $rowValidation['nombre'] = preg_replace('/[^A-Za-z0-9\-]/', 'X', $rowValidation['nombre']);
+
             $rowValidation['tlfdomicilio'] = "+57".strval($rowValidation['tlfdomicilio']);
             $rowValidation['tlfcelular'] = "+57".strval($rowValidation['tlfcelular']);
             $rowValidation['direccion'] = strval($rowValidation['direccion']);
@@ -353,14 +362,26 @@ class UsersController extends Controller
                 if($key === "email" && $value === "" && $rowValidation['nombre'] !== ""){
 
                     $number = rand(1, 999);
-                    $auxName = str_word_count(strtolower($rowValidation['nombre']), 2);
+
+//                    $tempName = strtolower($rowValidation['nombre']);
+//                    $tempName = str_replace('ñ', 'n', $tempName);
+
+//                    $auxName = explode(" ", $this->removeAccents($rowValidation['nombre']));
+                    $auxName = str_word_count($this->removeAccents($rowValidation['nombre']), 2);
+
+//                    foreach ($auxName as $stuff){
+//                        echo "item=".$stuff."\n";
+//                    }
+
                     $validName = true;
 
                     foreach ($auxName as $auxNameKey => $auxNameValue){
 
                         $itemToValidate = ['nombre'=>$auxNameValue];
+
                         $validator = Validator::make($itemToValidate, [
-                            'nombre' => 'required|string|regex:/^[a-zA-Z]{1,40}$/'
+//                            'nombre' => 'required|string|regex:/^[a-zA-Z]{1,40}$/'
+                            'nombre' => 'required|string'
                         ]);
 
                         if($validator->fails()){
@@ -371,11 +392,25 @@ class UsersController extends Controller
                     if($validName === true){
                         $lastName = end($auxName);
                         $sureName = reset($auxName);
-                        if($lastName && $sureName)
+                        if($lastName && $sureName){
                             $rowValidation[$key] = $lastName.$sureName.$number."@tucede.com";
+//                            echo $rowValidation[$key]."\n";
+                            $rowValidation[$key] = mb_strtolower($rowValidation[$key],'UTF-8');
+//                            echo $rowValidation[$key]."\n";
+//                            echo "\n";
+//                            $rowValidation[$key] = preg_replace("/[^A-Za-z]/", 'n', $rowValidation[$key]);
+//                            $auxName = str_replace(' ', '_', $rowValidation['nombre']);
+//                            $rowValidation[$key] = mb_convert_encoding($rowValidation[$key], "UTF-8");
+                        }
                     }
+//                    echo "NAME=".$rowValidation['nombre']."\n";
+//                    $auxName = str_replace(' ', '_', $rowValidation['nombre']);
+//                    $auxName = preg_replace('/[^A-Za-z0-9\-]/', '', $auxName);
+////                    $auxName = utf8_encode($rowValidation['nombre']);
+////                    $auxName = mb_convert_encoding($auxName, "UTF-8");
+////                    echo "AUX_NAME=".$auxName."\n";
+//                    $rowValidation[$key] = substr($auxName, 0,8).$number."@tucede.com";
                 }
-
 
                 if($key !== "type" && $key !== "grado" && $key !== "seccion" && $key !== "email" && ($value === "" || $value === "+57")){
 
@@ -436,8 +471,8 @@ class UsersController extends Controller
                         $curso = Curso::where("grado",strtoupper($rowValidation['grado']))->where("seccion",strtoupper($rowValidation['seccion']))->get()->first();
 
                         if(!is_null($curso) && $curso->cupos > 0){
-                            $curso->decrement('cupos');
-                            $curso->save();
+//                            $curso->decrement('cupos');
+//                            $curso->save();
                             array_push($filtered,$rowValidation);
                         }
                         else{
@@ -470,12 +505,11 @@ class UsersController extends Controller
             $index++;
         }
 
+//        return response()->json(['_BIEN' => "BIEN",'filtered' => $filtered,'rejected' => $rejected],400);
 
         if(count($filtered)===0){
             return back()->withErrors(['usersFile'=>['El archivo contiene un estructura invalida. utiliza el archivo de ejemplo.']])->with('rejected',$rejected);
         }
-
-//        return response()->json(['BIEN' => "BIEN",'filtered' => $filtered,'rejected' => $rejected],400);
 
         foreach ($filtered as $account){
 
@@ -526,6 +560,12 @@ class UsersController extends Controller
 
         }
         return redirect("users/add/masivo")->with(['message'=>'Usuarios Agregados!','rejected'=>$rejected,'accepted'=>$filtered]);
+    }
+
+    private function removeAccents($str) {
+        $a = array('À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į', 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō', 'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ', 'ƒ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ǎ', 'ǎ', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ', 'Ǔ', 'ǔ', 'Ǖ', 'ǖ', 'Ǘ', 'ǘ', 'Ǚ', 'ǚ', 'Ǜ', 'ǜ', 'Ǻ', 'ǻ', 'Ǽ', 'ǽ', 'Ǿ', 'ǿ', 'Ά', 'ά', 'Έ', 'έ', 'Ό', 'ό', 'Ώ', 'ώ', 'Ί', 'ί', 'ϊ', 'ΐ', 'Ύ', 'ύ', 'ϋ', 'ΰ', 'Ή', 'ή');
+        $b = array('A', 'A', 'A', 'A', 'A', 'A', 'AE', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'D', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 's', 'a', 'a', 'a', 'a', 'a', 'a', 'ae', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'a', 'A', 'a', 'A', 'a', 'C', 'c', 'C', 'c', 'C', 'c', 'C', 'c', 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'G', 'g', 'G', 'g', 'G', 'g', 'G', 'g', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'IJ', 'ij', 'J', 'j', 'K', 'k', 'L', 'l', 'L', 'l', 'L', 'l', 'L', 'l', 'l', 'l', 'N', 'n', 'N', 'n', 'N', 'n', 'n', 'O', 'o', 'O', 'o', 'O', 'o', 'OE', 'oe', 'R', 'r', 'R', 'r', 'R', 'r', 'S', 's', 'S', 's', 'S', 's', 'S', 's', 'T', 't', 'T', 't', 'T', 't', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'W', 'w', 'Y', 'y', 'Y', 'Z', 'z', 'Z', 'z', 'Z', 'z', 's', 'f', 'O', 'o', 'U', 'u', 'A', 'a', 'I', 'i', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'A', 'a', 'AE', 'ae', 'O', 'o', 'Α', 'α', 'Ε', 'ε', 'Ο', 'ο', 'Ω', 'ω', 'Ι', 'ι', 'ι', 'ι', 'Υ', 'υ', 'υ', 'υ', 'Η', 'η');
+        return str_replace($a, $b, $str);
     }
 
 }

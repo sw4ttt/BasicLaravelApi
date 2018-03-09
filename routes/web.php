@@ -93,7 +93,31 @@ Route::group(['middleware' => ['auth']], function () {
                         $item->gradoTexto = "Quinto";
                         break;
                     case 6:
-                        $item->gradoTexto = "Transición";
+                        $item->gradoTexto = "Sexto";
+                        break;
+                    case 7:
+                        $item->gradoTexto = "Septimo";
+                        break;
+                    case 8:
+                        $item->gradoTexto = "Octavo";
+                        break;
+                    case 9:
+                        $item->gradoTexto = "Noveno";
+                        break;
+                    case 10:
+                        $item->gradoTexto = "Decimo";
+                        break;
+                    case 11:
+                        $item->gradoTexto = "Pre-Jardin";
+                        break;
+                    case 12:
+                        $item->gradoTexto = "Jardin";
+                        break;
+                    case 13:
+                        $item->gradoTexto = "Transicion";
+                        break;
+                    case 14:
+                        $item->gradoTexto = "Parvulo";
                         break;
                     default:
                         $item->gradoTexto = "Otro";
@@ -141,7 +165,31 @@ Route::group(['middleware' => ['auth']], function () {
                         $item->gradoTexto = "Quinto";
                         break;
                     case 6:
-                        $item->gradoTexto = "Transición";
+                        $item->gradoTexto = "Sexto";
+                        break;
+                    case 7:
+                        $item->gradoTexto = "Septimo";
+                        break;
+                    case 8:
+                        $item->gradoTexto = "Octavo";
+                        break;
+                    case 9:
+                        $item->gradoTexto = "Noveno";
+                        break;
+                    case 10:
+                        $item->gradoTexto = "Decimo";
+                        break;
+                    case 11:
+                        $item->gradoTexto = "Pre-Jardin";
+                        break;
+                    case 12:
+                        $item->gradoTexto = "Jardin";
+                        break;
+                    case 13:
+                        $item->gradoTexto = "Transicion";
+                        break;
+                    case 14:
+                        $item->gradoTexto = "Parvulo";
                         break;
                     default:
                         $item->gradoTexto = "Otro";
@@ -181,7 +229,31 @@ Route::group(['middleware' => ['auth']], function () {
                         $item->gradoTexto = "Quinto";
                         break;
                     case 6:
-                        $item->gradoTexto = "Transición";
+                        $item->gradoTexto = "Sexto";
+                        break;
+                    case 7:
+                        $item->gradoTexto = "Septimo";
+                        break;
+                    case 8:
+                        $item->gradoTexto = "Octavo";
+                        break;
+                    case 9:
+                        $item->gradoTexto = "Noveno";
+                        break;
+                    case 10:
+                        $item->gradoTexto = "Decimo";
+                        break;
+                    case 11:
+                        $item->gradoTexto = "Pre-Jardin";
+                        break;
+                    case 12:
+                        $item->gradoTexto = "Jardin";
+                        break;
+                    case 13:
+                        $item->gradoTexto = "Transicion";
+                        break;
+                    case 14:
+                        $item->gradoTexto = "Parvulo";
                         break;
                     default:
                         $item->gradoTexto = "Otro";
