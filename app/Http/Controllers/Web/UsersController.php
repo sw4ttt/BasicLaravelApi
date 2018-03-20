@@ -331,7 +331,7 @@ class UsersController extends Controller
 
             $rowValidation = $row->toArray();
 
-            $rowValidation['password'] = 123456;
+            $rowValidation['password'] = "123456";
             $rowValidation['image'] = url('/')."/images/default-profile.jpg";
 
             $rowValidation['tipoidpersonal'] = strval($rowValidation['tipoidpersonal']);

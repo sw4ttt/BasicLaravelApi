@@ -22,7 +22,7 @@
                 <div class="form-group{{ $errors->has('content') ? ' has-error' : '' }}">
                     <label for="content" class="col-md-4 control-label">Contenido</label>
                     <div class="col-md-6">
-                        <input id="content" type="text" class="form-control" name="content" value="{{ old('content') }}" data-validation="length" data-validation-length="5-100" data-validation-optional="true" required>
+                        <textarea id="content" rows="4" class="form-control" name="content" data-validation="length" data-validation-length="5-255" data-validation-optional="true" required></textarea>
                         @if ($errors->has('content'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('content') }}</strong>

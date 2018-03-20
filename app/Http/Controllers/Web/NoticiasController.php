@@ -14,6 +14,7 @@ use Validator;
 use Carbon\Carbon;
 use App\User;
 use App\Noticia;
+use App\Mensaje;
 use App\Calificacion;
 use App\Estudiante;
 use App\Material;
@@ -54,19 +55,41 @@ class NoticiasController extends Controller
         $input['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
 
         $input['idUser'] = 1;
+
         $noticia = Noticia::create($input);
+
+        $Usuarios = User::where('type','!=','ADMIN')->get();
+
+//        foreach ($Usuarios as $usuario) {
+//
+//            $input['materia'] = "";
+//            $input['idMateria'] = 0;
+//            $input['grado'] = 0;
+//
+//            $input['asunto'] = "Nueva Noticia";
+//            $input['mensaje'] = $noticia->title;
+//
+//            $input['idEmisor'] = 1;
+//            $input['idReceptor'] = $usuario->id;
+//            $input['nombre'] = "Notificación";
+//            $mensaje = Mensaje::create($input);
+//        }
 
         OneSignal::sendNotificationToSegment(
             "Nueva Noticia: ".$noticia->title,
             "usersActive",
             $url = null,
             [
-                "key"=>"NOTICIA",
-                "id"=>$noticia->id,
-                "title"=>$noticia->title,
-                "content"=>$noticia->content,
-                "image"=>$noticia->image,
-                "fecha"=>$noticia->created_at
+                "key"=>"MENSAJE",
+                "id"=>1,
+                "idMateria"=>0,
+                "materia"=>"",
+                "idEmisor"=>1,
+                "idReceptor"=>1,
+                "nombre"=>"Admin",
+                "asunto"=>"Nueva Noticia",
+                "mensaje"=>$noticia->title,
+                "created_at"=>$noticia->created_at->format('Y-m-d H:i:s')
             ],
             $buttons = null,
             $schedule = null

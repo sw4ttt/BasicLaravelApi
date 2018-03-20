@@ -41,7 +41,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-6 col-md-offset-4">
-                                    <button type="submit" class="btn btn-primary" onclick="return confirm('Estas seguro que deseas eliminar el horario? no se pueden revertir los cambios.')">
+                                    <button type="submit" class="btn btn-primary" onclick="return confirm('Estas seguro que deseas crear la evaluacion?')">
                                         Crear Evaluación
                                     </button>
                                 </div>
@@ -52,6 +52,62 @@
             </div>
         </div>
         <div class="panel-body">
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="col-md-4" style="text-align: center">Titulo</th>
+                        <th class="col-md-6" style="text-align: center">Mensaje</th>
+                        <th class="col-md-2" style="text-align: center">Opcion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @if(isset($evaluaciones) && count($evaluaciones) > 0)
+                    @foreach ($evaluaciones as $evaluacion)
+                        <tr>
+                            <td class="col-md-4" style="text-align: center">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        {{ $evaluacion['nombre'] }}
+                                    </li>
+                                </ul>
+                            </td>
+                            <td class="col-md-6" style="text-align: center">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        {{ $evaluacion['mensaje'] }}
+                                    </li>
+                                </ul>
+                            </td>
+                            <td class="col-md-2" style="text-align: center">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <form class="form-horizontal" role="form" method="POST" action="{{ url('calificaciones/materia/'.$materia->id.'/delete/evaluacion/'.$evaluacion['nombre'].'/'.$evaluacion['mensaje']) }}" enctype="multipart/form-data">
+                                                {{ csrf_field() }}
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Estas seguro que deseas eliminar la Evaluacion? no se pueden revertir los cambios.')">
+                                                        Elimiar
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td>..</td>
+                        <td>..</td>
+                        <td>..</td>
+                    </tr>
+                @endif
+                </tbody>
+            </table>
+
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -78,22 +134,28 @@
                                             <li class="list-group-item">
                                                 <form class="form-horizontal" role="form" method="POST" action="{{ url('/calificaciones/'.$calificacion->id.'/evaluacion/'.$evaluacion['nombre']) }}" enctype="multipart/form-data">
                                                     {{ csrf_field() }}
+
                                                     <div class="form-group{{ $errors->has('nota') ? ' has-error' : '' }}">
-                                                        <label for="titulo" class="col-md-2 control-label">Titulo: {{$evaluacion['nombre']}}</label>
-                                                        <label for="nota" class="col-md-2 control-label">Nota:</label>
-                                                        <div class="col-md-4">
-                                                            <input id="nota" type="text" data-validation="number" data-validation-allowing="float,range[1;100]" data-validation-help="Valor de 0-100" class="form-control input-sm" name="nota" value="{{ $evaluacion['nota'] }}">
-                                                            @if ($errors->has('nota'))
-                                                                <span class="help-block">
-                                                                <strong>{{ $errors->first('nota') }}</strong>
-                                                            </span>
-                                                            @endif
+
+                                                        <div class="row">
+                                                            <label for="titulo" class="col-md-4 control-label">Titulo: {{$evaluacion['nombre']}}</label>
+                                                            {{--<label for="nota" class="col-md-2 control-label">Nota: {{$evaluacion['nombre']}}</label>--}}
+                                                            <div class="col-md-4">
+                                                                <label for="nota" class="control-label">Nota</label>
+                                                                <input id="nota" type="text" data-validation="number" data-validation-allowing="range[0.0;5.0],float" data-validation-decimal-separator="." data-validation-help="Valor de 0-5" class="form-control input-sm" name="nota" value="{{ $evaluacion['nota'] }}">
+                                                                @if ($errors->has('nota'))
+                                                                    <span class="help-block">
+                                                                        <strong>{{ $errors->first('nota') }}</strong>
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Guardar Nota?.')">
+                                                                    Guardar
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-2">
-                                                            <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Estas seguro que deseas eliminar el horario? no se pueden revertir los cambios.')">
-                                                                Guardar
-                                                            </button>
-                                                        </div>
+
                                                     </div>
                                                 </form>
                                             </li>
@@ -111,7 +173,7 @@
                                             <div class="form-group{{ $errors->has('acumulado') ? ' has-error' : '' }}">
                                                 <label for="acumulado" class="col-md-4 control-label">Acumulado:</label>
                                                 <div class="col-md-4">
-                                                    <input id="acumulado" type="text" data-validation="number" data-validation-allowing="float,range[1;99]" data-validation-help="Valor de 0-99" class="form-control input-sm" name="acumulado" value="{{ $calificacion->acumulado }}">
+                                                    <input id="acumulado" type="text" data-validation="number" data-validation-allowing="range[0.0;5.0],float" data-validation-decimal-separator="." data-validation-help="Valor de 0-5" class="form-control input-sm" data-validation-optional="true" name="acumulado" value="{{ $calificacion->acumulado }}">
                                                     @if ($errors->has('acumulado'))
                                                         <span class="help-block">
                                                             <strong>{{ $errors->first('acumulado') }}</strong>
@@ -119,7 +181,7 @@
                                                     @endif
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Guardar? no se pueden revertir los cambios.')">
+                                                    <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Guardar Acumulado?')">
                                                         Guardar
                                                     </button>
                                                 </div>

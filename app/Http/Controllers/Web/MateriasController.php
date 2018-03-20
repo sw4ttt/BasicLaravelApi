@@ -42,7 +42,31 @@ class MateriasController extends Controller
                     $item->gradoTexto = "Quinto";
                     break;
                 case 6:
-                    $item->gradoTexto = "Transición";
+                    $item->gradoTexto = "Sexto";
+                    break;
+                case 7:
+                    $item->gradoTexto = "Septimo";
+                    break;
+                case 8:
+                    $item->gradoTexto = "Octavo";
+                    break;
+                case 9:
+                    $item->gradoTexto = "Noveno";
+                    break;
+                case 10:
+                    $item->gradoTexto = "Decimo";
+                    break;
+                case 11:
+                    $item->gradoTexto = "Pre-Jardin";
+                    break;
+                case 12:
+                    $item->gradoTexto = "Jardin";
+                    break;
+                case 13:
+                    $item->gradoTexto = "Transicion";
+                    break;
+                case 14:
+                    $item->gradoTexto = "Parvulo";
                     break;
                 default:
                     $item->gradoTexto = "Otro";
@@ -97,7 +121,7 @@ class MateriasController extends Controller
             ]
         );
 
-        $estudiantes = Estudiante::where('grado',$input['grado'])->get();
+        $estudiantes = Estudiante::where('grado',$input['grado'])->where('seccion',$input['seccion'])->get();
 
         foreach ($estudiantes as $estudiante) {
             Calificacion::create([
@@ -150,12 +174,32 @@ class MateriasController extends Controller
 
         $materia->profesores()->sync([$profesor->id=>['updated_at' => $input['updated_at']]]);
 
-        Calificacion::where('idMateria', $id)
-            ->update([
-                    'idProfesor' => $profesor->id,
-                    'updated_at' => $input['updated_at']
-                ]
-            );
+//        Calificacion::where('idMateria', $id)
+//            ->update([
+//                    'idProfesor' => $profesor->id,
+//                    'updated_at' => $input['updated_at']
+//                ]
+//            );
+
+        if(($materia->grado !== $curso->grado) && ($materia->seccion !== $curso->seccion)){
+
+            Calificacion::where('idMateria', $id)->delete();
+
+            $estudiantes = Estudiante::where('grado',$curso->grado)->where('seccion',$curso->seccion)->get();
+
+            foreach ($estudiantes as $estudiante) {
+                Calificacion::create([
+                    'idProfesor'=>$profesor->id,
+                    'idEstudiante'=>$estudiante->id,
+                    'idMateria'=>$materia->id,
+                    'periodo'=>'2017-2018',
+                    'evaluaciones'=>[],
+                    'acumulado'=>0,
+                    'created_at'=>$input['created_at'],
+                    'updated_at'=>$input['updated_at'],
+                ]);
+            }
+        }
 
         $materia->nombre = $input['nombre'];
         $materia->grado = $curso->grado;

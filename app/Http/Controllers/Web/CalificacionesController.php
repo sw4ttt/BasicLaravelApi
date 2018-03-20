@@ -91,6 +91,40 @@ class CalificacionesController extends Controller
 
     }
 
+    public function eliminarEvaluacion(Request $request,$idMateria,$nombre,$mensaje)
+    {
+        $calificaciones = Calificacion::where('idMateria',$idMateria)->get();
+
+        foreach ($calificaciones as $calificacion){
+
+            if(isset($calificacion->evaluaciones) && count($calificacion->evaluaciones)>0){
+
+
+                $newItems = [];
+
+                foreach ($calificacion->evaluaciones as $itemEvaluacion) {
+                    if (($itemEvaluacion['nombre'] !== $nombre)&&($itemEvaluacion['mensaje'] !== $mensaje)) {
+
+                        $evaluacion = new \stdClass;
+                        $evaluacion->nombre = $itemEvaluacion['nombre'];
+                        $evaluacion->nota = $itemEvaluacion['nota'];
+                        $evaluacion->mensaje = $itemEvaluacion['mensaje'];
+
+                        array_push($newItems,$evaluacion);
+                    }
+                }
+
+                $calificacion->evaluaciones = $newItems;
+                $calificacion->save();
+
+            }
+
+        }
+
+        return redirect("calificaciones/materia/".$idMateria)->with('message', 'Evaluacion Editada!');
+
+    }
+
     public function editarAcumulado(Request $request,$id)
     {
         $input = $request->only('acumulado');
@@ -111,7 +145,6 @@ class CalificacionesController extends Controller
         $calificacion->save();
 
         return redirect("calificaciones/materia/".$calificacion->idMateria)->with('message', 'Acumulado Editado!');
-
     }
 
 
@@ -134,10 +167,18 @@ class CalificacionesController extends Controller
             return $calItem;
         });
 
+        $someCalificacion = $calificaciones->first();
+        $evaluaciones = [];
+
+        if(!is_null($someCalificacion)){
+            $evaluaciones = $someCalificacion->evaluaciones;
+        }
+
         return view('/calificaciones/edit',[
             'materia'=>$materia,
             'profesor'=>$materia->profesores()->first(),
-            'calificaciones'=>$calificaciones
+            'calificaciones'=>$calificaciones,
+            'evaluaciones'=>$evaluaciones
         ]);
 
     }
